@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Browser chrome colour. The two media-scoped defaults cover the no-JS /
+     system case; the theme script directly below rewrites BOTH whenever a
+     stored or ?theme= choice overrides the system, so the address bar can
+     never disagree with the page. They sit above the script because the
+     script needs them parsed. -->
+<meta name="theme-color" content="#FFF6E8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1109" media="(prefers-color-scheme: dark)">
+<script>document.documentElement.classList.add('js');
+/* automated captures (headless) skip straight to the settled page */
+if(navigator.webdriver||/HeadlessChrome/i.test(navigator.userAgent))document.documentElement.classList.add('settle');
+/* THEME resolution. This block runs BEFORE any stylesheet link — a sync
+   inline script cannot execute until every preceding stylesheet has
+   loaded, so putting it under the font <link> would gate first paint on a
+   third-party host and hand dark-theme visitors a white flash.
+   ?theme=dark|light wins on arrival → then the visitor's stored choice
+   from the header toggle → otherwise nothing is set and the CSS keeps
+   following the system preference. */
+var __q=new URLSearchParams(location.search).get('theme'),__stored=null;
+try{__stored=localStorage.getItem('sq_theme')}catch(e){}
+var __theme=(__q==='dark'||__q==='light')?__q:((__stored==='dark'||__stored==='light')?__stored:null);
+/* a ?theme= link is a one-shot choice, not a permanent override: persist
+   it on arrival so the visitor's own later toggle overwrites it normally
+   instead of the URL re-winning on every reload of that bookmark */
+if(__q&&__theme===__q){try{localStorage.setItem('sq_theme',__theme)}catch(e){}}
+window.__setTC=function(t){var m=document.querySelectorAll('meta[name="theme-color"]'),i;
+  for(i=0;i<m.length;i++){m[i].removeAttribute('media');
+    m[i].setAttribute('content',t==='dark'?'#1A1109':'#FFF6E8')}};
+if(__theme){document.documentElement.setAttribute('data-theme',__theme);window.__setTC(__theme)}</script>
+<title>Squirrel Skill — Capture Ideas Mid-Conversation in Claude | Free</title>
+<meta name="description" content="Squirrel Skill is a Claude skill that captures ideas mid-conversation — say “squirrel that,” the bolt gets bottled in seconds, and your momentum comes straight back. Free.">
+<link rel="canonical" href="https://squirrel.summitautomation.ai/"><!-- LAUNCH: set final URL -->
+<meta property="og:title" content="Squirrel Skill — capture ideas mid-conversation in Claude">
+<meta property="og:description" content="Say “squirrel that” — the bolt gets bottled in seconds and your momentum comes straight back. A Claude skill. Free.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://squirrel.summitautomation.ai/">
+<meta property="og:image" content="og.png"><!-- LAUNCH: absolute URL on deploy -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="og.png"><!-- LAUNCH: absolute URL on deploy -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23FFB237' stroke='%232A1B10' stroke-width='5'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle'%3E🐿️%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- the font CSS is loaded non-blocking so nothing in this document — least
+     of all the theme resolution above — is ever gated on a third-party host -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet"></noscript>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Squirrel Skill",
+"description":"A Claude skill that captures ideas mid-conversation. Say “squirrel that” — the idea is captured with full context in seconds and your momentum comes straight back.",
+"applicationCategory":"ProductivityApplication","operatingSystem":"Claude (claude.ai, Claude Desktop, Claude Code)",
+"offers":[{"@type":"Offer","price":"0","priceCurrency":"USD","name":"Free — lightning capture"},
+{"@type":"Offer","price":"147","priceCurrency":"USD","name":"Full — the Squirrel Cage",
+"hasMerchantReturnPolicy":{"@type":"MerchantReturnPolicy","returnPolicyCategory":"https://schema.org/MerchantReturnFiniteReturnWindow","merchantReturnDays":30,"refundType":"https://schema.org/FullRefund","description":"30-day unconditional refund — email and it is refunded, no questions."}}],
+"author":{"@type":"Organization","name":"SUMMIT Business Automation","url":"https://summitautomation.ai"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is a Claude skill, and how do I install this one?","acceptedAnswer":{"@type":"Answer","text":"A skill is a folder of markdown instructions Claude follows. On claude.ai or Claude Desktop: Settings → Capabilities → Skills → upload the ZIP → toggle it on. In Claude Code: unzip it into ~/.claude/skills. About 90 seconds either way, and from then on “squirrel that” just works."}},
+{"@type":"Question","name":"Do I need a paid Claude plan?","acceptedAnswer":{"@type":"Answer","text":"You need a Claude plan that supports custom skills — Pro, Max, Team, or Enterprise on claude.ai and Claude Desktop, or Claude Code. If your Claude can add a skill, this one runs."}},
+{"@type":"Question","name":"Do I need a Notion account or anything?","acceptedAnswer":{"@type":"Answer","text":"No. It works out of the box with a plain text file on your computer. Offline, yours, nothing to sign up for. Notion, Airtable and the rest are optional and take about two minutes if you want them."}},
+{"@type":"Question","name":"Does it ask me questions?","acceptedAnswer":{"@type":"Answer","text":"Never. That is the strictest rule in the whole thing. Give it half a sentence and it runs with the rest. Your momentum is the thing being protected here."}},
+{"@type":"Question","name":"What if I catch a whole lot?","acceptedAnswer":{"@type":"Answer","text":"Perfect. The Cage was built for volume. Bottle 40 in a month if that is your rhythm. Only 5 ever carry forward, so a fuller cage makes the winner sharper."}},
+{"@type":"Question","name":"What exactly am I paying for?","acceptedAnswer":{"@type":"Answer","text":"A skill file you install into Claude and own outright. No subscription, no seats, no server, no login. It adds the Chase, the Cage tournament, nut counts, your idea of the year, and a guide of worked examples."}},
+{"@type":"Question","name":"Why is bottling free but ranking paid?","acceptedAnswer":{"@type":"Answer","text":"Bottling is the straightforward half, so it should be free and it always will be. The Cage took two years to get right and it is the part that turns a year of good ideas into the one you build."}},
+{"@type":"Question","name":"What happens to my ideas and data?","acceptedAnswer":{"@type":"Answer","text":"They live in a plain file on your machine. Nothing leaves your computer, nothing is uploaded to us, and there is no account to hold your data hostage."}},
+{"@type":"Question","name":"Does it work outside Claude?","acceptedAnswer":{"@type":"Answer","text":"The skill runs on Claude — claude.ai, Claude Desktop, and Claude Code. Your bolts save as plain text, so the cage itself travels anywhere you want to take it."}},
+{"@type":"Question","name":"Refunds?","acceptedAnswer":{"@type":"Answer","text":"If it's not for you, email me within 30 days and I'll refund you. Unconditionally. No form, no call, no “can I ask why.”"}}]}
+</script>
+<style>
+/* ================================================================
+   SQUIRREL SKILL — round 2 · E2 "GOLDEN ARCADE" (dead center 50/50)
+   A beautifully machined toy photographed at golden hour.
+   Chunky ink-outlined chassis (Arcade DNA) in warm honey light
+   (Golden Hour DNA), applied with Full Voltage discipline:
+   one spacing scale, 5 hues, one physics rule, restrained motion.
+   ================================================================ */
+:root{
+  color-scheme:light;
+  --paper:#FFF6E8; --card:#FFFFFF; --ink:#2A1B10; --sub:#6B5744;
+  --amber:#FFB237; --amber-hi:#FFC65C; --deep:#96570A; --honey:#FFE9B8;
+  --teal:#1FC7D4; /* the ONE demoted support accent, ≤5% of page */
+  --esp:#26190F; --esp2:#33221A; --esp-text:#F7EFE2; --esp-sub:#C9B49A;
+  --esp-line:rgba(255,233,184,.15);
+  /* structural tokens: outlines, hard shadows, soft ink alphas */
+  --line:#2A1B10; --shadow-ink:#2A1B10; --soft-rgb:42,27,16;
+  --line-in:#2A1B10; /* text-input borders — must clear 3:1 in both themes */
+  --nut-bg:transparent; /* mount behind the 🌰 glyph — honey disc in dark */
+  --on-amber:#2A1B10; /* text/border sitting ON amber — constant both themes */
+  --focus:#0E7C86; /* deep teal — ≥3:1 on paper, card, and amber */
+  --header-bg:rgba(255,246,232,.92); --backdrop:rgba(42,27,16,.55);
+  --ph:#7A684E;
+  --hlA:.5; --hlB:.58; /* highlighter swipe alphas */
+  --glow1:rgba(255,178,55,.16); --glow2:rgba(199,123,10,.07);
+  --grain-op:.03; --grain-blend:multiply;
+  --feat-top:#FFFFFF; --feat-border:#2A1B10;
+  /* the Claude recreation frame — Claude's real light UI */
+  --cw-bg:#FFFFFF; --cw-bar:#FAF9F5; --cw-line:#E8E2D5; --cw-text:#3D3929;
+  --cw-mut:#6E6858; --cw-bubble:#F0EEE6; --cw-dots:#DDD6C8;
+  --disp:'Outfit',system-ui,sans-serif; --sans:'Inter',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --maxw:1120px;
+  /* ---- THE ONE ALIGNMENT GRID -------------------------------------
+     --edge is THE page content edge: the single x where every text
+     column begins, hero to footer. .wrap turns it into the page gutter;
+     a dark band cancels its own inset against it (see .cage-band) so its
+     eyebrow/headline/lead land on the SAME vertical line as the paper
+     sections above and below it — the band keeps its border, background
+     and radius, it just stops shifting the text column.
+     THE RULE: everything left-aligns on --edge. Exactly two exceptions:
+       (a) #final — the closing band is centered. One page-level
+           exception, deliberately, so the last ask reads as a full stop.
+       (b) the demo output column's counter / bridge / receipt — centered
+           on their own local axis at the client's request. The season
+           card and the Claude-frame figure are the same species: objects
+           centered in their own container, never the text column.
+     --band-inset = how far a dark band's OUTER border sits inside the
+     page frame; whatever is left of --edge becomes its inner padding. */
+  --edge:26px; --band-inset:8px;
+  --sec-y:clamp(3.2rem,7vw,5rem); /* the ONE section rhythm scale */
+  /* derived from --sec-y so the lead→content-block gap is identical in
+     every section instead of five hand-typed margins */
+  --block-gap:clamp(1.9rem,calc(var(--sec-y)*.45),2.4rem);
+  /* two card paddings, not six: card text starts on one secondary x, and
+     the roomier step is reserved for the pricing + founder set-pieces */
+  --card-pad:1.6rem; --card-pad-lg:2rem;
+  --r:16px; --r-lg:20px;
+  --shadow:0 4px 0 var(--shadow-ink); --shadow-up:0 6px 0 var(--shadow-ink);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+/* ================================================================
+   DARK — warm espresso, never pure black (2026 warm near-black).
+   Every pair below computed: body text ≥4.5:1, large/mono-label ≥3:1.
+   System-following; ?theme=dark|light forces via data-theme on <html>. */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#1A1109; --card:#271B10; --ink:#F5EAD9; --sub:#C4B39D;
+    --deep:#E8930F; --honey:#3B2A14;
+    --esp:#332216; --esp2:#412D1C; --esp-sub:#CDB89E; --esp-line:rgba(255,233,184,.16);
+    --line:rgba(245,234,217,.22); --shadow-ink:#0E0703; --soft-rgb:245,234,217;
+    --line-in:rgba(245,234,217,.45); --nut-bg:#FFE9B8;
+    --focus:#FFB237;
+    --header-bg:rgba(26,17,9,.92); --backdrop:rgba(8,4,1,.7);
+    --ph:#A6906F;
+    --hlA:.26; --hlB:.32;
+    --glow1:rgba(255,178,55,.10); --glow2:rgba(199,123,10,.05);
+    --grain-op:.05; --grain-blend:screen;
+    --feat-top:#2A1E13; --feat-border:#FFB237;
+    --cw-bg:#262521; --cw-bar:#1E1D19; --cw-line:#3B3934; --cw-text:#EDEAE3;
+    --cw-mut:#A8A296; --cw-bubble:#393731; --cw-dots:#4C4A43;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#1A1109; --card:#271B10; --ink:#F5EAD9; --sub:#C4B39D;
+  --deep:#E8930F; --honey:#3B2A14;
+  --esp:#332216; --esp2:#412D1C; --esp-sub:#CDB89E; --esp-line:rgba(255,233,184,.16);
+  --line:rgba(245,234,217,.22); --shadow-ink:#0E0703; --soft-rgb:245,234,217;
+  --line-in:rgba(245,234,217,.45); --nut-bg:#FFE9B8;
+  --focus:#FFB237;
+  --header-bg:rgba(26,17,9,.92); --backdrop:rgba(8,4,1,.7);
+  --ph:#A6906F;
+  --hlA:.26; --hlB:.32;
+  --glow1:rgba(255,178,55,.10); --glow2:rgba(199,123,10,.05);
+  --grain-op:.05; --grain-blend:screen;
+  --feat-top:#2A1E13; --feat-border:#FFB237;
+  --cw-bg:#262521; --cw-bar:#1E1D19; --cw-line:#3B3934; --cw-text:#EDEAE3;
+  --cw-mut:#A8A296; --cw-bubble:#393731; --cw-dots:#4C4A43;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);font-weight:400;background:var(--paper);color:var(--ink);line-height:1.6;font-size:1.0625rem;overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+a{color:inherit}
+img,svg{max-width:100%}
+::selection{background:var(--amber);color:var(--on-amber)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* golden hour: one warm light, upper-left, across the whole page */
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(72vw 56vh at 12% -8%,var(--glow1),transparent 62%),
+  radial-gradient(90vw 70vh at 108% 112%,var(--glow2),transparent 60%)}
+/* faint paper grain keeps the warmth physical */
+body::after{content:'';position:fixed;inset:0;z-index:600;pointer-events:none;opacity:var(--grain-op);mix-blend-mode:var(--grain-blend);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>")}
+
+/* type scale ~60/44/24/17/13 · display 600 (700 only on tiny elements) ·
+   tracking −1.5% to −2.2% on display · hierarchy via ink-vs-muted, not weight */
+h1,h2,h3{font-family:var(--disp);line-height:1.08;letter-spacing:-.015em}
+h1{font-size:clamp(2.5rem,4.8vw,3.75rem);font-weight:600;letter-spacing:-.022em;line-height:1.06}
+h2{font-size:clamp(1.8rem,3.6vw,2.75rem);font-weight:600;letter-spacing:-.018em}
+h3{font-size:1.3rem;font-weight:600}
+.lead{font-size:1.0625rem;color:var(--sub);max-width:36rem}
+.lead em{font-style:normal;font-weight:600;color:var(--ink)}
+.mono{font-family:var(--mono)}
+.eyebrow{display:block;font-family:var(--mono);font-weight:500;font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--deep);margin-bottom:1.1rem}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--edge)}
+/* the gutter grows with the viewport so a dark band can be inset AND
+   still start its text on --edge (see .cage-band) */
+@media(min-width:600px){:root{--edge:40px;--band-inset:12px}}
+@media(min-width:1000px){:root{--edge:56px;--band-inset:18px}}
+section{padding:var(--sec-y) 0;position:relative}
+section[id]{scroll-margin-top:88px}
+.skip{position:absolute;left:-9999px;top:0;z-index:1000;background:var(--ink);color:var(--paper);padding:.6rem 1rem;font-family:var(--mono);font-size:.85rem;border-radius:0 0 10px 0}
+.skip:focus-visible{left:0}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:6px}
+
+/* ---- THE ONE PHYSICS RULE ----------------------------------------
+   rest: shadow down 4px · hover: rise 2px, shadow 6px · press: flat, shadow 0 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;font-family:var(--disp);font-weight:700;font-size:1rem;letter-spacing:.005em;padding:.8rem 1.5rem;min-height:48px;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);text-decoration:none;transition:transform .12s var(--spring),box-shadow .12s var(--spring);user-select:none;white-space:nowrap}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-up)}
+.btn:active{transform:translateY(4px);box-shadow:0 0 0 var(--shadow-ink)}
+.btn-amber{background:linear-gradient(180deg,var(--amber-hi),var(--amber));color:var(--on-amber);border-color:var(--on-amber)}
+.btn-amber:active{background:var(--amber)}
+.btn-lg{font-size:1.1rem;padding:.95rem 1.8rem}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn:disabled:hover,.btn:disabled:active{transform:none;box-shadow:var(--shadow)}
+
+/* highlighter swipe — the only amber under text on light */
+.hlw{background-image:linear-gradient(104deg,rgba(255,178,55,0) 0,rgba(255,178,55,var(--hlA)) 3%,rgba(255,178,55,var(--hlB)) 92%,rgba(255,178,55,0));background-repeat:no-repeat;background-size:100% 42%;background-position:0 74%}
+.js .hlw{background-size:0% 42%;transition:background-size .7s cubic-bezier(.4,0,.2,1) .15s}
+.js .in .hlw,.js .hlw.in{background-size:100% 42%}
+
+/* zigzag self-drawing underline for “lightning” */
+.zz{position:relative;white-space:nowrap}
+.zz svg{position:absolute;left:2%;bottom:-.24em;width:96%;height:.34em;overflow:visible}
+.zz path{stroke:var(--deep);stroke-width:2.5;fill:none;stroke-dasharray:230;stroke-dashoffset:0}
+.js .zz path{stroke-dashoffset:230}
+.js .in .zz path{animation:zzdraw .8s ease .4s forwards}
+@keyframes zzdraw{to{stroke-dashoffset:0}}
+
+/* reveal (gated on .js) */
+.rv{transition:opacity .55s ease,transform .55s ease}
+.js .rv{opacity:0;transform:translateY(14px)}
+.js .rv.in{opacity:1;transform:none}
+
+/* metadata chips on captures + receipt (straight — not stickers) */
+.stamp{display:inline-flex;align-items:center;gap:.3rem;font-family:var(--mono);font-weight:500;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:.28rem .55rem;border:2px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);line-height:1.25;box-shadow:0 2px 0 var(--shadow-ink)}
+.stamp.s-amber{background:var(--honey)}
+.stamp.s-sub{color:var(--sub)}
+.js .stamp.thunk{animation:thunk .35s var(--spring) both}
+@keyframes thunk{0%{opacity:0;transform:scale(1.6)}100%{opacity:1;transform:scale(1)}}
+
+/* ================================================================ HEADER */
+header{position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:2px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:.75rem}
+.logo{display:flex;align-items:center;gap:.6rem;font-family:var(--disp);font-weight:700;font-size:1.08rem;text-decoration:none;min-height:44px;letter-spacing:-.01em}
+.logo .tile{width:34px;height:34px;border-radius:10px;background:linear-gradient(180deg,var(--amber-hi),var(--amber));border:2px solid var(--on-amber);box-shadow:0 3px 0 var(--shadow-ink);display:grid;place-items:center;font-size:1.05rem}
+.nav-links{display:flex;gap:1.5rem;font-family:var(--sans);font-weight:600;font-size:.92rem}
+.nav-links a{color:var(--sub);text-decoration:none;padding:.7rem 0;transition:color .15s}
+.nav-links a:hover{color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:.7rem}
+.stash-chip{font-family:var(--mono);font-weight:500;font-size:.8rem;color:var(--sub);border:2px solid var(--line);border-radius:12px;padding:.38rem .6rem;background:var(--honey);box-shadow:0 2px 0 var(--shadow-ink)}
+.stash-chip b{color:var(--ink);font-weight:500}
+/* the 🌰 glyph is a dark emoji — in dark mode it sits on a honey disc */
+.nut{display:inline-grid;place-items:center;width:1.45em;height:1.45em;border-radius:50%;background:var(--nut-bg);vertical-align:-.32em}
+/* the header controls use --line-in, not --line: their boundary is the
+   only thing identifying them, so it has to clear 3:1 (SC 1.4.11) in dark
+   as well. Identical to --line in light; brighter in dark. */
+.sound-btn,.theme-btn{width:44px;height:44px;display:grid;place-items:center;border:2px solid var(--line-in);border-radius:12px;background:var(--card);box-shadow:0 3px 0 var(--shadow-ink);font-family:var(--mono);font-weight:500;font-size:.6rem;letter-spacing:.04em;color:var(--sub);transition:transform .12s var(--spring),box-shadow .12s var(--spring)}
+.sound-btn:hover,.theme-btn:hover{transform:translateY(-2px);box-shadow:0 5px 0 var(--shadow-ink)}
+.sound-btn:active,.theme-btn:active{transform:translateY(3px);box-shadow:0 0 0 var(--shadow-ink)}
+.sound-btn[aria-pressed="true"]{background:var(--honey);color:var(--ink)}
+/* ---- THEME TOGGLE — two-state light ⇄ dark, drawn sun/moon.
+   The icon shows the theme the press will GIVE you, and it is switched
+   by the same cascade the colour tokens use (system preference unless
+   data-theme overrides), so it is correct on the very first paint. */
+/* The accessible NAME rides the same cascade as the icon (two sr-only
+   spans, the wrong one display:none and therefore out of the name), so it
+   can never say "switch to dark" on a page that is already dark — true on
+   the very first paint and true with JS off. */
+.theme-btn{color:var(--ink)}
+.theme-btn .ic{width:20px;height:20px;display:block}
+.theme-btn .ic-sun,.theme-btn .lbl-light{display:none}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .theme-btn .ic-moon,
+  :root:not([data-theme="light"]) .theme-btn .lbl-dark{display:none}
+  :root:not([data-theme="light"]) .theme-btn .ic-sun{display:block}
+  :root:not([data-theme="light"]) .theme-btn .lbl-light{display:inline}
+}
+:root[data-theme="dark"] .theme-btn .ic-moon,
+:root[data-theme="dark"] .theme-btn .lbl-dark{display:none}
+:root[data-theme="dark"] .theme-btn .ic-sun{display:block}
+:root[data-theme="dark"] .theme-btn .lbl-light{display:inline}
+:root[data-theme="light"] .theme-btn .ic-moon{display:block}
+:root[data-theme="light"] .theme-btn .lbl-dark{display:inline}
+:root[data-theme="light"] .theme-btn .ic-sun,
+:root[data-theme="light"] .theme-btn .lbl-light{display:none}
+.burger{display:none;width:44px;height:44px;border:2px solid var(--line-in);border-radius:12px;background:var(--card);box-shadow:0 3px 0 var(--shadow-ink);place-items:center}
+.burger .bars{display:flex;flex-direction:column;gap:4px}
+.burger .bars span{display:block;width:16px;height:2px;background:var(--ink);border-radius:2px;transition:transform .2s,opacity .2s}
+.burger[aria-expanded="true"] .bars span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger[aria-expanded="true"] .bars span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] .bars span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+/* .open is scoped to the width where the burger that closes it exists —
+   otherwise widening/rotating past 920px strands an open panel under the
+   header with no visible control to dismiss it (see the JS guard too) */
+.mnav{display:none;border-bottom:2px solid var(--line);background:var(--paper)}
+.mnav a{display:block;padding:.95rem var(--edge);font-family:var(--disp);font-weight:700;font-size:1rem;color:var(--ink);text-decoration:none;border-top:1px solid rgba(var(--soft-rgb),.12);min-height:44px}
+/* sound collapses into the menu panel on the narrowest phones so the
+   theme toggle always stays visible in the header */
+.mnav-sound{display:none;width:100%;align-items:center;justify-content:space-between;gap:.75rem;padding:.95rem var(--edge);font-family:var(--disp);font-weight:700;font-size:1rem;color:var(--ink);border-top:1px solid rgba(var(--soft-rgb),.12);min-height:44px;text-align:left}
+.mnav-sound .ms-state{font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);border:2px solid var(--line);border-radius:9px;padding:.2rem .5rem;background:var(--card)}
+.mnav-sound[aria-pressed="true"] .ms-state{background:var(--honey);color:var(--ink)}
+@media(max-width:920px){
+  .nav-links{display:none}
+  .burger{display:grid}
+  .mnav.open{display:block}
+  .nav .btn{padding:.55rem 1rem;min-height:44px;font-size:.88rem}
+}
+@media(max-width:560px){.stash-chip{display:none}.logo .suffix{display:none}}
+@media(max-width:520px){.sound-btn{display:none}.mnav-sound{display:flex}.nav-right{gap:.5rem}}
+</style>
+<style>
+/* ================================================================ HERO */
+/* the hero is the one section that runs tighter than the rhythm — and it
+   does it as a FRACTION of the same --sec-y scale, not a second scale */
+.hero{padding-top:calc(var(--sec-y)*.68);padding-bottom:calc(var(--sec-y)*.76)}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(1.6rem,4vw,3.4rem);align-items:center}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr;gap:1.4rem}}
+.hero-cat{margin-bottom:1.2rem}
+.cat-chip{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--mono);font-weight:500;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:999px;padding:.4rem .85rem;box-shadow:0 3px 0 var(--shadow-ink)}
+.cat-chip b{color:var(--deep);font-weight:500}
+.hero h1{margin:0 0 1.15rem;max-width:15ch}
+.hero .lead{margin-bottom:1.7rem}
+.hero-ctas{display:flex;gap:.85rem;flex-wrap:wrap;margin-bottom:1.15rem}
+.trust{font-family:var(--mono);font-weight:500;font-size:.76rem;color:var(--sub);display:flex;gap:.5rem 1.3rem;flex-wrap:wrap;margin-bottom:1.5rem}
+/* machined bolt counter */
+/* on the shared edge with the headline above it — never centred */
+.odometer{display:flex;width:fit-content;align-items:center;gap:.6rem;font-family:var(--mono);font-weight:500;font-size:.76rem;letter-spacing:.06em;color:var(--sub);margin:0;padding:.5rem .75rem;border:2px solid var(--line);border-radius:12px;background:var(--card);box-shadow:0 3px 0 var(--shadow-ink);font-variant-numeric:tabular-nums}
+.odo-digits{display:inline-flex;gap:2px}
+.odo-d{display:block;height:1.5em;width:1.5ch;overflow:hidden;border:1.5px solid var(--line);border-radius:4px;background:var(--honey)}
+.odo-d>span{display:block;line-height:1.5em;text-align:center;color:var(--ink);font-weight:500;white-space:pre;transition:transform .55s cubic-bezier(.22,.8,.3,1)}
+
+/* product at the fold: the Claude recreation lives in the hero column */
+.hero-stage{display:grid;place-items:center}
+.hero-stage .claude-frame{margin:0;width:100%;max-width:560px}
+.hero-stage .cw-chat{font-size:.88rem;gap:.9rem;padding:1.05rem 1.1rem 1.2rem}
+.hero-stage .cw-capture{font-size:.7rem}
+.hero-stage .cw-caption{margin:.65rem 0 0}
+/* the machined bottle, staged in golden light (now the closing set-piece) */
+.stage-box{position:relative;width:min(100%,430px)}
+.stage-box svg{display:block;width:100%;height:auto}
+.mascot{position:absolute;left:50%;bottom:76%;transform:translateX(-50%);font-size:clamp(2.5rem,5vw,3.3rem);line-height:1;min-width:44px;min-height:44px;display:grid;place-items:center;border-radius:14px;filter:drop-shadow(0 3px 0 rgba(42,27,16,.28));transition:transform .12s var(--spring)}
+.mascot:hover{transform:translateX(-50%) translateY(-2px)}
+.js .spark{animation:twinkle 2.8s ease-in-out infinite}
+.js .spark.k2{animation-delay:.9s}
+.js .spark.k3{animation-delay:1.7s}
+@keyframes twinkle{0%,100%{opacity:.9;transform:scale(1)}50%{opacity:.25;transform:scale(.6)}}
+.settle .spark{animation:none!important}
+@media(max-width:960px){
+  .stage-box{width:min(72%,320px)}
+  .hero{padding-top:calc(var(--sec-y)*.42)}
+}
+
+/* ================================================================ PROOF STRIP (empty-state hidden) */
+.proof{display:none}
+.proof.has-proof{display:block}
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:1.6rem}
+@media(max-width:860px){.proof-grid{grid-template-columns:1fr}}
+/* tweet-card anatomy: face + name + handle, then the quote */
+.proof-slot{background:var(--card);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:1.4rem 1.5rem}
+.proof-slot .ps-head{display:flex;align-items:center;gap:.7rem;margin-bottom:.9rem}
+.proof-slot .ps-ava{width:40px;height:40px;border-radius:50%;background:var(--honey);border:2px solid var(--line);overflow:hidden;flex-shrink:0;display:grid;place-items:center;font-size:1.1rem}
+.proof-slot .ps-ava img{width:100%;height:100%;object-fit:cover;display:block}
+.proof-slot .ps-name{display:block;font-family:var(--disp);font-weight:700;font-size:.95rem;line-height:1.25}
+.proof-slot .ps-handle{display:block;font-family:var(--mono);font-weight:500;font-size:.72rem;color:var(--sub)}
+.proof-slot blockquote{font-family:var(--sans);font-weight:500;font-size:1rem;line-height:1.55}
+.proof-stat{background:var(--honey);display:flex;flex-direction:column;justify-content:center}
+.proof-stat b{font-family:var(--disp);font-weight:600;font-size:2.5rem;line-height:1.1;letter-spacing:-.015em}
+.proof-stat span{font-family:var(--mono);font-weight:500;font-size:.76rem;color:var(--sub)}
+
+/* ================================================================ DEMO */
+/* framing chips — 2 of the page's 3 tilted stickers */
+.free-chip,.paid-chip{display:inline-block;font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;border:2px solid var(--line);border-radius:11px;padding:.34rem .7rem;margin-bottom:1.05rem;background:var(--card);box-shadow:0 3px 0 var(--shadow-ink);transform:rotate(-2deg)}
+.free-chip{border-color:var(--teal);box-shadow:0 3px 0 var(--teal);background:rgba(31,199,212,.07)}
+.paid-chip{transform:rotate(2deg);border-color:var(--amber);color:var(--amber);background:transparent;box-shadow:0 3px 0 rgba(0,0,0,.5)}
+.demo-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:1.6rem;margin-top:var(--block-gap);align-items:start}
+@media(max-width:860px){.demo-grid{grid-template-columns:1fr}.receipt-zone{grid-column:auto}}
+.pad{background:var(--card);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-up);padding:1.4rem var(--card-pad) 1.5rem;position:relative}
+.pad-label{font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);margin-bottom:.7rem}
+label.pad-label{display:block}
+.pad textarea{width:100%;border:2px solid var(--line-in);border-radius:12px;background:var(--paper);font-family:var(--mono);font-weight:500;font-size:1rem;line-height:1.6;color:var(--ink);resize:none;min-height:108px;padding:.8rem .9rem}
+.pad textarea:focus{outline:3px solid var(--focus);outline-offset:2px}
+.pad textarea::placeholder{color:var(--ph)}
+.chips{display:flex;gap:.55rem;flex-wrap:wrap;margin:.95rem 0 1.15rem}
+.chip{font-family:var(--mono);font-weight:500;font-size:.76rem;padding:.55rem .8rem;min-height:44px;border:2px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);box-shadow:0 3px 0 var(--shadow-ink);transition:transform .12s var(--spring),box-shadow .12s var(--spring)}
+.chip:hover{transform:translateY(-2px);box-shadow:0 5px 0 var(--shadow-ink)}
+.chip:active{transform:translateY(3px);box-shadow:0 0 0 var(--shadow-ink)}
+.dial-block{margin:0 0 1.2rem}
+.dial-head{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);margin-bottom:.45rem}
+.dial-seg{display:flex;border:2px solid var(--line);border-radius:14px;background:var(--paper);overflow:hidden;box-shadow:0 3px 0 var(--shadow-ink)}
+.dial-seg [role=radio]{flex:1;min-height:44px;font-family:var(--disp);font-weight:700;font-size:.82rem;letter-spacing:.01em;color:var(--sub);background:transparent;padding:.6rem .4rem;transition:color .15s,background .15s}
+.dial-seg [role=radio]+[role=radio]{border-left:2px solid var(--line)}
+.dial-seg [role=radio]:hover{color:var(--ink)}
+.dial-seg [role=radio][aria-checked="true"]{color:var(--on-amber);background:linear-gradient(180deg,var(--amber-hi),var(--amber));box-shadow:inset 0 -3px 0 #C77B0A}
+.dial-seg [role=radio]:focus-visible{outline-offset:-3px}
+/* the checked segment is amber — the ring must go ink to stay visible */
+.dial-seg [role=radio][aria-checked="true"]:focus-visible{outline-color:var(--on-amber)}
+/* output column */
+.out-wrap{position:relative}
+.out{background:var(--card);border:2px dashed rgba(var(--soft-rgb),.35);border-radius:var(--r-lg);padding:1.5rem 1.6rem;min-height:300px;font-family:var(--mono);font-weight:500;font-size:.84rem;line-height:1.75}
+/* the placeholder starts on the output column's own left edge, like the
+   labels above and below it — the centred trio here is the counter, the
+   bridge and the receipt, and this is not one of them */
+.out.empty{display:flex;align-items:center;color:var(--sub)}
+.out.filled{border-style:solid;border-color:var(--line);box-shadow:var(--shadow)}
+.out .cap-title{font-family:var(--disp);font-weight:700;font-size:1.4rem;line-height:1.15;letter-spacing:-.01em;margin:.25rem 0 .9rem}
+.out .stamps{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.caret::after{content:'▏';color:var(--deep);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.caret::after{animation:none}}
+.cap-row{display:flex;gap:.6rem;color:var(--sub);border-bottom:1px dotted rgba(var(--soft-rgb),.25);padding:.24rem 0}
+.cap-row b{color:var(--deep);font-weight:500;min-width:9.5ch;flex-shrink:0}
+.cap-row span{color:var(--ink)}
+.js .cap-line{opacity:0;transform:translateY(4px)}
+.js .cap-line.on{opacity:1;transform:none;transition:opacity .3s ease,transform .3s ease}
+.more-btn{font-family:var(--mono);font-weight:500;font-size:.76rem;color:var(--sub);padding:.5rem 0;min-height:44px;text-decoration:underline;text-underline-offset:3px}
+.more-btn:hover{color:var(--ink)}
+.more-fields[hidden]{display:none}
+.cap-close{margin-top:1rem;padding-top:.9rem;border-top:2px solid var(--honey);color:var(--deep);font-family:var(--disp);font-weight:700;font-size:1rem}
+/* zap dial payoff — three visibly different volumes for the same catch */
+.out .cap-tags{font-size:.72rem;letter-spacing:.06em;color:var(--sub);margin-bottom:1rem}
+.out.quiet .cap-close{color:var(--sub);font-family:var(--mono);font-weight:500;font-size:.78rem;border-top-color:rgba(var(--soft-rgb),.2)}
+.out.loud{border-color:var(--amber);box-shadow:0 4px 0 var(--amber)}
+.out.loud .cap-close{background:var(--honey);border-top:2px solid var(--amber);margin:1rem -1.6rem -1.5rem;padding:.9rem 1.6rem 1.1rem;border-radius:0 0 18px 18px}
+.sim-note{font-family:var(--mono);font-weight:500;font-size:.7rem;color:var(--sub);margin-top:.8rem}
+.demo-count{font-family:var(--mono);font-weight:500;font-size:.8rem;color:var(--sub);margin:1.5rem auto 0;text-align:center}
+.demo-count b{color:var(--deep);font-weight:500}
+.demo-count[hidden]{display:none}
+/* bridge card — centered in the demo column, balanced above and below */
+.bridge{margin:1.5rem auto;background:var(--honey);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:1.3rem 1.4rem;text-align:center}
+.bridge[hidden]{display:none}
+.js .bridge{transition:opacity .5s ease,transform .5s ease}
+.bridge p{font-size:.95rem;margin-bottom:.9rem}
+.bridge p em{font-style:normal;font-family:var(--disp);font-weight:700}
+/* the Idea Receipt — screenshot bait, warm-tactile.
+   A thermal receipt is paper in any theme: pin its tokens to light. */
+.receipt{--ink:#2A1B10;--sub:#6B5744;--card:#FFFFFF;--honey:#FFE9B8;--deep:#96570A;--line:#2A1B10;--shadow-ink:#2A1B10;--soft-rgb:42,27,16}
+/* receipt lives in the demo grid's output column — one centerline with the
+   counter + bridge above it, not a second page-width axis */
+.receipt-zone{grid-column:2;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.receipt-zone[hidden]{display:none}
+.receipt-clip{overflow:hidden;padding:0 14px 14px}
+.receipt{width:300px;background:#FFFEF9;color:var(--ink);font-family:var(--mono);font-weight:500;font-size:.74rem;line-height:1.65;padding:1.3rem 1.15rem 1.5rem;position:relative;transform:rotate(-.6deg);
+  filter:drop-shadow(0 4px 0 rgba(var(--soft-rgb),.3))}
+.receipt::after{content:'';position:absolute;left:0;right:0;bottom:-7px;height:7px;
+  background:conic-gradient(from 315deg at 50% 100%,#FFFEF9 90deg,#0000 0) 50% 0/12px 7px repeat-x}
+.receipt::before{content:'';position:absolute;left:0;right:0;top:-7px;height:7px;
+  background:conic-gradient(from 135deg at 50% 0,#FFFEF9 90deg,#0000 0) 50% 100%/12px 7px repeat-x}
+.js .receipt.printing{animation:printout .9s steps(14) both}
+@keyframes printout{from{clip-path:inset(0 0 100% 0);transform:translateY(-30px) rotate(-.6deg)}to{clip-path:inset(0 0 0 0);transform:translateY(0) rotate(-.6deg)}}
+.receipt .rc-head{text-align:center;letter-spacing:.28em;font-weight:500;font-size:.82rem}
+.receipt .rc-subhead{text-align:center;letter-spacing:.14em;font-size:.66rem;color:var(--sub)}
+.receipt .rc-rule{border:none;border-top:1px dashed #C4B499;margin:.65rem 0}
+.receipt .rc-row{display:flex;justify-content:space-between;gap:.5rem}
+.receipt .rc-row .l{color:var(--sub)}
+.receipt .rc-title{font-family:var(--disp);font-weight:700;font-size:1.02rem;line-height:1.25;letter-spacing:-.005em;margin:.35rem 0}
+.receipt .rc-stamps{display:flex;gap:.4rem;flex-wrap:wrap;margin:.5rem 0 .2rem}
+.receipt .rc-stamps .stamp{font-size:.58rem;padding:.16rem .4rem;box-shadow:none}
+.receipt .barcode{height:34px;margin:.7rem 0 .3rem;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 5px,transparent 5px 9px,var(--ink) 9px 12px,transparent 12px 14px)}
+.receipt .rc-foot{text-align:center;letter-spacing:.18em;font-size:.66rem;margin-top:.5rem}
+.receipt .rc-foot b{font-weight:500;color:var(--deep)}
+
+/* ================================================================ HOW IT WORKS */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;margin-top:var(--block-gap)}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{background:var(--card);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:1.6rem var(--card-pad) 1.5rem}
+.step .n{width:46px;height:46px;border-radius:13px;background:linear-gradient(180deg,var(--amber-hi),var(--amber));border:2px solid var(--on-amber);box-shadow:0 3px 0 var(--shadow-ink);display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:1.3rem;margin-bottom:1rem;color:var(--on-amber)}
+.step h3{margin-bottom:.5rem}
+.step p{font-size:.94rem;color:var(--sub)}
+.step p q{font-family:var(--disp);font-weight:600;color:var(--ink)}
+
+/* ================================================================ THE CAGE — warm dark machine */
+/* The band bleeds outward by exactly its own inset (border + inline
+   padding), so its text column lands on --edge — the same vertical line
+   as every paper section — while it keeps the inset-card look: border,
+   espresso background, radius, hard shadow, paper visible around it. */
+.cage-band{background:linear-gradient(180deg,var(--esp),var(--esp2));color:var(--esp-text);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-up);
+  margin-inline:calc(var(--band-inset) - var(--edge));
+  padding:clamp(1.8rem,4.5vw,3rem) calc(var(--edge) - var(--band-inset) - 2px);
+  position:relative;overflow:hidden}
+.cage-band h2{color:var(--esp-text)}
+.cage-band .eyebrow{color:var(--amber)}
+.cage-band .lead{color:var(--esp-sub)}
+.cage-band .lead b{color:var(--esp-text);font-weight:600}
+.cage-band .lead em{color:var(--amber)}
+.cage-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin:var(--block-gap) 0 1rem}
+.cage-month{font-family:var(--disp);font-weight:700;font-size:1.05rem;letter-spacing:.01em;color:var(--amber)}
+.cage-sub{font-family:var(--mono);font-weight:500;font-size:.76rem;color:var(--esp-sub)}
+.cage-actions{display:flex;gap:.7rem;flex-wrap:wrap}
+.cage-band .btn{background:transparent;color:var(--esp-text);border-color:var(--esp-text);box-shadow:0 4px 0 rgba(247,239,226,.3)}
+.cage-band .btn:hover{box-shadow:0 6px 0 rgba(247,239,226,.3);background:rgba(247,239,226,.06)}
+.cage-band .btn:active{box-shadow:0 0 0 transparent}
+.cage-band .btn-hot{background:linear-gradient(180deg,var(--amber-hi),var(--amber));color:var(--on-amber);border-color:var(--on-amber);box-shadow:0 4px 0 rgba(0,0,0,.55)}
+.cage-band .btn-hot:hover{box-shadow:0 6px 0 rgba(0,0,0,.55)}
+.cage-band .btn-hot:active{box-shadow:0 0 0 transparent}
+.cage-bar{height:10px;background:rgba(0,0,0,.4);border:2px solid rgba(247,239,226,.25);border-radius:999px;margin-bottom:1.4rem;position:relative;overflow:hidden}
+.cage-fill{position:absolute;inset:0 auto 0 0;width:8.3%;background:linear-gradient(180deg,var(--amber-hi),var(--amber));transition:width .6s ease;border-radius:999px}
+.league{list-style:none;font-family:var(--mono);font-weight:500;font-size:.86rem}
+.league li{display:flex;align-items:baseline;gap:.7rem;padding:.58rem 0;border-bottom:1px solid var(--esp-line);position:relative;transition:opacity .5s ease}
+.league .pos{color:var(--esp-sub);min-width:2.2ch;font-size:.76rem}
+.league .nm{font-family:var(--disp);font-weight:600;font-size:1.02rem;letter-spacing:.002em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0}
+.league .dots{flex:1;border-bottom:2px dotted rgba(247,239,226,.28);transform:translateY(-4px);min-width:24px}
+.league .nuts{color:var(--amber);white-space:nowrap}
+.league .new{color:var(--esp-sub);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+.league .carried{font-size:.6rem;font-weight:500;padding:.14rem .4rem;border:2px solid var(--amber);color:var(--amber);border-radius:7px;letter-spacing:.12em;text-transform:uppercase;margin-left:.3rem;flex-shrink:0}
+.league li.cut .nm{color:var(--esp-sub)}
+.league li .strike{position:absolute;left:0;top:52%;height:2px;width:0;background:var(--amber);pointer-events:none}
+.js .league li.cut .strike{animation:strikeL .45s ease-out forwards}
+@keyframes strikeL{to{width:100%}}
+.league li.gone{opacity:0}
+.league li.champ .nm{color:var(--amber)}
+.cage-log{font-family:var(--mono);font-weight:500;font-size:.78rem;color:var(--esp-sub);min-height:1.8em;margin-top:1.1rem}
+.cage-log b{color:var(--amber);font-weight:500}
+/* premium confetti */
+.cf{position:absolute;top:0;width:7px;height:11px;border-radius:2px;pointer-events:none;z-index:5}
+/* season card — crowned idea of the year, signed */
+.wrapped{margin-top:2rem;display:grid;place-items:center}
+.wrapped[hidden]{display:none}
+.season-card{width:min(100%,470px);background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:0 6px 0 rgba(0,0,0,.55);padding:1.8rem 1.9rem 1.6rem;text-align:center}
+.season-card .sc-top{display:flex;justify-content:space-between;font-family:var(--mono);font-weight:500;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);border-bottom:2px solid var(--line);padding-bottom:.5rem;margin-bottom:1rem}
+.season-card .sc-crown{font-size:2.1rem;line-height:1;margin-bottom:.4rem;filter:drop-shadow(0 2px 0 rgba(42,27,16,.25))}
+.season-card .sc-kicker{font-family:var(--disp);font-weight:700;font-size:.86rem;letter-spacing:.24em;text-transform:uppercase;color:var(--deep);margin-bottom:.5rem}
+.season-card .sc-winner{font-family:var(--disp);font-weight:600;font-size:1.55rem;line-height:1.14;letter-spacing:-.015em;margin-bottom:.7rem}
+.season-card .sc-agate{font-family:var(--mono);font-weight:500;font-size:.7rem;color:var(--sub);border-top:1px dashed rgba(var(--soft-rgb),.3);border-bottom:1px dashed rgba(var(--soft-rgb),.3);padding:.55rem 0;margin-bottom:1.05rem}
+.season-card .sc-date{font-family:var(--mono);font-weight:500;font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-bottom:1rem}
+.sign-row{display:flex;justify-content:center;align-items:center;gap:.6rem;margin-bottom:1.1rem}
+.sign-row label{font-family:var(--mono);font-weight:500;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sub)}
+.sign-row input{width:5.5ch;text-align:center;font-family:var(--mono);font-weight:500;font-size:1.05rem;letter-spacing:.2em;text-transform:uppercase;padding:.5rem .3rem;border:2px solid var(--line-in);border-radius:10px;background:var(--honey);color:var(--ink);min-height:44px}
+.sign-row .btn{min-height:44px;padding:.5rem 1rem;font-size:.9rem}
+.sign-done{font-family:var(--disp);font-weight:700;font-size:1.02rem;margin-bottom:1.1rem}
+.sign-done[hidden]{display:none}
+.sign-done b{color:var(--deep);letter-spacing:.14em}
+.sign-done .sd-sub{display:block;font-family:var(--mono);font-weight:500;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-top:.3rem}
+.season-card .sc-cta{display:flex;flex-direction:column;align-items:center;gap:.55rem}
+.season-card .sc-note{font-family:var(--mono);font-weight:500;font-size:.66rem;color:var(--sub)}
+/* rules trio */
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;margin-top:2.3rem;border-top:1px solid var(--esp-line);padding-top:1.6rem}
+@media(max-width:820px){.rules{grid-template-columns:1fr;gap:1.2rem}}
+.rule h3{font-family:var(--disp);font-weight:700;font-size:.98rem;color:var(--amber);margin-bottom:.4rem}
+.rule p{font-size:.9rem;color:var(--esp-sub)}
+</style>
+<style>
+/* ================================================================ CLAUDE FRAME
+   Faithful recreation of the real interaction — drawn in code, labeled
+   as a recreation. Claude's own quiet neutrals inside the ink-outlined
+   chassis; the capture block is the skill's REAL output format. */
+.claude-frame{max-width:780px;margin:2.4rem auto 0;background:var(--cw-bg);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-up);overflow:hidden;text-align:left}
+.cw-bar{display:flex;align-items:center;gap:.7rem;padding:.6rem .95rem;border-bottom:1px solid var(--cw-line);background:var(--cw-bar)}
+.cw-dots{display:inline-flex;gap:5px}
+.cw-dots i{width:9px;height:9px;border-radius:50%;background:var(--cw-dots)}
+.cw-name{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--sans);font-weight:600;font-size:.84rem;color:var(--cw-text)}
+.cw-tag{margin-left:auto;font-family:var(--mono);font-weight:500;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cw-mut)}
+.cw-chat{padding:1.25rem 1.35rem 1.45rem;display:flex;flex-direction:column;gap:1.05rem;background:var(--cw-bg);font-size:.93rem;line-height:1.55;color:var(--cw-text);transition:opacity .35s ease}
+.cw-chat.cw-fade{opacity:0}
+.cw-user{display:flex;justify-content:flex-end}
+.cw-user .cw-bubble{max-width:86%;background:var(--cw-bubble);border-radius:14px 14px 4px 14px;padding:.65rem .95rem}
+.cw-assistant{display:flex;gap:.7rem;align-items:flex-start}
+.cw-av{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:#D97757;display:grid;place-items:center;margin-top:.15rem}
+.cw-av svg{width:12px;height:12px;display:block}
+.cw-msg{min-width:0;flex:1}
+.cw-msg code{font-family:var(--mono);font-size:.82em;background:var(--cw-bubble);border-radius:5px;padding:.08em .35em}
+.cw-capture{font-family:var(--mono);font-weight:500;font-size:.76rem;line-height:1.75;background:var(--cw-bar);border:1px solid var(--cw-line);border-radius:10px;padding:.85rem 1rem;margin-top:.55rem;white-space:pre-wrap;word-break:break-word;overflow-x:auto}
+.js .cw-turn{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+.js .cw-turn.on{opacity:1;transform:none}
+/* typing engine: unsent turns reserve their final space but show nothing */
+.cw-turn.cw-hide{visibility:hidden}
+/* caption sits on the frame's own left edge — no stray centred line */
+.cw-caption{max-width:780px;margin:.7rem 0 0;font-family:var(--mono);font-weight:500;font-size:.7rem;color:var(--sub);text-align:left}
+/* user-facing pause for the auto-playing replay (WCAG 2.2.2) — injected by
+   JS only when the animation actually runs */
+.cw-pause{font-family:var(--mono);font-weight:500;font-size:.7rem;color:var(--sub);text-decoration:underline;text-underline-offset:3px;padding:.4rem .5rem;min-height:44px}
+.cw-pause:hover{color:var(--ink)}
+
+/* ================================================================ INSTALL */
+.install-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:var(--block-gap);align-items:stretch}
+.install-grid>*,.zip-grid>*{min-width:0}/* wide pre content scrolls inside its card, never widens it */
+@media(max-width:860px){.install-grid{grid-template-columns:1fr}}
+.ins-card{background:var(--card);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:1.6rem var(--card-pad);display:flex;flex-direction:column}
+.ins-card h3{margin-bottom:1.05rem}
+.ins-steps{list-style:none;counter-reset:st;margin:0 0 1.1rem}
+.ins-steps li{counter-increment:st;position:relative;padding:.5rem 0 .5rem 2.3rem;font-size:.95rem;color:var(--sub);border-bottom:1px dotted rgba(var(--soft-rgb),.22)}
+.ins-steps li b{color:var(--ink);font-weight:600}
+.ins-steps li::before{content:counter(st);position:absolute;left:0;top:.55rem;width:1.5rem;height:1.5rem;border:2px solid var(--line);border-radius:8px;background:var(--honey);font-family:var(--disp);font-weight:700;font-size:.78rem;display:grid;place-items:center}
+.ins-note{font-size:.88rem;color:var(--sub);margin-top:auto}
+.ins-note code,.tree-note code,.zip-lines code{font-family:var(--mono);font-size:.84em;background:var(--honey);border:1.5px solid rgba(var(--soft-rgb),.25);border-radius:6px;padding:.06em .35em;color:var(--ink);white-space:nowrap}
+.code-block{background:linear-gradient(180deg,var(--esp),var(--esp2));border:2px solid var(--line);border-radius:14px;box-shadow:0 3px 0 var(--shadow-ink);overflow:hidden;margin-bottom:1rem}
+.cb-bar{display:flex;justify-content:space-between;align-items:center;gap:.6rem;padding:.3rem .4rem .3rem .95rem;border-bottom:1px solid var(--esp-line)}
+.cb-bar>span{font-family:var(--mono);font-weight:500;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--esp-sub)}
+.copy-btn{font-family:var(--mono);font-weight:500;font-size:.7rem;letter-spacing:.06em;color:var(--esp-text);border:1.5px solid rgba(247,239,226,.4);border-radius:8px;padding:.3rem .75rem;min-height:38px;min-width:44px;transition:background .15s,border-color .15s,color .15s}
+.copy-btn:hover{background:rgba(247,239,226,.08)}
+.copy-btn.did{color:var(--amber);border-color:var(--amber)}
+.code-block pre{margin:0;padding:.85rem 1rem;overflow-x:auto}
+.code-block code{font-family:var(--mono);font-weight:500;font-size:.84rem;color:var(--esp-text)}
+.code-block .cmt{color:var(--esp-sub)}
+
+/* ================================================================ WHAT'S IN THE ZIP */
+.zip-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:2.2rem}
+@media(max-width:860px){.zip-grid{grid-template-columns:1fr}}
+.tree-card{background:var(--card);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:1.5rem var(--card-pad);display:flex;flex-direction:column}
+.tree-card .tier-line{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);margin-bottom:1rem;padding-bottom:.7rem;border-bottom:2px solid var(--honey)}
+.tree-card .tier-line b{color:var(--deep);font-weight:500}
+.tree{font-family:var(--mono);font-weight:500;font-size:.79rem;line-height:1.95;overflow-x:auto;white-space:pre;color:var(--ink);margin-bottom:1.05rem}
+.tree i{font-style:normal;color:var(--sub)}
+.tree-note{font-size:.88rem;color:var(--sub);margin-top:auto}
+.zip-lines{display:flex;gap:.5rem 2.2rem;flex-wrap:wrap;font-family:var(--mono);font-weight:500;font-size:.75rem;color:var(--sub);margin-top:1.5rem}
+.zip-trust{margin-top:1.7rem;background:var(--honey);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:1.2rem 1.4rem;font-size:1rem;max-width:760px}
+.zip-trust b{font-family:var(--disp);font-weight:600}
+/* the rule divides the whole column, so it runs the whole column — the
+   measure belongs on the text, not on the divider */
+.whynot{margin-top:2.4rem;border-top:1px solid rgba(var(--soft-rgb),.15);padding-top:1.9rem}
+.whynot h3{margin-bottom:.6rem;max-width:760px}
+.whynot p{color:var(--sub);font-size:.97rem;max-width:64ch}
+.whynot p b{color:var(--ink);font-weight:600}
+/* rules run edge-to-edge, so the text starts on --edge too — an open band,
+   not an unexplained 19px indent */
+.works-line{margin-top:2.2rem;border-top:2px solid var(--line);border-bottom:2px solid var(--line);background:var(--card);padding:1rem 0;font-size:.92rem;color:var(--sub)}
+.works-line b{font-family:var(--disp);font-weight:600;color:var(--ink)}
+
+/* ================================================================ FOUNDER NOTE */
+.founder{max-width:640px}
+.founder-card{background:var(--card);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:2rem var(--card-pad-lg);position:relative}
+.founder-card .dateline{font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--deep);margin-bottom:1.1rem}
+.founder-card p{font-size:1rem;margin-bottom:1rem;color:var(--ink)}
+.founder-card p:last-of-type{margin-bottom:1.3rem}
+.founder-sig{font-family:var(--disp);font-weight:600;font-size:1.3rem}
+.founder-role{font-family:var(--mono);font-weight:500;font-size:.72rem;color:var(--sub);margin-top:.2rem}
+
+/* ================================================================ PRICING */
+.price-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:1.6rem;margin-top:var(--block-gap);align-items:stretch}
+@media(max-width:860px){.price-grid{grid-template-columns:1fr}}
+.price{background:var(--card);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:1.9rem var(--card-pad-lg) 1.7rem;display:flex;flex-direction:column;position:relative}
+.price .tier{font-family:var(--mono);font-weight:500;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);margin-bottom:.7rem}
+.price .amt{font-family:var(--disp);font-weight:600;font-size:3.2rem;line-height:1;letter-spacing:-.022em}
+.price .amt small{font-family:var(--mono);font-weight:500;font-size:.78rem;color:var(--sub)}
+.price .tagline{font-size:.92rem;color:var(--sub);margin:.55rem 0 1.1rem}
+.price ul{list-style:none;flex:1;margin-bottom:1.4rem}
+.price li{display:flex;gap:.65rem;padding:.44rem 0;font-size:.93rem;color:var(--sub);border-bottom:1px dotted rgba(var(--soft-rgb),.22)}
+.price li b{color:var(--ink);font-weight:600}
+.price .tick{color:var(--deep);font-family:var(--mono);font-weight:500;flex-shrink:0}
+.price .dash{color:var(--ph);font-family:var(--mono);font-weight:500;flex-shrink:0}
+.price .btn{width:100%}
+/* the $147 machine — dominant via honey warmth + deeper chunk, not a
+   second espresso band (the closing CTA owns the dark volume) */
+.price.feat{background:linear-gradient(180deg,var(--feat-top),var(--honey));border-color:var(--feat-border);box-shadow:0 8px 0 var(--shadow-ink)}
+.price.feat .tier{color:var(--deep)}
+/* the bigger number occupies the SAME 51.2px line box as $0, so the two
+   cards' taglines and every checklist row below them stay on one grid */
+.price.feat .amt{font-size:3.9rem;line-height:.82}
+.price.feat .tagline em{font-style:normal;color:var(--deep);font-weight:600}
+.price.feat li{border-bottom-color:rgba(var(--soft-rgb),.22)}
+.price.feat .tick{color:var(--deep)}
+/* one-time, defined — the ≤4-line contract */
+.defined{list-style:none;font-family:var(--mono);font-weight:500;font-size:.74rem;line-height:1.6;color:var(--sub);margin:0 0 1.25rem;display:grid;gap:.3rem}
+.defined li{padding-left:1rem;position:relative}
+.defined li::before{content:'·';position:absolute;left:.1rem;color:var(--deep)}
+.defined li b{color:var(--ink);font-weight:500}
+/* the first-person guarantee, AT the button */
+.guarantee{margin-top:1.05rem;font-size:.9rem;line-height:1.55;color:var(--sub)}
+.guarantee b{color:var(--ink);font-weight:600}
+.pay-logistics{font-family:var(--mono);font-weight:500;font-size:.68rem;letter-spacing:.03em;color:var(--sub);margin-top:.65rem}
+/* founder trust block, pricing-adjacent — starts on --edge like the rest
+   of #pricing; its eyebrow is left-aligned with everything else */
+.trust-note{max-width:640px;margin:2.6rem 0 0}
+/* sticker #3 of 3 */
+.feat-stamp{position:absolute;top:-16px;right:18px;font-family:var(--mono);font-weight:500;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;background:linear-gradient(180deg,var(--amber-hi),var(--amber));color:var(--on-amber);border:2px solid var(--on-amber);border-radius:10px;padding:.3rem .65rem;box-shadow:0 3px 0 var(--shadow-ink);transform:rotate(-2deg)}
+.promo{margin:1.5rem 0 0;max-width:560px;font-family:var(--mono);font-weight:500;font-size:.8rem;color:var(--sub);border:2px dashed var(--deep);border-radius:var(--r);padding:.9rem 1.1rem;text-align:left;background:var(--card)}
+.promo code{color:var(--deep);border:1.5px solid rgba(var(--soft-rgb),.3);padding:.1rem .45rem;border-radius:6px;background:var(--honey)}
+.promo[hidden]{display:none}
+
+/* ================================================================ FAQ */
+.faq{max-width:760px}
+.q{background:var(--card);border:2px solid var(--line);border-radius:var(--r);margin-bottom:.65rem;overflow:hidden;transition:box-shadow .15s ease}
+.q:hover{box-shadow:0 3px 0 var(--shadow-ink)}
+.q button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 1.2rem;font-family:var(--disp);font-weight:700;font-size:1.02rem;text-align:left;min-height:44px}
+.q .mark{font-family:var(--mono);font-weight:500;font-size:1rem;color:var(--deep);flex-shrink:0;transition:transform .25s ease}
+.q button[aria-expanded="true"] .mark{transform:rotate(45deg)}
+/* collapse gated on .js so no-JS visitors still read every answer */
+.q .a{display:grid;transition:grid-template-rows .3s ease}
+.js .q .a{grid-template-rows:0fr}
+.q .a>div{overflow:hidden}
+.js .q .a>div{visibility:hidden;transition:visibility .3s}
+.q .a p{padding:0 1.2rem 1.1rem;color:var(--sub);font-size:.94rem;max-width:62ch}
+.q button[aria-expanded="true"]+.a{grid-template-rows:1fr}
+.q button[aria-expanded="true"]+.a>div{visibility:visible}
+
+/* ================================================================ FINAL + FOOTER */
+/* the closing CTA is THE loud band: espresso climax at the ask,
+   the machined bottle staged beside it */
+.final{text-align:center}
+.final h2{font-size:clamp(2.1rem,4.8vw,3.2rem);max-width:16ch;margin:0 auto 1.1rem}
+.final h2 em{font-style:normal;color:var(--amber)}
+.final .lead{margin:0 auto 1.7rem}
+.final-band{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(1.4rem,3.5vw,2.6rem);align-items:center}
+@media(max-width:860px){.final-band{grid-template-columns:1fr}}
+.final-stage .stage-box{width:min(100%,300px);margin:0 auto}
+.final-alt{font-family:var(--mono);font-weight:500;font-size:.82rem;color:var(--esp-sub);margin-top:1rem}
+.final-alt a{color:var(--amber);text-underline-offset:3px;display:inline-block;padding:.8rem 0}
+footer{border-top:2px solid var(--line);background:var(--card);padding:2.6rem 0 5.5rem}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:2rem;font-size:.9rem}
+@media(max-width:760px){.foot-grid{grid-template-columns:1fr 1fr;gap:1.6rem}}
+.foot-grid h4{font-family:var(--mono);font-weight:500;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--deep);margin-bottom:.55rem}
+.foot-grid ul{list-style:none}
+.foot-grid li a{color:var(--sub);text-decoration:none;display:inline-block;padding:.32rem 0}
+.foot-grid li a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.foot-brand .fb-logo{font-family:var(--disp);font-weight:700;font-size:1.05rem;margin-bottom:.4rem}
+.foot-brand p{color:var(--sub);font-size:.86rem;margin-bottom:.25rem}
+.foot-brand a{color:var(--sub)}
+.foot-brand a:hover{color:var(--ink)}
+.ver-pill{display:inline-block;font-family:var(--mono);font-weight:500;font-size:.64rem;letter-spacing:.08em;color:var(--sub);border:1.5px solid rgba(var(--soft-rgb),.3);border-radius:999px;padding:.24rem .65rem;margin-top:.7rem}
+.foot-line{margin-top:2.2rem;padding-top:1.2rem;border-top:1px solid rgba(var(--soft-rgb),.12);font-family:var(--mono);font-weight:500;font-size:.73rem;color:var(--sub);display:flex;justify-content:space-between;gap:.6rem 1.5rem;flex-wrap:wrap}
+
+/* ================================================================ MODALS */
+.modal{position:fixed;inset:0;z-index:900;display:grid;place-items:center;padding:20px}
+.modal[hidden]{display:none}
+.modal .backdrop{position:absolute;inset:0;background:var(--backdrop)}
+.modal .panel{position:relative;width:min(100%,460px);background:var(--paper);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:0 8px 0 var(--shadow-ink);padding:1.9rem 1.9rem 1.7rem;max-height:88vh;overflow:auto}
+.modal .m-eyebrow{font-family:var(--mono);font-weight:500;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--deep);margin-bottom:.7rem}
+.modal h3{font-family:var(--disp);font-weight:600;font-size:1.6rem;line-height:1.1;letter-spacing:-.015em;margin-bottom:.7rem}
+.modal p{font-size:.92rem;color:var(--sub);margin-bottom:1.1rem}
+.modal .x{position:absolute;top:10px;right:10px;width:44px;height:44px;display:grid;place-items:center;font-family:var(--mono);color:var(--sub);border-radius:12px}
+.modal .x:hover{color:var(--ink)}
+.modal form{display:flex;flex-direction:column;gap:.8rem}
+.modal input[type=email]{font-family:var(--mono);font-weight:500;font-size:1rem;padding:.85rem 1rem;border:2px solid var(--line-in);border-radius:12px;background:var(--card);color:var(--ink);min-height:48px}
+.modal input[type=email]:focus{outline:3px solid var(--focus);outline-offset:2px}
+.modal .micro{font-family:var(--mono);font-weight:500;font-size:.7rem;color:var(--sub);margin:0}
+.order{font-family:var(--mono);font-weight:500;font-size:.84rem;border:2px solid var(--line);border-radius:var(--r);background:var(--card);padding:1rem 1.1rem;margin-bottom:1.1rem;box-shadow:0 3px 0 var(--shadow-ink)}
+.order .o-row{display:flex;justify-content:space-between;padding:.28rem 0;color:var(--sub)}
+.order .o-row.total{border-top:2px solid var(--honey);margin-top:.4rem;padding-top:.6rem;color:var(--ink);font-weight:500}
+.m-success{text-align:center;padding:1.2rem 0 .6rem}
+.m-success[hidden]{display:none}
+.m-success .big{font-size:2rem;margin-bottom:.6rem}
+.m-success h4{font-family:var(--disp);font-weight:600;font-size:1.35rem;margin-bottom:.5rem}
+.m-success p{font-family:var(--mono);font-weight:500;font-size:.78rem;color:var(--sub)}
+
+/* ================================================================ STICKY MOBILE CTA BAR */
+/* the one element on screen at all times honours the page's own edge, so
+   the left line does not shift under the overlay */
+.ctabar{position:fixed;left:0;right:0;bottom:0;z-index:800;display:none;background:var(--paper);border-top:2px solid var(--line);padding:8px var(--edge) calc(8px + env(safe-area-inset-bottom));min-height:56px;align-items:center;gap:.6rem;
+  visibility:hidden;transform:translateY(110%);transition:transform .3s ease,visibility 0s linear .3s}
+.ctabar.show{visibility:visible;transform:none;transition-delay:0s}
+.ctabar .btn{flex:1;min-height:44px;padding:.6rem .8rem;font-size:.92rem}
+.ctabar .full-link{font-family:var(--mono);font-weight:500;font-size:.78rem;color:var(--sub);text-decoration:underline;text-underline-offset:3px;white-space:nowrap;padding:.6rem .4rem;min-height:44px;display:inline-flex;align-items:center}
+@media(max-width:720px){.ctabar{display:flex}}
+
+/* ================================================================ RESPONSIVE + MOTION */
+@media(max-width:720px){
+  html{scroll-padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+  body{font-size:1rem}
+  .hero h1{font-size:clamp(2.15rem,9vw,2.7rem)}
+  :root{--sec-y:2.9rem}/* same scale, one step down — not a second scale */
+  .receipt{width:270px}
+  .cage-actions{width:100%}
+  .cage-actions .btn{flex:1;min-width:0}
+}
+@media(max-width:520px){
+  .cage-actions{flex-direction:column}
+  .cage-actions .btn{width:100%}
+  .league .nm{font-size:.95rem}
+  .hero-ctas .btn{width:100%}
+}
+/* Narrow-viewport guard: cap + CENTER so 391–500px phones (Pixel 7,
+   Pro Max) get symmetric gutters. Headless Chrome clamps windows to
+   ~500px wide, so automated 390px captures (.settle) stay left-anchored
+   — the cropped shot then matches a true 390px phone exactly. */
+@media(max-width:500px){
+  .wrap{max-width:390px;margin-inline:auto}
+  .ctabar{max-width:390px;margin-inline:auto}
+  .settle .wrap,.settle .ctabar{margin-inline:0 auto}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+  .js .rv,.js .cap-line,.js .cw-turn{opacity:1;transform:none}
+  .js .hlw{background-size:100% 42%}
+  .js .zz path{stroke-dashoffset:0}
+  .spark{animation:none!important}
+}
+/* settled state for automated captures — same final layout, no cadence */
+.settle .rv,.settle .cw-turn{opacity:1!important;transform:none!important;transition:none!important}
+.settle .hlw{background-size:100% 42%!important;transition:none!important}
+.settle .zz path{stroke-dashoffset:0!important;animation:none!important}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">skip to content</a>
+
+<!-- ================= 1 · HEADER ================= -->
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="logo"><span class="tile" aria-hidden="true">🐿️</span><span>squirrel <span class="suffix">skill</span></span></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#how">How it works</a>
+      <a href="#cage">The Cage</a>
+      <a href="#install">Install</a>
+      <a href="#pricing">Pricing</a>
+    </nav>
+    <div class="nav-right">
+      <span class="stash-chip" id="stashChip" role="status" aria-label="Nuts earned on this page"><span class="nut" aria-hidden="true">🌰</span> <b id="stash">0</b></span>
+      <!-- the accessible name starts with the visible token so "click SND"
+           works for speech input (WCAG 2.5.3); aria-pressed carries state -->
+      <button class="sound-btn" id="soundBtn" type="button" aria-pressed="false"><span aria-hidden="true" id="sndFace">SND</span><span class="sr">SND — page sound</span></button>
+      <!-- theme toggle: drawn sun/moon, no emoji. Icon = the theme you get. -->
+      <button class="theme-btn" id="themeBtn" type="button">
+        <svg class="ic ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20.2 14.6A8.6 8.6 0 0 1 9.4 3.8 8.6 8.6 0 1 0 20.2 14.6Z" fill="var(--honey)"/><path d="M12.6 7.4 13.4 9.6 15.6 10.4 13.4 11.2 12.6 13.4 11.8 11.2 9.6 10.4 11.8 9.6 Z" fill="none" stroke-width="1.4" opacity=".55"/></svg>
+        <svg class="ic ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.3" fill="var(--amber)"/><path d="M12 2.4v2.3M12 19.3v2.3M2.4 12h2.3M19.3 12h2.3M5.2 5.2 6.8 6.8M17.2 17.2l1.6 1.6M18.8 5.2 17.2 6.8M6.8 17.2 5.2 18.8"/></svg>
+        <span class="sr lbl-dark">Switch to dark theme</span><span class="sr lbl-light">Switch to light theme</span>
+      </button>
+      <span class="sr" id="themeStatus" role="status" aria-live="polite"></span>
+      <button class="btn btn-amber" data-open="free" data-evt="cta_free_open">Get it free</button>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="mnav" aria-label="Menu"><span class="bars"><span></span><span></span><span></span></span></button>
+    </div>
+  </div>
+  <nav class="mnav" id="mnav" aria-label="Mobile">
+    <a href="#how">How it works</a>
+    <a href="#cage">The Cage</a>
+    <a href="#install">Install</a>
+    <a href="#pricing">Pricing</a>
+    <!-- shown only under 520px, where the header sound button collapses -->
+    <button class="mnav-sound" id="soundBtnM" type="button" aria-pressed="false">Sound <span class="ms-state">off</span></button>
+  </nav>
+</header>
+
+<main id="main">
+<!-- ================= 2 · HERO ================= -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="hero-cat"><span class="cat-chip">a skill for <b>Claude</b></span></p>
+      <h1>Your brain makes lightning. <span class="hlw" id="hlHero">Catch every&nbsp;bolt.</span></h1>
+      <p class="lead">Say <em>“squirrel that”</em> mid-sentence and this Claude skill bottles the idea — 13 fields, about five seconds — then hands your momentum straight back.</p>
+      <!-- LAUNCH: link the viral thread — one linkable stat line here, e.g.
+           <p class="trust"><a href="THREAD_URL">1,200 installs in week one — see the thread</a></p> -->
+      <div class="hero-ctas" id="heroCtas">
+        <button class="btn btn-amber btn-lg" data-open="free" data-evt="cta_free_open" id="heroCta">Get it free</button>
+        <a class="btn" href="#demo">Throw a bolt ↓</a>
+      </div>
+      <p class="trust"><span>Free to start</span><span>Full system $147 once</span><span>30-day guarantee</span></p>
+      <p class="odometer" id="odometer" aria-live="polite"><span class="odo-digits" id="odoDigits" aria-hidden="true"><span class="odo-d"><span>0</span></span><span class="odo-d"><span>0</span></span><span class="odo-d"><span>0</span></span><span class="odo-d"><span>0</span></span><span class="odo-d"><span>0</span></span></span><span class="sr" id="odoText">00000</span><span>bolts bottled on this page</span></p>
+    </div>
+
+    <div class="hero-stage">
+      <!-- Product at the fold: the faithful Claude recreation, honestly labeled.
+           LAUNCH: swap in real screen recording — <video poster="demo-poster.png" ...> replaces .claude-frame; keep .cw-caption -->
+      <div class="claude-frame" id="claudeFrame" role="img" aria-label="Recreation of a Claude conversation: mid-task, the user says squirrel that, the skill captures the idea in its real format, and the conversation returns to the original work.">
+        <div class="cw-bar" aria-hidden="true">
+          <span class="cw-dots"><i></i><i></i><i></i></span>
+          <span class="cw-name"><svg viewBox="0 0 24 24" fill="#D97757" aria-hidden="true"><path d="M12 2l1.8 6.4L20 10l-6.2 1.6L12 18l-1.8-6.4L4 10l6.2-1.6z"/></svg>Claude</span>
+          <span class="cw-tag">recreation</span>
+        </div>
+        <div class="cw-chat" aria-hidden="true">
+          <div class="cw-turn cw-user"><div class="cw-bubble">the webhook fires but GHL drops the payload when the contact already exists — can we switch it to an upsert?</div></div>
+          <div class="cw-turn cw-assistant"><span class="cw-av"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l1.8 6.4L20 10l-6.2 1.6L12 18l-1.8-6.4L4 10l6.2-1.6z"/></svg></span><div class="cw-msg">Yes — <code>upsert-contact</code> updates the existing record instead of erroring. Rewriting that step now.</div></div>
+          <div class="cw-turn cw-user"><div class="cw-bubble">wait — squirrel that: template packs for the trades, $49 each, plumbers first</div></div>
+          <div class="cw-turn cw-assistant"><span class="cw-av"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l1.8 6.4L20 10l-6.2 1.6L12 18l-1.8-6.4L4 10l6.2-1.6z"/></svg></span><div class="cw-msg"><pre class="cw-capture">🐿️ SQUIRREL CAPTURED — IN THE BOX
+"Trade-specific template packs — $49 each"
+Type:&nbsp;🏢&nbsp;Business | Energy:&nbsp;Hot | Potential:&nbsp;🚀&nbsp;High
+Chase Month: August
+→ saved to your squirrel box
+
+Continue where you left off? → the GHL webhook — switching it to upsert.</pre></div></div>
+          <div class="cw-turn cw-assistant"><span class="cw-av"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l1.8 6.4L20 10l-6.2 1.6L12 18l-1.8-6.4L4 10l6.2-1.6z"/></svg></span><div class="cw-msg">Back to the webhook. Swapping the create step for the upsert now:</div></div>
+        </div>
+      </div>
+      <p class="cw-caption">recreated in code from a real session · uncut screen recording lands here at launch</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3 · PROOF STRIP =================
+     LAUNCH(Happy Hustle beta): paste real testimonials into .proof-slot templates below; strip stays hidden
+     until at least one is filled — the script auto-adds .has-proof when any blockquote has text -->
+<section class="proof" id="proof" aria-label="Field reports">
+  <div class="wrap">
+    <span class="eyebrow">wall of bolts</span>
+    <h2>Caught in the wild.</h2>
+    <div class="proof-grid">
+      <div class="proof-slot"><div class="ps-head"><span class="ps-ava" aria-hidden="true"><!-- LAUNCH: <img src="face1.jpg" alt=""> — 40px face; leave empty for honey circle --></span><span><b class="ps-name"><!-- Full Name --></b><span class="ps-handle"><!-- @handle · context --></span></span></div><blockquote><!-- quote text --></blockquote></div>
+      <div class="proof-slot"><div class="ps-head"><span class="ps-ava" aria-hidden="true"></span><span><b class="ps-name"></b><span class="ps-handle"></span></span></div><blockquote></blockquote></div>
+      <div class="proof-slot proof-stat"><b><!-- e.g. 412 --></b><span><!-- bolts bottled by the beta crew, dated --></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4 · DEMO — your turn ================= -->
+<section id="demo">
+  <div class="wrap">
+    <span class="free-chip rv">this half is free</span>
+    <span class="eyebrow rv">now you throw one</span>
+    <h2 class="rv">Same move, your idea.<br>The bolt gets <span class="hlw">bottled.</span></h2>
+    <p class="lead rv" style="margin-top:1rem">The capture up top is real, drawn to scale. Try it yourself — type half a thought, half is enough. You never leave the conversation and the skill never asks a question.</p>
+
+    <div class="demo-grid">
+      <!-- the label sits on the column, mirroring .out-wrap, so both columns
+           open on the same row and the two boxes start at the same y -->
+      <div class="pad-col rv">
+        <label class="pad-label" for="ideaIn">you, mid-thought</label>
+        <div class="pad">
+        <textarea id="ideaIn" rows="4" placeholder="wait — what if we built a…"></textarea>
+        <div class="chips" role="group" aria-label="Example ideas">
+          <button class="chip" data-fill="A CRM built just for home inspectors. They all re-type everything twice.">a business</button>
+          <button class="chip" data-fill="Voice agent that answers after-hours HVAC calls and books the slot">a feature</button>
+          <button class="chip" data-fill="Weekly newsletter breaking down one broken local business process">a strategy</button>
+        </div>
+        <div class="dial-block">
+          <div class="dial-head"><span id="dialLabel">zap dial — how loud should the catch be?</span></div>
+          <div class="dial-seg" role="radiogroup" aria-labelledby="dialLabel" id="zapSeg">
+            <button type="button" role="radio" aria-checked="false" data-lvl="1" tabindex="-1">understate</button>
+            <button type="button" role="radio" aria-checked="true" data-lvl="2" tabindex="0">narrate</button>
+            <button type="button" role="radio" aria-checked="false" data-lvl="3" tabindex="-1">celebrate</button>
+          </div>
+        </div>
+        <button class="btn btn-amber" id="squirrelBtn" style="width:100%" data-evt="demo_bottled">squirrel that</button>
+        <p class="sim-note" id="kbdHint">⌘/ctrl + enter works too</p>
+        </div>
+      </div>
+
+      <div class="out-wrap rv">
+        <p class="pad-label">the capture</p>
+        <div class="out empty" id="out" aria-live="polite">
+          <div>your bottled bolt will appear here<span class="caret"></span></div>
+        </div>
+        <p class="sim-note">simulated on this page; the real one runs in your Claude.</p>
+        <p class="demo-count" id="demoCount" hidden>you have bottled <b id="liveCount">0</b> bolt<span id="liveS">s</span> on this page</p>
+        <div class="bridge" id="bridge" hidden>
+          <p><em>That's a real capture.</em> Get the skill free and this exact bolt arrives pre-loaded in your cage.</p>
+          <button class="btn btn-amber" data-open="free" data-evt="cta_free_open" id="bridgeBtn">Send me the skill + this bolt</button>
+        </div>
+      </div>
+
+      <div class="receipt-zone" id="receiptZone" hidden>
+        <button class="btn" id="printBtn">print the receipt</button>
+        <div class="receipt-clip"><div class="receipt" id="receipt" hidden></div></div>
+        <p class="sim-note" id="receiptHint" hidden>screenshot it. that's the point.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5 · HOW IT WORKS ================= -->
+<section id="how">
+  <div class="wrap">
+    <span class="eyebrow rv">how it works</span>
+    <h2 class="rv">You are not short on ideas.<br>You are <span class="hlw">rich</span> with them.</h2>
+    <p class="lead rv" style="margin-top:1rem">The good ones strike mid-sentence — that is exactly how it should be. Your <span class="zz">lightning<svg viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6 L10 2 L20 6 L30 2 L40 6 L50 2 L60 6 L70 2 L80 6 L90 2 L100 6" vector-effect="non-scaling-stroke"/></svg></span> deserves equipment that keeps pace. Three moves, none of them yours to make.</p>
+    <div class="steps">
+      <div class="step rv">
+        <span class="n" aria-hidden="true">1</span>
+        <h3>Say “squirrel that”</h3>
+        <p>You are already talking to Claude, so just say it. Nothing to open, no folder to pick, no tags to fill in.</p>
+      </div>
+      <div class="step rv">
+        <span class="n" aria-hidden="true">2</span>
+        <h3>The bolt gets bottled whole</h3>
+        <p>The idea, what you were building when it struck, how bright it burned, and the cheapest next step to prove it out. Thirteen fields, zero questions.</p>
+      </div>
+      <div class="step rv">
+        <span class="n" aria-hidden="true">3</span>
+        <h3>You are back in five seconds</h3>
+        <p><q>Now — back to the webhook. Where were we?</q> Not one follow-up question. Your momentum is the thing this was built to protect.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6 · THE CAGE ================= -->
+<section id="cage">
+  <div class="wrap">
+    <div class="cage-band rv">
+      <span class="paid-chip">this is the paid half</span>
+      <span class="eyebrow">the Cage</span>
+      <h2>Then the brightest one wins.</h2>
+      <p class="lead" style="margin-top:.9rem">Every bolt you bottle goes in the Cage. The Chase runs first Monday of every month: the top <b>5 carry forward</b> and earn a nut; the rest get a line about what they taught you. Twelve months on, the bolt holding the most nuts is <b>your idea of the year</b>. You never had to pick it. It earned it.</p>
+
+      <div class="cage-head">
+        <div>
+          <div class="cage-month" id="cageMonth">Month 1 of 12</div>
+          <div class="cage-sub" id="cageSub">7 bolts in the cage</div>
+        </div>
+        <div class="cage-actions">
+          <button class="btn" id="chaseBtn">Run the Chase</button>
+          <button class="btn btn-hot" id="seasonBtn">Play the whole season</button>
+        </div>
+      </div>
+      <div class="cage-bar" aria-hidden="true"><div class="cage-fill" id="cageFill"></div></div>
+      <ol class="league" id="cageList" aria-label="League table of ideas"><!-- static seed; renderCage() redraws on load -->
+        <li><span class="pos">01</span><span class="nm">CRM built only for home inspectors</span><span class="dots" aria-hidden="true"></span><span class="new">new</span><span class="strike"></span></li>
+        <li><span class="pos">02</span><span class="nm">After-hours voice agent for HVAC</span><span class="dots" aria-hidden="true"></span><span class="new">new</span><span class="strike"></span></li>
+        <li><span class="pos">03</span><span class="nm">Weekly teardown newsletter</span><span class="dots" aria-hidden="true"></span><span class="new">new</span><span class="strike"></span></li>
+        <li><span class="pos">04</span><span class="nm">Buy the laundromat on 7th</span><span class="dots" aria-hidden="true"></span><span class="new">new</span><span class="strike"></span></li>
+        <li><span class="pos">05</span><span class="nm">Turn the audit into a fixed fee</span><span class="dots" aria-hidden="true"></span><span class="new">new</span><span class="strike"></span></li>
+        <li><span class="pos">06</span><span class="nm">Podcast with three local operators</span><span class="dots" aria-hidden="true"></span><span class="new">new</span><span class="strike"></span></li>
+        <li><span class="pos">07</span><span class="nm">App that reads utility bills</span><span class="dots" aria-hidden="true"></span><span class="new">new</span><span class="strike"></span></li>
+      </ol>
+      <p class="cage-log" id="cageLog" aria-live="polite">Press Run the Chase to watch a month go by — or fast-forward the year.</p>
+
+      <div class="wrapped" id="wrapped" hidden>
+        <div class="season-card">
+          <div class="sc-top"><span>the squirrel cage</span><span>season one · final</span></div>
+          <!-- drawn crown: one light source upper-left, gradient shading, edge highlight -->
+          <div class="sc-crown" aria-hidden="true"><svg viewBox="0 0 64 44" width="46" height="32" style="display:block;margin:0 auto"><defs><linearGradient id="crownG" x1="0" y1="0" x2=".6" y2="1"><stop offset="0%" stop-color="#FFE9B8"/><stop offset="55%" stop-color="#FFC65C"/><stop offset="100%" stop-color="#E8930F"/></linearGradient></defs><path d="M8 36 L5 12 L19 24 L32 6 L45 24 L59 12 L56 36 Q32 41 8 36 Z" fill="url(#crownG)" stroke="#2A1B10" stroke-width="2.5" stroke-linejoin="round"/><path d="M9 14.5 L18 22" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity=".85"/><circle cx="32" cy="31" r="2.6" fill="#C77B0A" stroke="#2A1B10" stroke-width="1.6"/></svg></div>
+          <div class="sc-kicker">Idea of the year</div>
+          <div class="sc-winner" id="wcWinner"></div>
+          <div class="sc-agate" id="wcAgate"></div>
+          <div class="sc-date" id="bsDate">HELENA, MONTANA — DECEMBER</div>
+          <form class="sign-row" id="signForm">
+            <label for="signIn">sign your season</label>
+            <input id="signIn" name="initials" maxlength="3" autocomplete="off" spellcheck="false" placeholder="TH" aria-describedby="signHint">
+            <button class="btn" type="submit">Sign it</button>
+          </form>
+          <p class="sr" id="signHint">Two or three letters — your initials go on the season card.</p>
+          <p class="sign-done" id="signDone" hidden>— signed, <b id="signName"></b><span class="sd-sub">screenshot it. that's your season.</span></p>
+          <div class="sc-cta">
+            <button class="btn btn-amber" data-open="paid" data-evt="cta_paid_open">Get the full Cage — $147 once</button>
+            <span class="sc-note">season one ends with one of these.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rules">
+        <div class="rule"><h3>Five carry forward</h3><p>Five, not twenty. A tight field is what makes winning mean something, and what makes the winner obvious.</p></div>
+        <div class="rule"><h3>The rest teach you</h3><p>Each one gets a line on what you learned. A year of those is a map of how you think, in your own words.</p></div>
+        <div class="rule"><h3>Six nuts = green light</h3><p>An idea that keeps beating fresh competition has told you everything you need. Put a date on it and build.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7 · INSTALL ================= -->
+<section id="install">
+  <div class="wrap">
+    <span class="eyebrow rv">install</span>
+    <h2 class="rv">Installed in about 90 seconds.</h2>
+    <p class="lead rv" style="margin-top:1rem">One ZIP, two front doors. Pick the Claude you live in.</p>
+    <!-- LAUNCH: uncut install video — one take, no cuts, embedded beside the steps -->
+    <div class="install-grid">
+      <div class="ins-card rv">
+        <h3>Claude.ai · Desktop · Cowork</h3>
+        <ol class="ins-steps">
+          <li>Open <b>Settings → Capabilities → Skills</b></li>
+          <li><b>Upload skill</b> → pick <code>squirrel-skill.zip</code></li>
+          <li>Toggle it on. Say <b>“squirrel that.”</b></li>
+        </ol>
+        <p class="ins-note">Upload the ZIP as-is — it keeps the <code>squirrel/</code> folder at the root, which is what Claude expects. (A loose <code>SKILL.md</code> won't register. We zipped it right so you never think about it.)</p>
+      </div>
+      <div class="ins-card rv">
+        <h3>Claude Code</h3>
+        <div class="code-block">
+          <div class="cb-bar"><span>terminal</span><button class="copy-btn" type="button" data-copy="unzip squirrel-skill.zip -d ~/.claude/skills/">Copy</button></div>
+          <pre><code><span class="cmt"># the folder lands in ~/.claude/skills</span>
+unzip squirrel-skill.zip -d ~/.claude/skills/</code></pre>
+        </div>
+        <div class="code-block">
+          <div class="cb-bar"><span>any session</span><button class="copy-btn" type="button" data-copy="/squirrel">Copy</button></div>
+          <pre><code>/squirrel</code></pre>
+        </div>
+        <p class="ins-note">That's the whole install. From then on, <code>/squirrel</code> — or just saying it — runs the capture.</p>
+      </div>
+    </div>
+
+    <!-- what lands on disk (merged from the old ZIP section — one idea, one section) -->
+    <div class="zip-head rv" id="zip" style="margin-top:3.2rem">
+      <h3 style="font-size:1.5rem">What lands on disk: a folder of markdown. Nothing hides.</h3>
+      <p class="lead" style="margin-top:.7rem">Open every file in a text editor before you install a thing. A skill is instructions, not software — this is all of them.</p>
+    </div>
+    <div class="zip-grid" style="margin-top:1.6rem">
+      <div class="tree-card rv">
+        <div class="tier-line"><span>free — the capture half</span><b>$0</b></div>
+        <pre class="tree">squirrel/
+├─ SKILL.md        <i>the capture protocol</i>
+│                  <i>13 fields, zero questions</i>
+└─ references/
+   └─ capture-examples.md</pre>
+        <p class="tree-note">Everything the free half does, in plain sight. Read it, edit it, make it yours.</p>
+      </div>
+      <div class="tree-card rv">
+        <div class="tier-line"><span>full — capture + the cage</span><b>$147 once</b></div>
+        <pre class="tree">squirrel/
+├─ SKILL.md        <i>capture + Chase, integrated</i>
+├─ references/
+│  ├─ capture-examples.md
+│  ├─ chase-protocol.md   <i>the first-Monday ritual</i>
+│  ├─ cage-tournament.md  <i>ranking + nut mechanics</i>
+│  └─ season-guide.md     <i>a full season, worked</i>
+└─ LICENSE.md</pre>
+        <p class="tree-note">The same folder, with the system in it. Nothing phones home; there is nothing to phone.</p>
+      </div>
+    </div>
+    <p class="zip-lines rv"><span>license: yours — personal use, every Claude you run</span><span>updates: free through season one, then optional</span><!-- LAUNCH: Taylor confirms update policy --></p>
+    <p class="zip-trust rv"><b>Read every line before you install.</b> It's a folder of markdown, not a black box — if a skill won't show you its files, don't run it.</p>
+    <p class="works-line rv"><b>Captures land in a plain file you own — the default.</b> Already live in Notion, Airtable, Obsidian, Google Sheets, ClickUp, or Apple Notes? Point the skill there and it goes.</p>
+  </div>
+</section>
+
+<!-- ================= 9 · PRICING ================= -->
+<section id="pricing">
+  <div class="wrap">
+    <span class="eyebrow rv">pricing</span>
+    <h2 class="rv">Two options. That is on purpose.</h2>
+    <p class="lead rv" style="margin-top:.9rem">You came here to catch lightning, not compare six plans.</p>
+    <div class="price-grid">
+      <div class="price rv">
+        <p class="tier">Free — the capture half</p>
+        <div class="amt">$0</div>
+        <p class="tagline">Bottle bolts forever. No card, no account.</p>
+        <ul>
+          <li><span class="tick" aria-hidden="true">✓</span><span>Captures a bolt in about <b>5 seconds</b></span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>All 13 fields, zero questions asked</span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>Saves to <b>a plain file you own</b></span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>Hands your momentum straight back</span></li>
+          <li><span class="dash" aria-hidden="true">—</span><span class="sr">not included: </span><span>The monthly Chase</span></li>
+          <li><span class="dash" aria-hidden="true">—</span><span class="sr">not included: </span><span>The Squirrel Cage tournament</span></li>
+          <li><span class="dash" aria-hidden="true">—</span><span class="sr">not included: </span><span>Your idea of the year</span></li>
+        </ul>
+        <button class="btn" data-open="free" data-evt="cta_free_open">Get it free</button>
+      </div>
+      <div class="price feat rv">
+        <span class="feat-stamp">the whole thing</span>
+        <p class="tier">Full — capture + the Cage</p>
+        <div class="amt">$147 <small>Pay once. It's yours.</small></div>
+        <p class="tagline">Bottle them <em>and</em> find out which one wins.</p>
+        <ul>
+          <li><span class="tick" aria-hidden="true">✓</span><span><b>Everything in free</b></span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span><b>The monthly Chase</b> — first Monday, every month</span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span><b>The Cage tournament</b> — nut counts, survival ranking</span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>Your idea of the year, crowned for you</span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>A guide of worked examples</span></li>
+        </ul>
+        <ul class="defined" aria-label="What one-time means">
+          <li><b>Yours forever</b> — a folder you keep, not a login we hold</li>
+          <li><b>Updates</b> — free through season one, then optional<!-- LAUNCH: Taylor confirms update policy --></li>
+          <li><b>License</b> — personal use, every Claude surface you run</li>
+          <li><b>Free tier</b> — stays free forever; this adds the system</li>
+        </ul>
+        <button class="btn btn-hot btn-amber" data-open="paid" data-evt="cta_paid_open">Get the full Cage — $147</button>
+        <p class="guarantee" id="guarantee"><b>If it's not for you, email me within 30 days and I'll refund you. Unconditionally.</b> — Taylor</p>
+        <p class="pay-logistics">Checkout by Stripe · delivered by email<!-- LAUNCH: restore "instant delivery · VAT handled" only after Stripe Tax + automated fulfillment are live --></p>
+      </div>
+    </div>
+    <div class="promo" id="promo" hidden>Happy Hustle crew — your code <code>HUSTLE50</code> takes <b>50% off</b> at checkout.</div>
+
+    <div class="whynot rv">
+      <h3>There are thousands of free skills. Why is this $147?</h3>
+      <p>Because the free tier <b>is one of them</b> — capture, free forever, every line inspectable above. The $147 buys the system that took two years of monthly use to get right: the Chase ritual, the Cage tournament, the ranking that crowns your idea of the year, and updates as the ecosystem moves. <b>It's the workflow you'd charge a client for, not a prompt anyone could type.</b></p>
+    </div>
+
+    <div class="trust-note">
+      <span class="eyebrow rv">a note from the founder</span>
+      <div class="founder-card rv">
+        <!-- LAUNCH: founder photo slot — <img src="taylor.jpg" alt="Taylor" style="width:64px;border-radius:12px;border:2px solid var(--line)"> above the dateline -->
+        <p class="dateline">Helena, Montana</p>
+        <p>I kept losing my best ideas to my own momentum. Mid-build, mid-call, a real one would strike — and I'd wave it off to protect the thread. By Friday it was gone.</p>
+        <p>So I taught Claude to catch them without breaking my stride. Capture took a weekend. The Cage — the part that tells you which one actually matters — took two years of monthly Chases to get right.</p>
+        <p>Capture is free because it should be. The Cage is the part worth paying for.</p>
+        <p class="founder-sig">— Taylor</p>
+        <p class="founder-role">SUMMIT Business Automation · Helena, Montana<!-- LAUNCH: add @handle + profile link, e.g. · <a href="https://x.com/HANDLE">@HANDLE</a> --></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10 · FAQ ================= -->
+<section id="faq">
+  <div class="wrap">
+    <span class="eyebrow rv">the honest answers</span>
+    <h2 class="rv" style="margin-bottom:2rem">Questions, answered plainly.</h2>
+    <div class="faq" id="faqList">
+      <div class="q"><button aria-expanded="false" aria-controls="a0" id="qb0">What is a Claude skill, and how do I install this one?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a0" role="region" aria-labelledby="qb0"><div><p>A skill is a folder of markdown instructions Claude follows. On claude.ai or Claude Desktop: Settings → Capabilities → Skills → upload the ZIP → toggle it on. In Claude Code: unzip it into ~/.claude/skills. About 90 seconds either way, and from then on “squirrel that” just works.</p></div></div></div>
+      <div class="q"><button aria-expanded="false" aria-controls="a1" id="qb1">Do I need a paid Claude plan?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a1" role="region" aria-labelledby="qb1"><div><p>You need a Claude plan that supports custom skills — Pro, Max, Team, or Enterprise on claude.ai and Claude Desktop, or Claude Code. If your Claude can add a skill, this one runs.</p></div></div></div>
+      <div class="q"><button aria-expanded="false" aria-controls="a2" id="qb2">Do I need a Notion account or anything?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a2" role="region" aria-labelledby="qb2"><div><p>No. It works out of the box with a plain text file on your computer. Offline, yours, nothing to sign up for. Notion, Airtable and the rest are optional and take about two minutes if you want them.</p></div></div></div>
+      <div class="q"><button aria-expanded="false" aria-controls="a3" id="qb3">Does it ask me questions?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a3" role="region" aria-labelledby="qb3"><div><p>Never. That is the strictest rule in the whole thing. Give it half a sentence and it runs with the rest. Your momentum is the thing being protected here, so it takes what you gave it and gets out of your way.</p></div></div></div>
+      <div class="q"><button aria-expanded="false" aria-controls="a4" id="qb4">What if I catch a whole lot?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a4" role="region" aria-labelledby="qb4"><div><p>Perfect. The Cage was built for volume. Bottle 40 in a month if that is your rhythm. Only 5 ever carry forward, so a fuller cage makes the winner sharper. More lightning is always better here.</p></div></div></div>
+      <div class="q"><button aria-expanded="false" aria-controls="a5" id="qb5">What exactly am I paying for?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a5" role="region" aria-labelledby="qb5"><div><p>A skill file you install into Claude and own outright. No subscription, no seats, no server, no login. It adds the Chase, the Cage tournament, nut counts, your idea of the year, and a guide of worked examples.</p></div></div></div>
+      <div class="q"><button aria-expanded="false" aria-controls="a6" id="qb6">Why is bottling free but ranking paid?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a6" role="region" aria-labelledby="qb6"><div><p>Bottling is the straightforward half, so it should be free and it always will be. The Cage took two years to get right and it is the part that turns a year of good ideas into the one you build. Charging for the hard half felt more honest than watering down both.</p></div></div></div>
+      <div class="q"><button aria-expanded="false" aria-controls="a7" id="qb7">What happens to my ideas and data?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a7" role="region" aria-labelledby="qb7"><div><p>They live in a plain file on your machine. Nothing leaves your computer, nothing is uploaded to us, and there is no account to hold your data hostage.</p></div></div></div>
+      <div class="q"><button aria-expanded="false" aria-controls="a8" id="qb8">Does it work outside Claude?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a8" role="region" aria-labelledby="qb8"><div><p>The skill runs on Claude — claude.ai, Claude Desktop, and Claude Code. Your bolts save as plain text, so the cage itself travels anywhere you want to take it.</p></div></div></div>
+      <div class="q"><button aria-expanded="false" aria-controls="a9" id="qb9">Refunds?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a9" role="region" aria-labelledby="qb9"><div><p>If it’s not for you, email me within 30 days and I’ll refund you. Unconditionally. No form, no call, no “can I ask why.”</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 11 · FINAL CTA — the one loud band ================= -->
+<section id="final">
+  <div class="wrap final">
+    <div class="cage-band final-band rv">
+      <div>
+        <span class="eyebrow">the last line</span>
+        <h2>Go make some <em>lightning.</em></h2>
+        <p class="lead">Free, no account, installed in about 90 seconds. The next bolt is already on its way — and now you have somewhere to put it.</p>
+        <div style="margin-top:1.6rem">
+          <button class="btn btn-hot btn-lg" data-open="free" data-evt="cta_free_open">Get squirrel skill free</button>
+          <p class="final-alt">or <a href="#" data-open="paid" data-evt="cta_paid_open">get the whole Cage — $147</a></p>
+        </div>
+      </div>
+      <div class="final-stage" aria-hidden="false">
+        <div class="stage-box">
+          <!-- The Bolt Bottle, Mk I — machined toy at golden hour.
+               One light source (upper-left): every surface shades toward
+               the lower-right; edge highlights ride the upper-left. -->
+          <svg viewBox="0 0 360 400" role="img" aria-label="A machined glass bottle with a lightning bolt sealed inside, glowing amber, on a small engraved plinth. A squirrel sits on the cork.">
+            <defs>
+              <radialGradient id="glowG" cx="46%" cy="42%" r="60%">
+                <stop offset="0%" stop-color="#FFE9B8" stop-opacity=".95"/>
+                <stop offset="55%" stop-color="#FFE9B8" stop-opacity=".5"/>
+                <stop offset="100%" stop-color="#FFE9B8" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="glassG" x1="0" y1="0" x2="1" y2=".25">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="45%" stop-color="#FFF6E4"/>
+                <stop offset="100%" stop-color="#EFDCBB"/>
+              </linearGradient>
+              <linearGradient id="liquidG" x1="0" y1="0" x2=".3" y2="1">
+                <stop offset="0%" stop-color="#FFD87A"/>
+                <stop offset="55%" stop-color="#FFB237"/>
+                <stop offset="100%" stop-color="#E8930F"/>
+              </linearGradient>
+              <linearGradient id="boltG" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#FFE9B8"/>
+                <stop offset="60%" stop-color="#FFC65C"/>
+                <stop offset="100%" stop-color="#FFB237"/>
+              </linearGradient>
+              <linearGradient id="corkG" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#E2B276"/>
+                <stop offset="100%" stop-color="#A9713A"/>
+              </linearGradient>
+              <linearGradient id="collarG" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="100%" stop-color="#E4D2B0"/>
+              </linearGradient>
+              <linearGradient id="plinthG" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="100%" stop-color="#EFE0C2"/>
+              </linearGradient>
+              <radialGradient id="dialG" cx="35%" cy="30%" r="80%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="100%" stop-color="#EFE0C2"/>
+              </radialGradient>
+              <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="9"/>
+              </filter>
+            </defs>
+
+            <!-- golden-hour backdrop: glow + machined sun rings -->
+            <circle cx="180" cy="185" r="158" fill="url(#glowG)"/>
+            <circle cx="180" cy="185" r="122" fill="none" stroke="#FFB237" stroke-width="2" opacity=".2"/>
+            <circle cx="180" cy="185" r="146" fill="none" stroke="#FFB237" stroke-width="2" opacity=".12"/>
+
+            <!-- sparks (geometric 4-point stars) -->
+            <path class="spark" d="M84 148 l2 5.4 5.4 2 -5.4 2 -2 5.4 -2 -5.4 -5.4 -2 5.4 -2 z" fill="#FFB237" opacity=".9"/>
+            <path class="spark k2" d="M282 116 l1.7 4.6 4.6 1.7 -4.6 1.7 -1.7 4.6 -1.7 -4.6 -4.6 -1.7 4.6 -1.7 z" fill="#FFB237" opacity=".85"/>
+            <path class="spark k3" d="M276 250 l1.4 3.8 3.8 1.4 -3.8 1.4 -1.4 3.8 -1.4 -3.8 -3.8 -1.4 3.8 -1.4 z" fill="#E8930F" opacity=".8"/>
+
+            <!-- ground -->
+            <ellipse cx="180" cy="382" rx="126" ry="9" fill="#2A1B10" opacity=".25"/>
+
+            <!-- plinth: hard 6px shadow, machined face, etched nameplate -->
+            <rect x="66" y="346" width="228" height="34" rx="14" fill="#2A1B10"/>
+            <rect x="66" y="340" width="228" height="34" rx="14" fill="url(#plinthG)" stroke="#2A1B10" stroke-width="2"/>
+            <line x1="80" y1="345.5" x2="280" y2="345.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity=".85"/>
+            <g><!-- left machined screw, flathead -->
+              <circle cx="79" cy="357" r="3.4" fill="url(#collarG)" stroke="#2A1B10" stroke-width="1.6"/>
+              <line x1="76.6" y1="357" x2="81.4" y2="357" stroke="#2A1B10" stroke-width="1.3" stroke-linecap="round"/>
+            </g>
+            <text x="167" y="360.5" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="8" letter-spacing="2" fill="#2A1B10" opacity=".6">SQUIRREL SKILL · MK I</text>
+            <g><!-- machined dial, needle at three-quarters charged -->
+              <circle cx="271" cy="359.5" r="11.5" fill="#2A1B10"/>
+              <circle cx="271" cy="357" r="11.5" fill="url(#dialG)" stroke="#2A1B10" stroke-width="2"/>
+              <g stroke="#2A1B10" stroke-width="1.4" stroke-linecap="round" opacity=".75">
+                <line x1="263.4" y1="351.4" x2="265.2" y2="353.2"/>
+                <line x1="271" y1="348.6" x2="271" y2="351.1"/>
+                <line x1="278.6" y1="351.4" x2="276.8" y2="353.2"/>
+              </g>
+              <line x1="271" y1="357" x2="276.5" y2="351.2" stroke="#C77B0A" stroke-width="2.6" stroke-linecap="round"/>
+              <circle cx="271" cy="357" r="2.6" fill="#2A1B10"/>
+            </g>
+
+            <!-- bottle shadow on plinth -->
+            <ellipse cx="180" cy="340" rx="64" ry="6" fill="#2A1B10" opacity=".16"/>
+
+            <!-- bolt glow behind glass -->
+            <path d="M190 162 L154 216 L174 216 L160 264 L208 204 L186 204 L202 162 Z" fill="#FFB237" opacity=".55" filter="url(#soft)"/>
+
+            <!-- glass body -->
+            <path d="M152 120 L208 120 L208 142 Q208 151 216 157 Q242 175 242 205 L242 302 Q242 334 210 334 L150 334 Q118 334 118 302 L118 205 Q118 175 144 157 Q152 151 152 142 Z"
+                  fill="url(#glassG)" fill-opacity=".9" stroke="#2A1B10" stroke-width="2" stroke-linejoin="round"/>
+
+            <!-- liquid light, sealed in the bottom -->
+            <path d="M127 244 L233 244 L233 300 Q233 325 208 325 L152 325 Q127 325 127 300 Z" fill="url(#liquidG)" stroke="#2A1B10" stroke-width="2" stroke-linejoin="round"/>
+            <ellipse cx="180" cy="244" rx="53" ry="6.5" fill="#FFE9B8" stroke="#2A1B10" stroke-width="2"/>
+            <circle cx="163" cy="270" r="3" fill="#FFE9B8" opacity=".75"/>
+            <circle cx="196" cy="288" r="2.4" fill="#FFE9B8" opacity=".6"/>
+            <circle cx="176" cy="304" r="2" fill="#FFE9B8" opacity=".55"/>
+
+            <!-- the bolt -->
+            <path d="M190 162 L154 216 L174 216 L160 264 L208 204 L186 204 L202 162 Z"
+                  fill="url(#boltG)" stroke="#2A1B10" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M186.5 167 L160 206.5" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" opacity=".85"/>
+
+            <!-- glass sheen, upper-left light -->
+            <path d="M139 172 Q130 186 128 204" fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" opacity=".8"/>
+            <path d="M128 218 L128 296" fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" opacity=".55"/>
+
+            <!-- collar + cork -->
+            <rect x="144" y="132" width="72" height="14" rx="7" fill="url(#collarG)" stroke="#2A1B10" stroke-width="2"/>
+            <line x1="150" y1="136" x2="196" y2="136" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+            <rect x="148" y="98" width="64" height="38" rx="9" fill="url(#corkG)" stroke="#2A1B10" stroke-width="2"/>
+            <line x1="154" y1="112" x2="206" y2="112" stroke="#7E5527" stroke-width="1.4" opacity=".5"/>
+            <line x1="154" y1="122" x2="206" y2="122" stroke="#7E5527" stroke-width="1.4" opacity=".5"/>
+            <ellipse cx="180" cy="100" rx="30" ry="6" fill="#E9BC7C" stroke="#2A1B10" stroke-width="2"/>
+          </svg>
+          <button class="mascot" id="mascot" aria-label="Poke the squirrel">🐿️</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ================= 12 · FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <p class="fb-logo"><span aria-hidden="true">🐿️</span> squirrel skill</p>
+        <p>by <a href="https://summitautomation.ai">SUMMIT Business Automation</a><!-- LAUNCH: confirm URL --></p>
+        <p>Helena, Montana</p>
+        <p class="ver-pill">v1.0 · <a href="changelog.html" style="color:inherit">changelog</a></p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Trust</h4>
+        <ul>
+          <li><a href="#guarantee">Refund policy</a></li>
+          <li><a href="terms.html">Terms</a><!-- LAUNCH: Taylor reviews terms.html wording --></li>
+          <li><a href="privacy.html">Privacy</a><!-- LAUNCH: Taylor reviews privacy.html wording --></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@summitautomation.ai">hello@summitautomation.ai</a></li>
+          <!-- LAUNCH: add X handle li here when the real handle exists — no dead placeholder -->
+
+        </ul>
+      </div>
+    </div>
+    <p class="foot-line"><span>built by an idea person, for idea people.</span><span>© 2026 SUMMIT Business Automation</span></p>
+  </div>
+</footer>
+
+<!-- sticky mobile CTA bar -->
+<div class="ctabar" id="ctabar">
+  <button class="btn btn-amber" data-open="free" data-evt="cta_free_open">Get it free</button>
+  <a href="#" class="full-link" data-open="paid" data-evt="cta_paid_open">Full · $147</a>
+</div>
+
+<!-- FREE modal -->
+<div class="modal" id="modal-free" hidden role="dialog" aria-modal="true" aria-labelledby="mfTitle">
+  <div class="backdrop" data-close></div>
+  <div class="panel">
+    <button class="x" data-close aria-label="Close">✕</button>
+    <p class="m-eyebrow">free — the capture half</p>
+    <h3 id="mfTitle">Where should the skill land?</h3>
+    <p>One email. The ZIP arrives with install steps — about 90 seconds from inbox to “squirrel that.”</p>
+    <!-- LAUNCH: POST to GHL form, tag squirrel-free + source -->
+    <form data-todo="ghl" id="freeForm">
+      <input type="hidden" name="captured_idea" id="capturedIdea" value="">
+      <label class="sr" for="freeEmail">Email address</label>
+      <input type="email" id="freeEmail" name="email" placeholder="you@youremail.com" required autocomplete="email">
+      <button class="btn btn-amber" type="submit" data-evt="modal_email_submit">Send the skill file</button>
+      <p class="micro" id="freeMicro">the ZIP lands in your inbox. no spam, no sequence.</p>
+    </form>
+    <div class="m-success" id="freeSuccess" hidden>
+      <div class="big" aria-hidden="true">🐿️</div>
+      <h4>Check your inbox.</h4>
+      <p id="freeSuccessP">the ZIP is on its way.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PAID modal -->
+<div class="modal" id="modal-paid" hidden role="dialog" aria-modal="true" aria-labelledby="mpTitle">
+  <div class="backdrop" data-close></div>
+  <div class="panel">
+    <button class="x" data-close aria-label="Close">✕</button>
+    <p class="m-eyebrow">full — capture + the Cage</p>
+    <h3 id="mpTitle">The whole Cage. Once.</h3>
+    <div class="order">
+      <div class="o-row"><span>Lightning capture (free half)</span><span>included</span></div>
+      <div class="o-row"><span>Monthly Chase + Cage tournament</span><span>included</span></div>
+      <div class="o-row"><span>Your idea of the year, crowned</span><span>included</span></div>
+      <div class="o-row"><span>Guide of worked examples</span><span>included</span></div>
+      <div class="o-row total"><span>One payment</span><span>$147</span></div>
+    </div>
+    <!-- LAUNCH: Stripe payment link, promo codes on -->
+    <button class="btn btn-amber" style="width:100%" data-todo="stripe" id="stripeBtn">Continue to checkout →</button>
+    <p class="micro" style="margin-top:.8rem"><b>If it's not for you, email me within 30 days and I'll refund you. Unconditionally.</b> — Taylor</p>
+    <p class="micro" style="margin-top:.5rem">Checkout by Stripe · delivered by email · pay once, it's yours<!-- LAUNCH: restore "instant delivery · VAT handled" only after Stripe Tax + automated fulfillment are live --></p>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   GOLDEN ARCADE — script. Plumbing ported wholesale from the
+   round-1 final (focus traps, storage guards, escaping, aria wiring).
+   New this round: mascot poke, season signing, milestone confetti.
+   Everything gated on reduced().
+   ================================================================ */
+const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const track=e=>{(window.__evts=window.__evts||[]).push([e,Date.now()])};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-evt]');if(el)track(el.dataset.evt)});
+
+/* ---- SOUND (v4 engine, tuned premium; default OFF, persisted) ---- */
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const Sound=(()=>{let ctx=null,on=store.get('sq_snd')==='1';
+ const init=()=>{if(ctx)return ctx;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;ctx=new AC();return ctx};
+ const unlock=()=>{const c=init();if(c&&c.state==='suspended')c.resume()};
+ const voice=f=>{if(!on)return;const c=init();if(!c)return;if(c.state==='suspended')c.resume();f(c,c.currentTime)};
+ const tick=()=>voice((c,t)=>{const o=c.createOscillator(),g=c.createGain();o.type='square';
+   o.frequency.setValueAtTime(1900+Math.random()*300,t);
+   g.gain.setValueAtTime(.028,t);g.gain.exponentialRampToValueAtTime(.0001,t+.03);
+   o.connect(g).connect(c.destination);o.start(t);o.stop(t+.035)});
+ const crack=()=>voice((c,t)=>{const n=Math.floor(c.sampleRate*.08),b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);
+   for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
+   const s=c.createBufferSource();s.buffer=b;
+   const bp=c.createBiquadFilter();bp.type='bandpass';bp.frequency.setValueAtTime(2200,t);bp.frequency.exponentialRampToValueAtTime(700,t+.07);bp.Q.value=1.5;
+   const g=c.createGain();g.gain.setValueAtTime(.2,t);g.gain.exponentialRampToValueAtTime(.001,t+.08);
+   s.connect(bp).connect(g).connect(c.destination);s.start(t);s.stop(t+.09)});
+ const stash=()=>voice((c,t)=>{[523.25,659.25,783.99,1046.5].forEach((f,i)=>{const s=t+i*.06;
+   const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.setValueAtTime(f,s);
+   g.gain.setValueAtTime(.0001,s);g.gain.linearRampToValueAtTime(.1,s+.012);
+   g.gain.exponentialRampToValueAtTime(.0001,s+.28);o.connect(g).connect(c.destination);o.start(s);o.stop(s+.3)})});
+ const fanfare=()=>voice((c,t)=>{[523.25,659.25,783.99,1046.5,1318.5].forEach((f,i)=>{const s=t+i*.085;
+   const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.setValueAtTime(f,s);
+   g.gain.setValueAtTime(.0001,s);g.gain.linearRampToValueAtTime(.12,s+.015);
+   g.gain.exponentialRampToValueAtTime(.0001,s+.5);o.connect(g).connect(c.destination);o.start(s);o.stop(s+.55)})});
+ return{unlock,tick,crack,stash,fanfare,isOn:()=>on,
+  toggle(){on=!on;store.set('sq_snd',on?'1':'0');if(on){unlock();stash()}return on}}})();
+['pointerdown','keydown','touchstart'].forEach(e=>addEventListener(e,()=>Sound.unlock(),{once:true,passive:true}));
+/* two mounts for one control: the header button, and the row inside the
+   mobile menu panel that takes over under 520px */
+/* both mounts take their accessible name from their own visible text (so
+   the spoken label always contains it) and their state from aria-pressed;
+   only the decorative face changes here */
+const soundBtn=$('#soundBtn'),soundBtnM=$('#soundBtnM'),sndFace=$('#sndFace');
+function paintSnd(on){
+  soundBtn.setAttribute('aria-pressed',on);if(sndFace)sndFace.textContent=on?'SND✓':'SND';
+  if(soundBtnM){soundBtnM.setAttribute('aria-pressed',on);
+    soundBtnM.querySelector('.ms-state').textContent=on?'on':'off'}}
+paintSnd(Sound.isOn());
+soundBtn.addEventListener('click',()=>paintSnd(Sound.toggle()));
+if(soundBtnM)soundBtnM.addEventListener('click',()=>paintSnd(Sound.toggle()));
+
+/* ---- THEME: two-state toggle (light ⇄ dark) ----
+   The <head> script already resolved ?theme= → stored choice → system
+   before first paint, so all this does is flip and persist. No third
+   "auto" state: the page simply follows the system until the visitor
+   presses this once. Persistence goes through the same try/catch store
+   helper as everything else. */
+const themeBtn=$('#themeBtn'),themeStatus=$('#themeStatus'),
+      darkMQ=matchMedia('(prefers-color-scheme: dark)');
+const themeNow=()=>document.documentElement.getAttribute('data-theme')||(darkMQ.matches?'dark':'light');
+/* the button's accessible name is carried by two sr-only spans switched in
+   the same cascade as the icon, so nothing here has to keep a label in
+   sync — it is already right before this script ever runs */
+themeBtn.addEventListener('click',()=>{
+  const next=themeNow()==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  store.set('sq_theme',next);
+  if(window.__setTC)window.__setTC(next);/* keep the browser chrome with us */
+  themeStatus.textContent=next==='dark'?'Dark theme on.':'Light theme on.';
+  Sound.tick()});
+
+/* ---- MOBILE NAV ---- */
+const burger=$('#burger'),mnav=$('#mnav');
+burger.addEventListener('click',()=>{const open=mnav.classList.toggle('open');burger.setAttribute('aria-expanded',open)});
+mnav.addEventListener('click',e=>{if(e.target.closest('a')){mnav.classList.remove('open');burger.setAttribute('aria-expanded','false')}});
+/* close it when the burger itself stops existing (rotate to landscape,
+   widen the window) and on Esc, so the state can never outlive its control */
+const closeMnav=()=>{if(mnav.classList.contains('open')){mnav.classList.remove('open');
+  burger.setAttribute('aria-expanded','false')}};
+const burgerMQ=matchMedia('(max-width:920px)');
+if(burgerMQ.addEventListener)burgerMQ.addEventListener('change',e=>{if(!e.matches)closeMnav()});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&mnav.classList.contains('open')){closeMnav();burger.focus()}});
+
+/* ---- SCROLL REVEAL: one entrance per section — all .rv children of a
+   section reveal together with a shared transition (motion budget) ---- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){
+  e.target.querySelectorAll('.rv').forEach(el=>el.classList.add('in'));
+  io.unobserve(e.target)}}),
+  {threshold:.12,rootMargin:'0px 0px -36px 0px'});
+$$('section').forEach(s=>{if(s.querySelector('.rv'))io.observe(s)});
+/* hero highlighter swipe — one earned moment, shortly after load */
+setTimeout(()=>{const h=$('#hlHero');if(h)h.classList.add('in')},350);
+
+/* ---- STASH ---- */
+let stashN=0;const stashEl=$('#stash');
+const earn=n=>{stashN+=n;stashEl.textContent=stashN};
+
+/* ---- MASCOT POKE (replaces round-1's underline easter egg) ---- */
+const mascot=$('#mascot');
+function mascotPop(){if(reduced()||!mascot)return;
+  mascot.animate([{transform:'translateX(-50%) scale(1)'},
+    {transform:'translateX(-50%) scale(1.18) rotate(-8deg)'},
+    {transform:'translateX(-50%) scale(.95) rotate(4deg)'},
+    {transform:'translateX(-50%) scale(1)'}],{duration:450,easing:'cubic-bezier(.34,1.56,.64,1)'})}
+if(mascot)mascot.addEventListener('click',()=>{mascotPop();Sound.tick();earn(1)});
+
+/* ---- ZAP DIAL: segmented control (radiogroup) ---- */
+const DIAL=['understate','narrate','celebrate'];
+let zapLevel=2;
+const seg=$('#zapSeg'),segBtns=[...seg.querySelectorAll('[role=radio]')];
+function setZap(l,focus){zapLevel=l;segBtns.forEach(b=>{const on=+b.dataset.lvl===l;
+  b.setAttribute('aria-checked',on);b.tabIndex=on?0:-1;if(on&&focus)b.focus()})}
+seg.addEventListener('click',e=>{const b=e.target.closest('[role=radio]');if(b)setZap(+b.dataset.lvl)});
+seg.addEventListener('keydown',e=>{let d=0;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')d=1;
+  else if(e.key==='ArrowLeft'||e.key==='ArrowUp')d=-1;
+  else if(e.key==='Home')d=1-zapLevel;else if(e.key==='End')d=3-zapLevel;else return;
+  e.preventDefault();setZap(((zapLevel-1+d+3)%3)+1,true)});
+
+/* ---- ODOMETER: this visitor's bottlings, column-roll digits ---- */
+const odoDigits=$('#odoDigits'),odoText=$('#odoText');
+function buildOdo(){odoDigits.innerHTML='';for(let i=0;i<5;i++){
+  const d=document.createElement('span');d.className='odo-d';
+  const col=document.createElement('span');col.textContent='0\n1\n2\n3\n4\n5\n6\n7\n8\n9';
+  d.appendChild(col);odoDigits.appendChild(d)}}
+function paintOdo(n){const s=String(Math.min(n,99999)).padStart(5,'0');
+  [...odoDigits.children].forEach((d,i)=>{d.firstChild.style.transform='translateY(-'+(+s[i]*1.5)+'em)'});
+  if(odoText.textContent!==s)odoText.textContent=s}
+buildOdo();paintOdo(0);
+
+/* ---- DEMO: classify + set the capture ---- */
+const CLASSIFY=[
+ {k:['crm','platform','marketplace','saas','business','company','agency','laundromat','buy the'],type:'🏢 Business',dom:'Product'},
+ {k:['agent','voice','automation','bot','api','workflow','webhook','feature','integrat'],type:'⚙️ Feature',dom:'Systems'},
+ {k:['strategy','position','market','pricing','launch','brand','compete','newsletter'],type:'🗺️ Strategy',dom:'Strategy'},
+ {k:['method','framework','process','patent','invention'],type:'🔬 IP/Invention',dom:'IP'},
+ {k:['tool','script','repo','cli','app that','plugin'],type:'📦 Repo/Tool',dom:'Infrastructure'},
+ {k:['pivot','direction','thesis','shift'],type:'🧠 Direction',dom:'Strategy'},
+ {k:['call','email','text','intro','partner','hire','meet'],type:'👤 Person/Partner',dom:'People'},
+ {k:['article','dataset','course','book','reference'],type:'📋 Resource',dom:'Personal'}];
+const NEXT=['Text 3 people in that job and ask what they pay for this now.',
+ 'Search two industry groups. Is anyone else asking for this?',
+ 'Sketch it on paper. Show one person. Watch where they pause.',
+ 'Ask your last 3 clients what they would have paid.',
+ 'One page, $50 of ads, count the emails. Decide Friday.'];
+const titleFrom=t=>{const s=t.trim().replace(/^(wait[,—\s]*)?(what if we|what if|we should|idea[:\s]|maybe)\s*/i,'').replace(/[.!?]+$/,'');
+  const w=s.split(/\s+/),sh=w.slice(0,9).join(' ');return sh.charAt(0).toUpperCase()+sh.slice(1)+(w.length>9?'…':'')};
+const classify=t=>{const l=t.toLowerCase();for(const c of CLASSIFY)if(c.k.some(k=>l.includes(k)))return c;return{type:'💡 Idea',dom:'Open'}};
+const nextMonth=()=>{const d=new Date();d.setMonth(d.getMonth()+1,1);return d.toLocaleDateString('en-US',{month:'long'})};
+const today=()=>new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+const out=$('#out'),ideaIn=$('#ideaIn'),liveCount=$('#liveCount'),demoCount=$('#demoCount'),
+      bridge=$('#bridge'),receiptZone=$('#receiptZone'),receiptEl=$('#receipt');
+let bottled=0,lastCap=null;
+$$('.chip').forEach(c=>c.addEventListener('click',()=>{ideaIn.value=c.dataset.fill;
+  if(!matchMedia('(pointer:coarse)').matches)ideaIn.focus()}));
+if(matchMedia('(pointer:coarse)').matches)$('#kbdHint').hidden=true;
+
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function capRow(k,v){return '<div class="cap-row cap-line"><b>'+k+'</b><span>'+v+'</span></div>'}
+function bottle(){
+  const text=ideaIn.value.trim();
+  if(!text){ideaIn.focus();
+    if(!reduced())$('.pad').animate([{transform:'translateX(0)'},{transform:'translateX(-7px)'},{transform:'translateX(7px)'},{transform:'translateX(0)'}],{duration:240});
+    Sound.crack();return}
+  const c=classify(text),energy=text.length>70?'Hot':'Warm',
+        pot=/crm|agent|automat|newsletter|platform|voice|report/i.test(text)?'🚀 High':'📈 Medium',
+        eff=text.length>90?'medium':'quick',title=titleFrom(text),nm=nextMonth();
+  lastCap={title,type:c.type,energy,pot,nm};
+  bottled++;$('#capturedIdea').value=text;
+  const lvl=DIAL[zapLevel-1];
+  /* the dial must LOOK different per level: quiet = plain text + murmured
+     close; narrate = stamps; celebrate = amber chassis + honey close band */
+  const closeLine=lvl==='understate'?'bottled. back to the landing page. where were we?':
+        lvl==='celebrate'?'⚡ Caught clean — that one’s a keeper. Now — back to the landing page. Where were we?':
+        'Now — back to the landing page. Where were we?';
+  out.className='out filled'+(lvl==='understate'?' quiet':lvl==='celebrate'?' loud':'');
+  out.innerHTML=
+    '<div class="cap-line" style="font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sub)">capture № '+String(bottled).padStart(4,'0')+' · '+today()+'</div>'+
+    '<div class="cap-title cap-line">'+esc(title)+'</div>'+
+    (lvl==='understate'?
+      '<div class="cap-tags cap-line">'+c.type+' · '+energy+' · '+pot+'</div>':
+      '<div class="stamps cap-line">'+
+        '<span class="stamp thunk">'+c.type+'</span>'+
+        '<span class="stamp s-amber thunk">'+energy+'</span>'+
+        '<span class="stamp s-sub thunk">'+pot+'</span>'+
+        (lvl==='celebrate'?'<span class="stamp s-amber thunk">★ keeper</span>':'')+'</div>')+
+    capRow('effort','to validate: '+eff)+
+    capRow('domain',c.dom)+
+    capRow('next',NEXT[(Math.random()*NEXT.length)|0])+
+    capRow('chase',nm+' — first Monday')+
+    '<button class="more-btn cap-line" id="moreBtn" aria-expanded="false" aria-controls="moreFields">+ 5 more fields captured</button>'+
+    '<div class="more-fields" id="moreFields" hidden>'+
+      capRow('context','what you were doing when it struck — kept whole')+
+      capRow('status','Raw')+
+      capRow('source','this landing page')+
+      capRow('captured',today())+
+      capRow('attached','— (clean catch, no parent task)')+'</div>'+
+    '<div class="cap-close cap-line">'+closeLine+'</div>';
+  /* set line by line */
+  const lines=out.querySelectorAll('.cap-line');
+  if(reduced()){lines.forEach(l=>l.classList.add('on'))}
+  else lines.forEach((l,i)=>setTimeout(()=>{l.classList.add('on');Sound.tick()},120+i*150));
+  const doneAt=reduced()?50:120+lines.length*150+200;
+  setTimeout(()=>{Sound.stash();
+    liveCount.textContent=bottled;$('#liveS').textContent=bottled===1?'':'s';demoCount.hidden=false;
+    bridge.hidden=false;receiptZone.hidden=false;earn(3);paintOdo(bottled);track('demo_bottled');
+    if(Math.random()<1/6)mascotPop();
+    if(bottled>=3)bridge.querySelector('p').innerHTML='<em>Third bolt. You are exactly who this was built for.</em> The capture half is free — take it, and this one ships pre-loaded.';
+    if(innerWidth<860)out.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'nearest'});
+  },doneAt);
+  /* TODO(launch): pass this capture into the free download flow so the
+     delivered skill file arrives with this exact bolt already in the cage. */
+}
+out.addEventListener('click',e=>{const b=e.target.closest('#moreBtn');if(!b)return;
+  const mf=$('#moreFields'),open=mf.hidden;mf.hidden=!open;
+  b.setAttribute('aria-expanded',open);b.textContent=open?'– fewer fields':'+ 5 more fields captured';
+  if(open)mf.querySelectorAll('.cap-line').forEach((l,i)=>{l.classList.remove('on');
+    reduced()?l.classList.add('on'):setTimeout(()=>l.classList.add('on'),60+i*90)})});
+$('#squirrelBtn').addEventListener('click',bottle);
+ideaIn.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter')bottle()});
+
+/* ---- THE IDEA RECEIPT (screenshot bait) ---- */
+$('#printBtn').addEventListener('click',()=>{
+  if(!lastCap)return;
+  const now=new Date();
+  receiptEl.innerHTML=
+    '<div class="rc-head">SQUIRREL SKILL</div>'+
+    '<div class="rc-subhead">· LIGHTNING RECEIPT ·</div>'+
+    '<hr class="rc-rule">'+
+    '<div class="rc-row"><span class="l">BOLT</span><span>№ '+String(bottled).padStart(4,'0')+'</span></div>'+
+    '<div class="rc-row"><span class="l">DATE</span><span>'+now.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'})+'</span></div>'+
+    '<div class="rc-row"><span class="l">TIME</span><span>'+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})+'</span></div>'+
+    '<hr class="rc-rule">'+
+    '<div class="rc-title">'+esc(lastCap.title)+'</div>'+
+    '<div class="rc-stamps"><span class="stamp">'+lastCap.type+'</span><span class="stamp s-amber">'+lastCap.energy+'</span><span class="stamp s-sub">'+lastCap.pot+'</span></div>'+
+    '<hr class="rc-rule">'+
+    '<div class="rc-row"><span class="l">CAGE</span><span>ADMITTED</span></div>'+
+    '<div class="rc-row"><span class="l">NUTS</span><span>🌰 0</span></div>'+
+    '<div class="rc-row"><span class="l">FIRST CHASE</span><span>'+lastCap.nm.toUpperCase()+'</span></div>'+
+    '<div class="rc-row"><span class="l">FRICTION</span><span>$0.00</span></div>'+
+    '<div class="barcode" aria-hidden="true"></div>'+
+    '<div class="rc-foot"><b>MOMENTUM RETURNED</b><br>helena, montana · squirrel skill</div>';
+  receiptEl.hidden=false;
+  receiptEl.classList.remove('printing');void receiptEl.offsetWidth;
+  if(!reduced())receiptEl.classList.add('printing');
+  $('#receiptHint').hidden=false;Sound.tick();setTimeout(()=>Sound.tick(),180);setTimeout(()=>Sound.tick(),360);
+});
+
+/* ---- PREMIUM CONFETTI: milestone-only (season finale), capped ---- */
+function confetti(host){if(reduced())return;
+  const n=innerWidth<720?22:36,cols=['#FFB237','#FFE9B8','#FFFFFF','#FFC65C'];
+  for(let i=0;i<n;i++){const p=document.createElement('i');p.className='cf';
+    p.style.left=(6+Math.random()*88)+'%';
+    p.style.background=(i===0)?'#1FC7D4':cols[i%4]; /* one teal fleck, that's the budget */
+    host.appendChild(p);
+    const dx=(Math.random()-.5)*150,rot=(Math.random()-.5)*540,dur=900+Math.random()*700;
+    p.animate([{transform:'translate(0,-12px) rotate(0deg)',opacity:1},
+      {transform:'translate('+dx+'px,'+(180+Math.random()*180)+'px) rotate('+rot+'deg)',opacity:0}],
+      {duration:dur,easing:'cubic-bezier(.2,.6,.3,1)'}).onfinish=()=>p.remove()}}
+
+/* ---- THE CAGE: league table season ---- */
+const SEED=['CRM built only for home inspectors','After-hours voice agent for HVAC',
+ 'Weekly teardown newsletter','Buy the laundromat on 7th','Turn the audit into a fixed fee',
+ 'Podcast with three local operators','App that reads utility bills'];
+const INCOMING=['Route the intake form through Claude','Charge for the assessment, not the build',
+ 'Buy the competitor list off the state site','Templates for the trades, $49 each',
+ 'Local meetup, first Thursday','Flip the pricing page to annual',
+ 'Warm-email the 40 firms from spring','Teach the course once, sell the replay',
+ 'Partner with the equipment dealer','Free tier for anyone under 5 people',
+ 'Rewrite the onboarding as a checklist','White-label it for the accountants',
+ 'Newsletter sponsorship, one slot','Turn last year’s support tickets into docs'];
+const LESSONS=['taught me my real market is elsewhere','strong idea, better with a partner',
+ 'worth building once the tooling catches up','someone does this well already — learned from them',
+ 'great instinct, better applied to the day job','holding this one for next season',
+ 'felt huge at 11pm; still good, just not first'];
+let cage=SEED.map(n=>({n,s:0})),month=1,inbox=0,boltsSeen=SEED.length,playing=false;
+const cageList=$('#cageList'),cageLog=$('#cageLog'),cageMonth=$('#cageMonth'),cageSub=$('#cageSub'),
+      cageFill=$('#cageFill'),chaseBtn=$('#chaseBtn'),seasonBtn=$('#seasonBtn'),wrapped=$('#wrapped'),
+      signForm=$('#signForm'),signIn=$('#signIn'),signDone=$('#signDone');
+function renderCage(mark){
+  cageList.innerHTML=cage.map((i,ix)=>{
+    const champ=month>12&&ix===0;
+    return '<li class="'+(champ?'champ':'')+'">'+
+      '<span class="pos">'+(champ?'<span aria-hidden="true">★</span>':String(ix+1).padStart(2,'0'))+'</span>'+
+      (champ?'<span class="sr">champion — </span>':'')+
+      '<span class="nm">'+i.n+'</span>'+
+      (mark&&ix<5&&i.s>0?'<span class="carried">carried</span>':'')+
+      '<span class="dots" aria-hidden="true"></span>'+
+      (i.s>0?'<span class="nuts"><span class="nut">🌰</span> '+i.s+'</span>':'<span class="new">new</span>')+
+      '<span class="strike"></span></li>'}).join('');
+  cageMonth.textContent=month>12?'Season complete':'Month '+month+' of 12';
+  cageSub.textContent=cage.length+' bolt'+(cage.length===1?'':'s')+' in the cage';
+  cageFill.style.width=Math.min(100,(month/12)*100)+'%';
+}
+renderCage();
+function chase(silent,done){
+  /* carried bolts glow brighter, but the edge caps at ~2 nuts — the cage
+     never locks, so a fresh bolt can always out-shine a veteran */
+  cage.forEach(i=>{i.r=Math.min(i.s,2)*.9+Math.random()*4.5});
+  cage.sort((a,b)=>b.r-a.r);
+  if(month===12){
+    /* finale: if co-leaders are tied on nuts, this last chase decides —
+       only the brightest of them survives to take the crown-count */
+    const m=Math.max(...cage.map(i=>i.s));
+    if(cage.filter(i=>i.s===m).length>1){
+      const surv=[],rest=[];let took=false;
+      for(const i of cage){
+        if(surv.length<5&&(i.s!==m||!took)){surv.push(i);if(i.s===m)took=true}
+        else rest.push(i)}
+      while(surv.length<5&&rest.length)surv.push(rest.shift());
+      cage=surv.concat(rest)}}
+  renderCage();
+  const rows=cageList.querySelectorAll('li'),restCount=cage.length-5;
+  rows.forEach((el,ix)=>{if(ix>=5){
+    setTimeout(()=>el.classList.add('cut'),(ix-5)*90);
+    setTimeout(()=>el.classList.add('gone'),(ix-5)*90+(reduced()?0:480))}});
+  setTimeout(()=>{
+    const survivors=cage.slice(0,5);survivors.forEach(s=>s.s++);
+    cage=survivors;month++;
+    if(month<=12){const add=2+((month%2)===0?1:0);
+      for(let i=0;i<add;i++){cage.push({n:INCOMING[inbox%INCOMING.length],s:0});inbox++;boltsSeen++}}
+    cage.sort((a,b)=>b.s-a.s||b.r-a.r);
+    renderCage(true);earn(5);
+    if(month>12){
+      Sound.fanfare();earn(25);track('cage_season_complete');
+      $('#wcWinner').textContent='“'+cage[0].n+'”';
+      $('#wcAgate').textContent=cage[0].s+' nuts · '+boltsSeen+' bolts entered · 12 chases run';
+      $('#bsDate').textContent='HELENA, MONTANA — '+new Date().toLocaleDateString('en-US',{month:'long'}).toUpperCase();
+      wrapped.hidden=false;
+      confetti($('.cage-band'));
+      if(!reduced())wrapped.scrollIntoView({behavior:'smooth',block:'nearest'});
+      cageLog.innerHTML=cage[0].s>cage[1].s?
+        '<b>'+cage[0].n+'</b> held the most nuts across 12 chases. That is your idea of the year. Go build it.':
+        '<b>'+cage[0].n+'</b> finished tied on nuts and took the final chase outright. That is your idea of the year. Go build it.';
+      chaseBtn.textContent='New season';
+    }else{
+      if(!silent)Sound.stash();
+      const add=cage.filter(i=>i.s===0).length;
+      cageLog.innerHTML=restCount+' rested (“'+LESSONS[(month-2)%LESSONS.length]+'”). Survivors each earned a nut. '+add+' fresh bolt'+(add===1?'':'s')+' landed.';
+    }
+    if(done)done();
+  },reduced()?60:(cage.length-5)*90+620);
+}
+/* disabling the focused button blurs it to <body>; hand focus back when done */
+const refocus=opener=>{if(document.activeElement===document.body&&opener&&opener.focus)
+  (opener.disabled?chaseBtn:opener).focus({preventScroll:true})};
+chaseBtn.addEventListener('click',()=>{
+  if(playing)return;
+  if(month>12){cage=SEED.map(n=>({n,s:0}));month=1;inbox=0;boltsSeen=SEED.length;
+    wrapped.hidden=true;renderCage();
+    signForm.hidden=false;signDone.hidden=true;signIn.value='';
+    cageLog.textContent='Fresh season, fresh cage. Run the Chase.';
+    chaseBtn.textContent='Run the Chase';seasonBtn.disabled=false;return}
+  const opener=document.activeElement;
+  chaseBtn.disabled=true;seasonBtn.disabled=true;
+  chase(false,()=>{chaseBtn.disabled=false;seasonBtn.disabled=month>12;refocus(opener)});
+});
+seasonBtn.addEventListener('click',()=>{
+  if(playing||month>12)return;
+  const opener=document.activeElement;
+  playing=true;chaseBtn.disabled=true;seasonBtn.disabled=true;
+  const step=()=>{if(month>12){playing=false;chaseBtn.disabled=false;seasonBtn.disabled=true;refocus(opener);return}
+    chase(true,()=>setTimeout(step,reduced()?80:900))};
+  step();
+});
+
+/* ---- SIGN YOUR SEASON (the initials mechanic, in squirrel voice) ---- */
+signIn.addEventListener('input',()=>{signIn.value=signIn.value.replace(/[^a-zA-Z]/g,'').toUpperCase()});
+signForm.addEventListener('submit',e=>{e.preventDefault();
+  const v=signIn.value.trim();
+  if(v.length<2){signIn.focus();
+    if(!reduced())signIn.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:220});
+    return}
+  $('#signName').textContent=v;
+  signForm.hidden=true;signDone.hidden=false;
+  Sound.stash();earn(5)});
+
+/* ---- CLAUDE FRAME: silent auto-play on scroll-into-view ----
+   TODO(launch): the works-line platforms get affiliate links.
+   ClickUp pays on FREE signups (priority). Notion 50% first payment.
+   Airtable 20% via PartnerStack. The plain file stays the default
+   and nobody is ever pushed off it. */
+const cwFrame=$('#claudeFrame');
+if(cwFrame){const turns=[...cwFrame.querySelectorAll('.cw-turn')];
+  if(document.documentElement.classList.contains('settle')||reduced()){
+    /* headless captures + reduced motion: complete final state, loop disabled */
+    turns.forEach(t=>t.classList.add('on'));
+  }else{
+    const chat=cwFrame.querySelector('.cw-chat');
+    let visible=false,started=false,paused=false,plan=[];
+    const rnd=(a,b)=>a+Math.random()*(b-a);
+    /* pause-aware wait: while the frame is off-viewport OR the user has
+       paused the replay, the loop idles */
+    const wait=ms=>new Promise(res=>{const go=()=>{if(started&&(!visible||paused)){setTimeout(go,250);return}setTimeout(res,ms)};go()});
+    const caret=document.createElement('span');caret.className='caret';caret.setAttribute('aria-hidden','true');
+    /* pre-measure the settled layout so the frame NEVER changes height:
+       each turn keeps its final box (visibility:hidden until "sent") */
+    function build(){
+      plan=turns.map(el=>{
+        const user=el.classList.contains('cw-user');
+        const pre=el.querySelector('.cw-capture');
+        const box=user?el.querySelector('.cw-bubble'):el.querySelector('.cw-msg');
+        let data;
+        if(user)data={kind:'type',text:box.textContent};
+        else if(pre)data={kind:'lines',lines:pre.textContent.split('\n'),html:box.innerHTML};
+        else{const toks=[];box.childNodes.forEach(n=>{
+          /* word + trailing space tokens — no lookbehind, which would throw
+             a parse-time SyntaxError on Safari ≤16.3 and kill this script */
+          if(n.nodeType===3)(n.textContent.match(/\S*\s*/g)||[]).forEach(w=>{if(w)toks.push(esc(w))});
+          else toks.push(n.outerHTML)});
+          data={kind:'stream',toks}}
+        return{el,box,data,h:el.offsetHeight}});
+      chat.style.minHeight=chat.offsetHeight+'px';
+    }
+    const blank=()=>plan.forEach(p=>{p.el.style.minHeight=p.h+'px';p.el.classList.add('on','cw-hide');
+      if(p.data.kind==='type')p.box.textContent='';else p.box.innerHTML=''});
+    async function typeTurn(p){ /* user turn: char-by-char, blinking caret,
+      ~18–28 cps — fast human typing, clearly slower than Claude's stream */
+      p.el.classList.remove('cw-hide');
+      p.box.textContent='';p.box.appendChild(caret);
+      for(const ch of p.data.text){
+        caret.before(document.createTextNode(ch));
+        let ms=rnd(35,55);
+        if(ch==='—')ms+=rnd(420,600);            /* beat at the em-dash */
+        else if(/[,.?:;]/.test(ch))ms+=rnd(80,150);
+        else if(ch===' '&&Math.random()<.12)ms+=rnd(60,140);
+        await wait(ms)}
+      await wait(280);caret.remove()}
+    async function streamTurn(p){ /* Claude turn: word-chunk token streaming */
+      p.el.classList.remove('cw-hide');
+      const t=p.data.toks;let i=0;
+      while(i<t.length){i=Math.min(t.length,i+2+((Math.random()*3)|0));
+        p.box.innerHTML=t.slice(0,i).join('');
+        await wait(rnd(55,95))}}
+    async function linesTurn(p){ /* the capture block: streams line-by-line */
+      p.el.classList.remove('cw-hide');
+      p.box.innerHTML=p.data.html;
+      const pre=p.box.querySelector('.cw-capture'),L=p.data.lines;
+      pre.textContent=L[0];
+      for(let i=2;i<=L.length;i++){await wait(rnd(130,190));pre.textContent=L.slice(0,i).join('\n')}}
+    async function run(){
+      for(;;){
+        for(const p of plan){
+          if(p.data.kind==='type')await typeTurn(p);
+          else if(p.data.kind==='lines')await linesTurn(p);
+          else await streamTurn(p);
+          await wait(rnd(550,850))}
+        await wait(4000);                              /* hold the finished scene */
+        chat.classList.add('cw-fade');await wait(420); /* fade reset, then replay */
+        blank();chat.classList.remove('cw-fade');await wait(600);
+      }}
+    /* measure only after fonts settle (1.5s cap) so reserved heights are true */
+    const fontsReady=(document.fonts&&document.fonts.ready)?
+      Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]):Promise.resolve();
+    /* WCAG 2.2.2: a user-facing pause. The frame is aria-hidden decoration,
+       so the control lives in the caption (outside the frame) where it is
+       focusable; clicking the frame itself also toggles. */
+    const cap=cwFrame.nextElementSibling;
+    const pauseBtn=document.createElement('button');
+    pauseBtn.type='button';pauseBtn.className='cw-pause';
+    pauseBtn.setAttribute('aria-pressed','false');
+    pauseBtn.textContent='pause the replay';
+    const setPause=p=>{paused=p;pauseBtn.setAttribute('aria-pressed',p);
+      pauseBtn.textContent=p?'play the replay':'pause the replay'};
+    pauseBtn.addEventListener('click',()=>setPause(!paused));
+    cwFrame.addEventListener('click',()=>setPause(!paused));
+    if(cap&&cap.classList.contains('cw-caption')){
+      cap.appendChild(document.createTextNode(' · '));cap.appendChild(pauseBtn)}
+    fontsReady.then(()=>{build();blank();
+      new IntersectionObserver(es=>es.forEach(en=>{visible=en.isIntersecting;
+        if(visible&&!started){started=true;run()}}),{threshold:.3}).observe(cwFrame)});
+  }}
+
+/* ---- INSTALL: copy-able commands (clipboard API + execCommand fallback) ---- */
+$$('.copy-btn').forEach(b=>b.addEventListener('click',()=>{
+  const txt=b.dataset.copy;
+  const done=()=>{b.textContent='Copied';b.classList.add('did');
+    setTimeout(()=>{b.textContent='Copy';b.classList.remove('did')},1600)};
+  const fallback=()=>{const ta=document.createElement('textarea');ta.value=txt;
+    ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');done()}catch(err){}ta.remove()};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done,fallback);
+  else fallback();
+  Sound.tick()}));
+
+/* ---- FAQ (static markup; JS only wires the accordion) ---- */
+$$('.q button').forEach(b=>b.addEventListener('click',()=>{
+  const was=b.getAttribute('aria-expanded')==='true';
+  $$('.q button').forEach(x=>x.setAttribute('aria-expanded','false'));
+  if(!was)b.setAttribute('aria-expanded','true')}));
+
+/* ---- PROMO gating (?crew=hustle only) ---- */
+if(new URLSearchParams(location.search).get('crew')==='hustle')$('#promo').hidden=false;
+
+/* ---- PROOF strip: reveal once any testimonial slot is filled ---- */
+if([...$$('.proof-slot blockquote')].some(b=>b.textContent.trim()))$('#proof').classList.add('has-proof');
+
+/* ---- MODALS: focus-trapped stubs ---- */
+let lastFocus=null;
+function openModal(name){lastFocus=document.activeElement;
+  const m=$('#modal-'+name);m.hidden=false;
+  /* #capturedIdea is set by bottle() — the bottled bolt, never the raw pad */
+  if(name==='free'){
+    $('#freeMicro').textContent=lastCap?'the skill file lands in your inbox; your bolt ships inside it. no spam, no sequence.':'the skill file lands in your inbox. no spam, no sequence.';
+    $('#freeSuccessP').textContent=lastCap?'the skill file is on its way — your bolt rides along, pre-loaded in the cage.':'the skill file is on its way.';
+  }
+  const f=m.querySelector('input:not([type=hidden]),button:not(.x)');(f||m.querySelector('.x')).focus()}
+function closeModal(m){m.hidden=true;if(lastFocus)lastFocus.focus()}
+document.addEventListener('click',e=>{
+  const opener=e.target.closest('[data-open]');
+  if(opener){e.preventDefault();openModal(opener.dataset.open);return}
+  const closer=e.target.closest('[data-close]');
+  if(closer)closeModal(closer.closest('.modal'))});
+document.addEventListener('keydown',e=>{
+  const m=$('.modal:not([hidden])');if(!m)return;
+  if(e.key==='Escape'){closeModal(m);return}
+  if(e.key!=='Tab')return;
+  const f=[...m.querySelectorAll('button,input:not([type=hidden]),a[href]')].filter(x=>!x.disabled&&x.offsetParent);
+  if(!f.length)return;
+  const first=f[0],last=f[f.length-1];
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}});
+$('#freeForm').addEventListener('submit',e=>{e.preventDefault();track('modal_email_submit');
+  $('#freeForm').hidden=true;$('#freeSuccess').hidden=false;Sound.stash()});
+$('#stripeBtn').addEventListener('click',()=>{const o=$('#stripeBtn').innerHTML;
+  $('#stripeBtn').textContent='checkout opens at launch';
+  setTimeout(()=>$('#stripeBtn').innerHTML=o,2200)});
+
+/* ---- STICKY MOBILE CTA BAR ---- */
+const ctabar=$('#ctabar');let heroOut=false,bottomZone=false;
+const paintBar=()=>ctabar.classList.toggle('show',heroOut&&!bottomZone);
+new IntersectionObserver(es=>es.forEach(e=>{heroOut=!e.isIntersecting&&e.boundingClientRect.top<0;paintBar()})).observe($('#heroCtas'));
+const zones=new Map();
+const zoneIO=new IntersectionObserver(es=>{es.forEach(e=>zones.set(e.target,e.isIntersecting));
+  bottomZone=[...zones.values()].some(Boolean);paintBar()});
+zoneIO.observe($('#pricing'));zoneIO.observe($('#final'));
+</script>
+</body>
+</html>

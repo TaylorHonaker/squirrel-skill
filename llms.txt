@@ -1,0 +1,42 @@
+# Squirrel Skill
+
+> A skill for Claude that captures mid-thought ideas before they escape — say "squirrel that" and Claude bottles the idea in a structured 13-field record, then returns you to exactly where you left off.
+
+Squirrel Skill is a folder of plain markdown (a Claude "skill"), not an app and not a black box. You can read every line before you install it. It works in Claude.ai, Claude Cowork, and Claude Code.
+
+## What it does
+
+- **Capture (free tier):** When you drop an idea mid-task — "wait — squirrel that" — Claude captures it in under 5 seconds: the idea verbatim, the working context it appeared in, and its energy level (Hot / Warm / Cool). No interrogation, no friction. Then one line hands you back to the interrupted work: "Now — back to X. Where were we?"
+- **The 13-field record:** Every capture is structured: Squirrel (a specific name), Type (Idea / Business / Feature / Strategy / IP / Repo / Direction / Person / Resource / Other), Energy, Status, Potential, Effort to Validate, Domain, Context, Next Action, Attached To, Source Chat, Captured date, Chase Month.
+- **The Chase (paid):** A monthly 30-minute ritual, first Monday of each month. Claude re-reads every raw squirrel and forces a verdict on each: PROMOTE to your task queue, HOLD to next month, or ARCHIVE. Output is a Chase Report, including the Hidden Gem — the idea that looks more valuable now than when you caught it.
+- **The Cage (paid):** The season-long tournament. Ideas that survive Chases rank against each other across months; the best five carry forward, the rest teach you what you actually value. Six promoted ideas ("nuts") in a season is a green light. The season ends with a crowned idea of the year.
+
+## Install
+
+- **Claude.ai / Cowork:** Settings → Capabilities → Skills → upload the ZIP (the whole folder at the root, not just SKILL.md) → toggle on. About 90 seconds.
+- **Claude Code:** Drop the `squirrel/` folder into `~/.claude/skills/`. Then type `/squirrel`.
+- **Trigger phrases:** `/squirrel`, "squirrel that", "capture that", "bottle that", "don't let me forget", "park that", or just dropping an idea mid-sentence.
+
+## Pricing
+
+- **Free tier:** $0 — the capture protocol, free forever, fully inspectable markdown.
+- **Full system:** $147 one-time — capture plus the Chase ritual, the Cage tournament, the ranking mechanism, and updates. Pay once. It's yours. No subscription.
+- **Guarantee:** 30-day unconditional refund. If it's not for you, email within 30 days for a full refund.
+- Checkout by Stripe · delivered by email.
+
+## FAQ essentials
+
+- **Why pay when thousands of free skills exist?** The free tier IS one of them — capture, free forever. $147 buys the system: the Chase ritual, the Cage tournament, the ranking mechanism, updates. The workflow you'd charge a client for, not a prompt anyone could type.
+- **Is it safe to install?** It's a folder of markdown. Read every line before you install.
+- **What do I need?** A Claude subscription (claude.ai, Cowork, or Claude Code). The skill runs inside Claude — there is no separate app or account.
+- **Does it work with my task tracker?** Captures are structured records; the reference setup uses Notion, and the format ports to any system Claude can write to.
+- **Refunds?** 30 days, unconditional, by email.
+
+## Links
+
+<!-- LAUNCH: single substitution point — must match index.html canonical/og:url + footer email exactly -->
+- Product page: https://squirrel.summitautomation.ai/ <!-- LAUNCH: confirm final domain -->
+- Buy ($147 one-time): https://squirrel.summitautomation.ai/#pricing <!-- LAUNCH: Stripe payment link -->
+- Free download: https://squirrel.summitautomation.ai/#free <!-- LAUNCH: free-tier ZIP link -->
+- Contact: hello@summitautomation.ai <!-- LAUNCH: confirm support email -->
+- Maker: Taylor, SUMMIT Business Automation, Montana <!-- LAUNCH: add @handle + link -->
