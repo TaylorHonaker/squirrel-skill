@@ -1403,8 +1403,7 @@ unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
       <div class="o-row"><span>Guide of worked examples</span><span>included</span></div>
       <div class="o-row total"><span>One payment</span><span>$147</span></div>
     </div>
-    <!-- LAUNCH: Stripe payment link, promo codes on -->
-    <button class="btn btn-amber" style="width:100%" data-todo="stripe" id="stripeBtn">Continue to checkout →</button>
+    <a class="btn btn-amber" style="width:100%" id="stripeBtn" href="https://buy.stripe.com/5kQ6oH97wcfP9S02XJds405" data-evt="checkout_stripe">Continue to checkout →</a>
     <p class="micro" style="margin-top:.8rem"><b>If it's not for you, email me within 30 days and I'll refund you. Unconditionally.</b> — Taylor</p>
     <p class="micro" style="margin-top:.5rem">Checkout by Stripe · delivered by email · pay once, it's yours<!-- LAUNCH: restore "instant delivery · VAT handled" only after Stripe Tax + automated fulfillment are live --></p>
   </div>
@@ -1937,9 +1936,9 @@ document.addEventListener('keydown',e=>{
   else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}});
 $('#freeForm').addEventListener('submit',e=>{e.preventDefault();track('modal_email_submit');
   $('#freeForm').hidden=true;$('#freeSuccess').hidden=false;Sound.stash()});
-$('#stripeBtn').addEventListener('click',()=>{const o=$('#stripeBtn').innerHTML;
-  $('#stripeBtn').textContent='checkout opens at launch';
-  setTimeout(()=>$('#stripeBtn').innerHTML=o,2200)});
+/* Crew link carries the code straight into Stripe checkout */
+if(new URLSearchParams(location.search).get('crew')==='hustle')
+  $('#stripeBtn').href+='?prefilled_promo_code=HUSTLE50';
 
 /* ---- STICKY MOBILE CTA BAR ---- */
 const ctabar=$('#ctabar');let heroOut=false,bottomZone=false;
