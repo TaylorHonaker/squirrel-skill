@@ -62,7 +62,7 @@ if(__theme){document.documentElement.setAttribute('data-theme',__theme);window._
 {"@type":"Question","name":"What is a Claude skill, and how do I install this one?","acceptedAnswer":{"@type":"Answer","text":"A skill is a folder of markdown instructions Claude follows. On claude.ai or Claude Desktop: Settings → Capabilities → Skills → upload the ZIP → toggle it on. In Claude Code: unzip it into ~/.claude/skills. About 90 seconds either way, and from then on “squirrel that” just works."}},
 {"@type":"Question","name":"Do I need a paid Claude plan?","acceptedAnswer":{"@type":"Answer","text":"You need a Claude plan that supports custom skills — Pro, Max, Team, or Enterprise on claude.ai and Claude Desktop, or Claude Code. If your Claude can add a skill, this one runs."}},
 {"@type":"Question","name":"Do I need a Notion account or anything?","acceptedAnswer":{"@type":"Answer","text":"No. It works out of the box with a plain text file on your computer. Offline, yours, nothing to sign up for. Notion, Airtable and the rest are optional and take about two minutes if you want them."}},
-{"@type":"Question","name":"Does it ask me questions?","acceptedAnswer":{"@type":"Answer","text":"Never. That is the strictest rule in the whole thing. Give it half a sentence and it runs with the rest. Your momentum is the thing being protected here."}},
+{"@type":"Question","name":"Does it ask me questions?","acceptedAnswer":{"@type":"Answer","text":"Never during capture — that is the strictest rule in the whole thing. Give it half a sentence and it runs with the rest. The full Cage earns exactly one question a season: when an idea green-lights, it asks for your start date."}},
 {"@type":"Question","name":"What if I catch a whole lot?","acceptedAnswer":{"@type":"Answer","text":"Perfect. The Cage was built for volume. Bottle 40 in a month if that is your rhythm. Only 5 ever carry forward, so a fuller cage makes the winner sharper."}},
 {"@type":"Question","name":"What exactly am I paying for?","acceptedAnswer":{"@type":"Answer","text":"A skill file you install into Claude and own outright. No subscription, no seats, no server, no login. It adds the Chase, the Cage tournament, nut counts, your idea of the year, and a guide of worked examples."}},
 {"@type":"Question","name":"Why is bottling free but ranking paid?","acceptedAnswer":{"@type":"Answer","text":"Bottling is the straightforward half, so it should be free and it always will be. The Cage took two years to get right and it is the part that turns a year of good ideas into the one you build."}},
@@ -862,7 +862,7 @@ Type:&nbsp;🏢&nbsp;Business | Energy:&nbsp;Hot | Potential:&nbsp;🚀&nbsp;Hig
 Chase Month: August
 → saved to your squirrel box
 
-Continue where you left off? → the GHL webhook — switching it to upsert.</pre></div></div>
+Now — back to the GHL webhook. Where were we?</pre></div></div>
           <div class="cw-turn cw-assistant"><span class="cw-av"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l1.8 6.4L20 10l-6.2 1.6L12 18l-1.8-6.4L4 10l6.2-1.6z"/></svg></span><div class="cw-msg">Back to the webhook. Swapping the create step for the upsert now:</div></div>
         </div>
       </div>
@@ -1042,7 +1042,7 @@ Continue where you left off? → the GHL webhook — switching it to upsert.</pr
         <h3>Claude.ai · Desktop · Cowork</h3>
         <ol class="ins-steps">
           <li>Open <b>Settings → Capabilities → Skills</b></li>
-          <li><b>Upload skill</b> → pick <code>squirrel-skill.zip</code></li>
+          <li><b>Upload skill</b> → pick your <code>squirrel-*.zip</code> (free or full — same doors)</li>
           <li>Toggle it on. Say <b>“squirrel that.”</b></li>
         </ol>
         <p class="ins-note">Upload the ZIP as-is — it keeps the <code>squirrel/</code> folder at the root, which is what Claude expects. (A loose <code>SKILL.md</code> won't register. We zipped it right so you never think about it.)</p>
@@ -1050,9 +1050,9 @@ Continue where you left off? → the GHL webhook — switching it to upsert.</pr
       <div class="ins-card rv">
         <h3>Claude Code</h3>
         <div class="code-block">
-          <div class="cb-bar"><span>terminal</span><button class="copy-btn" type="button" data-copy="unzip squirrel-skill.zip -d ~/.claude/skills/">Copy</button></div>
+          <div class="cb-bar"><span>terminal</span><button class="copy-btn" type="button" data-copy="unzip squirrel-free.zip -d ~/.claude/skills/">Copy</button></div>
           <pre><code><span class="cmt"># the folder lands in ~/.claude/skills</span>
-unzip squirrel-skill.zip -d ~/.claude/skills/</code></pre>
+unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
         </div>
         <div class="code-block">
           <div class="cb-bar"><span>any session</span><button class="copy-btn" type="button" data-copy="/squirrel">Copy</button></div>
@@ -1172,7 +1172,7 @@ unzip squirrel-skill.zip -d ~/.claude/skills/</code></pre>
       <div class="q"><button aria-expanded="false" aria-controls="a0" id="qb0">What is a Claude skill, and how do I install this one?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a0" role="region" aria-labelledby="qb0"><div><p>A skill is a folder of markdown instructions Claude follows. On claude.ai or Claude Desktop: Settings → Capabilities → Skills → upload the ZIP → toggle it on. In Claude Code: unzip it into ~/.claude/skills. About 90 seconds either way, and from then on “squirrel that” just works.</p></div></div></div>
       <div class="q"><button aria-expanded="false" aria-controls="a1" id="qb1">Do I need a paid Claude plan?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a1" role="region" aria-labelledby="qb1"><div><p>You need a Claude plan that supports custom skills — Pro, Max, Team, or Enterprise on claude.ai and Claude Desktop, or Claude Code. If your Claude can add a skill, this one runs.</p></div></div></div>
       <div class="q"><button aria-expanded="false" aria-controls="a2" id="qb2">Do I need a Notion account or anything?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a2" role="region" aria-labelledby="qb2"><div><p>No. It works out of the box with a plain text file on your computer. Offline, yours, nothing to sign up for. Notion, Airtable and the rest are optional and take about two minutes if you want them.</p></div></div></div>
-      <div class="q"><button aria-expanded="false" aria-controls="a3" id="qb3">Does it ask me questions?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a3" role="region" aria-labelledby="qb3"><div><p>Never. That is the strictest rule in the whole thing. Give it half a sentence and it runs with the rest. Your momentum is the thing being protected here, so it takes what you gave it and gets out of your way.</p></div></div></div>
+      <div class="q"><button aria-expanded="false" aria-controls="a3" id="qb3">Does it ask me questions?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a3" role="region" aria-labelledby="qb3"><div><p>Never during capture — that is the strictest rule in the whole thing. Give it half a sentence and it runs with the rest. The full Cage earns exactly one question a season: when an idea green-lights, it asks for your start date.</p></div></div></div>
       <div class="q"><button aria-expanded="false" aria-controls="a4" id="qb4">What if I catch a whole lot?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a4" role="region" aria-labelledby="qb4"><div><p>Perfect. The Cage was built for volume. Bottle 40 in a month if that is your rhythm. Only 5 ever carry forward, so a fuller cage makes the winner sharper. More lightning is always better here.</p></div></div></div>
       <div class="q"><button aria-expanded="false" aria-controls="a5" id="qb5">What exactly am I paying for?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a5" role="region" aria-labelledby="qb5"><div><p>A skill file you install into Claude and own outright. No subscription, no seats, no server, no login. It adds the Chase, the Cage tournament, nut counts, your idea of the year, and a guide of worked examples.</p></div></div></div>
       <div class="q"><button aria-expanded="false" aria-controls="a6" id="qb6">Why is bottling free but ranking paid?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a6" role="region" aria-labelledby="qb6"><div><p>Bottling is the straightforward half, so it should be free and it always will be. The Cage took two years to get right and it is the part that turns a year of good ideas into the one you build. Charging for the hard half felt more honest than watering down both.</p></div></div></div>
