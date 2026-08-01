@@ -1,36 +1,47 @@
 # Squirrel Skill
 
-> A skill for Claude that captures mid-thought ideas before they escape — say "squirrel that" and Claude bottles the idea in a structured 13-field record, then returns you to exactly where you left off.
+> An AI skill — born on Claude — that captures mid-thought ideas before they escape: say "squirrel that" and the idea is bottled in a structured 13-field record, then you are returned to exactly where you left off.
 
-Squirrel Skill is a folder of plain markdown (a Claude "skill"), not an app and not a black box. You can read every line before you install it. It works in Claude.ai, Claude Cowork, and Claude Code.
+Squirrel Skill is a folder of plain markdown (an Agent Skill), not an app and not a black box. You can read every line before you install it. Claude (claude.ai, Claude Cowork, Claude Code) is the first-class path; Agent Skills began at Anthropic in October 2025 and became an open standard adopted across major AI platforms, and because SKILL.md is plain markdown, any capable AI can follow it.
 
 ## What it does
 
-- **Capture (free tier):** When you drop an idea mid-task — "wait — squirrel that" — Claude captures it in under 5 seconds: the idea verbatim, the working context it appeared in, and its energy level (Hot / Warm / Cool). No interrogation, no friction. Then one line hands you back to the interrupted work: "Now — back to X. Where were we?"
+- **Capture (free tier):** When you drop an idea mid-task — "wait — squirrel that" — the skill captures it in under 5 seconds: the idea verbatim, the working context it appeared in, and its energy level (Hot / Warm / Cool). No interrogation, no friction. Then one line hands you back to the interrupted work: "Now — back to X. Where were we?"
 - **The 13-field record:** Every capture is structured: Squirrel (a specific name), Type (Idea / Business / Feature / Strategy / IP / Repo / Direction / Person / Resource / Other), Energy, Status, Potential, Effort to Validate, Domain, Context, Next Action, Attached To, Source Chat, Captured date, Chase Month.
-- **The Chase (paid):** A monthly 30-minute ritual, first Monday of each month. Claude re-reads every raw squirrel and forces a verdict on each: PROMOTE to your task queue, HOLD to next month, or ARCHIVE. Output is a Chase Report, including the Hidden Gem — the idea that looks more valuable now than when you caught it.
-- **The Cage (paid):** The season-long tournament. Ideas that survive Chases rank against each other across months; the best five carry forward, the rest teach you what you actually value. Six promoted ideas ("nuts") in a season is a green light. The season ends with a crowned idea of the year.
+- **The Chase (paid):** A monthly 30-minute ritual, first Monday of each month. The skill fields every squirrel due this month — Raw, Assessed, Carried, and Held — and forces a verdict on each: CARRY (the top 5 survive the month, one nut each), PROMOTE into active work, HOLD to a named month (rare, dated), or ARCHIVE with a one-line lesson. Output is a Chase Report, including the Hidden Gem — the idea that looks more valuable now than when you caught it.
+- **The Squirrel Box tournament (paid):** The season-long ranking. Each month the top five survivors carry forward and each earns a nut; six nuts on one idea is the green light — put a date on it and build. After 12 chases, the idea holding the most nuts is crowned idea of the year.
 
 ## Install
 
 - **Claude.ai / Cowork:** Settings → Capabilities → Skills → upload the ZIP (the whole folder at the root, not just SKILL.md) → toggle on. About 90 seconds.
 - **Claude Code:** Drop the `squirrel/` folder into `~/.claude/skills/`. Then type `/squirrel`.
+- **Everywhere else (the road less paved):** Point any skills-capable agent at the unzipped folder — Agent Skills is an open standard — or paste SKILL.md into any capable AI as instructions; it is plain markdown.
 - **Trigger phrases:** `/squirrel`, "squirrel that", "capture that", "bottle that", "don't let me forget", "park that", or just dropping an idea mid-sentence.
+
+## Your box (where captures land)
+
+- **Plain file** — zero setup, the default. Offline, yours.
+- **Notion** — preferred; the original skill is Notion-native. Create a database named "Squirrel Box 🐿️", add the 13 properties (a property-by-property guide ships in the ZIP as references/notion-setup.md), connect your AI to Notion, and tell the skill where the box lives on first capture.
+- **Anywhere else that holds text** — Airtable, Obsidian, Google Sheets, ClickUp, Apple Notes; the format ports to any system your AI can write to.
 
 ## Pricing
 
 - **Free tier:** $0 — the capture protocol, free forever, fully inspectable markdown.
-- **Full system:** $147 one-time — capture plus the Chase ritual, the Cage tournament, the ranking mechanism, and updates. Pay once. It's yours. No subscription.
+- **Full system:** $147 one-time — capture plus the Chase ritual, the Squirrel Box tournament, the ranking mechanism, and updates. Pay once. It's yours. No subscription.
 - **Guarantee:** 30-day unconditional refund. If it's not for you, email within 30 days for a full refund.
 - Checkout by Stripe · delivered by email.
 
 ## FAQ essentials
 
-- **Why pay when thousands of free skills exist?** The free tier IS one of them — capture, free forever. $147 buys the system: the Chase ritual, the Cage tournament, the ranking mechanism, updates. The workflow you'd charge a client for, not a prompt anyone could type.
+- **Why pay when thousands of free skills exist?** The free tier IS one of them — capture, free forever. $147 buys the system: the Chase ritual, the Squirrel Box tournament, the ranking mechanism, updates. The workflow you'd charge a client for, not a prompt anyone could type.
 - **Is it safe to install?** It's a folder of markdown. Read every line before you install.
-- **What do I need?** A Claude subscription (claude.ai, Cowork, or Claude Code). The skill runs inside Claude — there is no separate app or account.
-- **Does it work with my task tracker?** Captures are structured records; the reference setup uses Notion, and the format ports to any system Claude can write to.
+- **What do I need?** For the first-class path, a Claude plan that supports custom skills (claude.ai, Cowork, or Claude Code). Running it on another skills-capable platform instead? Then no Claude plan is needed — the skill is plain markdown and there is no separate app or account either way.
+- **Does it work with my task tracker?** Captures are structured records; the reference setup uses Notion (preferred — setup guide included), and the format ports to any system your AI can write to.
 - **Refunds?** 30 days, unconditional, by email.
+
+## Legal
+
+- Sold by AI Company USA dba SUMMIT Business Automation, Helena, Montana.
 
 ## Links
 
