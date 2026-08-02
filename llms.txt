@@ -46,8 +46,8 @@ Squirrel Skill is a folder of plain markdown (an Agent Skill), not an app and no
 ## Links
 
 <!-- LAUNCH: single substitution point — must match index.html canonical/og:url + footer email exactly -->
-- Product page: https://taylorhonaker.github.io/squirrel-skill/ <!-- LAUNCH: confirm final domain -->
+- Product page: https://www.squirrelskill.com/
 - Buy ($147 one-time): https://buy.stripe.com/5kQ6oH97wcfP9S02XJds405 (promo codes supported)
-- Free download (direct ZIP, no email): https://taylorhonaker.github.io/squirrel-skill/squirrel-free.zip
-- Contact: hello@summitautomation.ai <!-- LAUNCH: confirm support email -->
+- Free download (direct ZIP, no email): https://www.squirrelskill.com/squirrel-free.zip
+- Contact: taylor@aicompanyusa.com
 - Maker: Taylor, SUMMIT Business Automation, Montana <!-- LAUNCH: add @handle + link -->
