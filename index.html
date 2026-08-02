@@ -213,6 +213,9 @@ section[id]{scroll-margin-top:88px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;font-family:var(--disp);font-weight:700;font-size:1rem;letter-spacing:.005em;padding:.8rem 1.5rem;min-height:48px;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);text-decoration:none;transition:transform .12s var(--spring),box-shadow .12s var(--spring);user-select:none;white-space:nowrap}
 .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-up)}
 .btn:active{transform:translateY(4px);box-shadow:0 0 0 var(--shadow-ink)}
+/* the two long $147 CTAs may wrap on narrow screens — an unbreakable 346px
+   button was the page's widest element and forced shrink-to-fit on phones */
+.price .btn,.season-card .btn{white-space:normal}
 .btn-amber{background:linear-gradient(180deg,var(--amber-hi),var(--amber));color:var(--on-amber);border-color:var(--on-amber)}
 .btn-amber:active{background:var(--amber)}
 .btn-lg{font-size:1.1rem;padding:.95rem 1.8rem}
@@ -379,7 +382,8 @@ header{position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-fi
 .free-chip{border-color:var(--teal);box-shadow:0 3px 0 var(--teal);background:rgba(31,199,212,.07)}
 .paid-chip{transform:rotate(2deg);border-color:var(--amber);color:var(--amber);background:transparent;box-shadow:0 3px 0 rgba(0,0,0,.5)}
 .demo-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:1.6rem;margin-top:var(--block-gap);align-items:start}
-@media(max-width:860px){.demo-grid{grid-template-columns:1fr}.receipt-zone{grid-column:auto}}
+@media(max-width:860px){.demo-grid{grid-template-columns:1fr}}
+.demo-grid>*{min-width:0}/* the first-entry pre must scroll inside its card, never widen the page */
 .pad{background:var(--card);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-up);padding:1.4rem var(--card-pad) 1.5rem;position:relative}
 .pad-label{font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);margin-bottom:.7rem}
 label.pad-label{display:block}
@@ -442,7 +446,10 @@ label.pad-label{display:block}
 .receipt{--ink:#2A1B10;--sub:#6B5744;--card:#FFFFFF;--honey:#FFE9B8;--deep:#96570A;--line:#2A1B10;--shadow-ink:#2A1B10;--soft-rgb:42,27,16}
 /* receipt lives in the demo grid's output column — one centerline with the
    counter + bridge above it, not a second page-width axis */
-.receipt-zone{grid-column:2;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.receipt-zone{display:flex;flex-direction:column;align-items:center;gap:1rem}
+/* desktop only: pin to the output column — placing this unscoped forced an
+   implicit 2nd grid track on phones even with the mobile stack rule active */
+@media(min-width:861px){.receipt-zone{grid-column:2}}
 .receipt-zone[hidden]{display:none}
 .receipt-clip{overflow:hidden;padding:0 14px 14px}
 .receipt{width:300px;background:#FFFEF9;color:var(--ink);font-family:var(--mono);font-weight:500;font-size:.74rem;line-height:1.65;padding:1.3rem 1.15rem 1.5rem;position:relative;transform:rotate(-.6deg);
@@ -521,7 +528,8 @@ label.pad-label{display:block}
 /* season card — crowned idea of the year, signed */
 .wrapped{margin-top:2rem;display:grid;place-items:center}
 .wrapped[hidden]{display:none}
-.season-card{width:min(100%,470px);background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:0 6px 0 rgba(0,0,0,.55);padding:1.8rem 1.9rem 1.6rem;text-align:center}
+.season-card{width:min(100%,470px);min-width:0;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:0 6px 0 rgba(0,0,0,.55);padding:1.8rem 1.9rem 1.6rem;text-align:center}
+@media(max-width:430px){.season-card{padding:1.6rem 1.2rem 1.4rem}}
 .season-card .sc-top{display:flex;justify-content:space-between;font-family:var(--mono);font-weight:500;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);border-bottom:2px solid var(--line);padding-bottom:.5rem;margin-bottom:1rem}
 .season-card .sc-crown{font-size:2.1rem;line-height:1;margin-bottom:.4rem;filter:drop-shadow(0 2px 0 rgba(42,27,16,.25))}
 .season-card .sc-kicker{font-family:var(--disp);font-weight:700;font-size:.86rem;letter-spacing:.24em;text-transform:uppercase;color:var(--deep);margin-bottom:.5rem}
@@ -703,6 +711,8 @@ label.pad-label{display:block}
 footer{border-top:2px solid var(--line);background:var(--card);padding:2.6rem 0 5.5rem}
 .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:2rem;font-size:.9rem}
 @media(max-width:760px){.foot-grid{grid-template-columns:1fr 1fr;gap:1.6rem}}
+.foot-grid>*{min-width:0}
+.foot-grid a[href^="mailto"]{overflow-wrap:anywhere}
 .foot-grid h4{font-family:var(--mono);font-weight:500;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--deep);margin-bottom:.55rem}
 .foot-grid ul{list-style:none}
 .foot-grid li a{color:var(--sub);text-decoration:none;display:inline-block;padding:.32rem 0}
@@ -763,14 +773,14 @@ footer{border-top:2px solid var(--line);background:var(--card);padding:2.6rem 0 
   .league .nm{font-size:.95rem}
   .hero-ctas .btn{width:100%}
 }
-/* Narrow-viewport guard: cap + CENTER so 391–500px phones (Pixel 7,
-   Pro Max) get symmetric gutters. Headless Chrome clamps windows to
-   ~500px wide, so automated 390px captures (.settle) stay left-anchored
-   — the cropped shot then matches a true 390px phone exactly. */
+/* Capture-fidelity guard, HEADLESS ONLY (.settle is set solely under
+   webdriver/HeadlessChrome, see head script): headless Chrome clamps
+   windows to ~500px wide, so automated 390px captures stay left-anchored
+   and crop to a true 390px phone. Real phones — including 430pt Pro Max —
+   get the full viewport width; the fixed CTA bar stays edge-to-edge. */
 @media(max-width:500px){
-  .wrap{max-width:390px;margin-inline:auto}
-  .ctabar{max-width:390px;margin-inline:auto}
-  .settle .wrap,.settle .ctabar{margin-inline:0 auto}
+  .settle .wrap{max-width:390px;margin-inline:0 auto}
+  .settle .ctabar{max-width:390px;margin-inline:0 auto}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
