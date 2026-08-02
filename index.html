@@ -866,7 +866,7 @@ Now — back to the GHL webhook. Where were we?</pre></div></div>
           <div class="cw-turn cw-assistant"><span class="cw-av"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l1.8 6.4L20 10l-6.2 1.6L12 18l-1.8-6.4L4 10l6.2-1.6z"/></svg></span><div class="cw-msg">Back to the webhook. Swapping the create step for the upsert now:</div></div>
         </div>
       </div>
-      <p class="cw-caption">recreated in code from a real session · uncut screen recording lands here at launch</p>
+      <p class="cw-caption">recreated in code from a real session</p>
     </div>
   </div>
 </section>
@@ -914,7 +914,7 @@ Now — back to the GHL webhook. Where were we?</pre></div></div>
             <button type="button" role="radio" aria-checked="false" data-lvl="3" tabindex="-1">celebrate</button>
           </div>
         </div>
-        <button class="btn btn-amber" id="squirrelBtn" style="width:100%" data-evt="demo_bottled">squirrel that</button>
+        <button class="btn btn-amber" id="squirrelBtn" style="width:100%">squirrel that</button>
         <p class="sim-note" id="kbdHint">⌘/ctrl + enter works too</p>
         </div>
       </div>
@@ -927,8 +927,17 @@ Now — back to the GHL webhook. Where were we?</pre></div></div>
         <p class="sim-note">simulated on this page; the real one runs in your Claude — or wherever your skills run.</p>
         <p class="demo-count" id="demoCount" hidden>you have bottled <b id="liveCount">0</b> bolt<span id="liveS">s</span> on this page</p>
         <div class="bridge" id="bridge" hidden>
-          <p><em>That's a real capture.</em> Get the skill free and this exact bolt arrives pre-loaded in your box.</p>
-          <button class="btn btn-amber" data-open="free" data-evt="cta_free_open" id="bridgeBtn">Send me the skill + this bolt</button>
+          <p><em>That's a real capture.</em> Get the skill free — and make this bolt your box's first resident.</p>
+          <button class="btn btn-amber" data-open="free" data-evt="cta_free_open" id="bridgeBtn">Get the skill free</button>
+        </div>
+        <!-- the honest hand-off: the demo capture, formatted as a real squirrel-box.md
+             entry the visitor can paste in after installing -->
+        <div class="first-entry" id="firstEntry" hidden style="margin:1.5rem 0 0">
+          <p class="pad-label" style="margin-bottom:.5rem">your first box entry — copy it, install the skill, paste it in.</p>
+          <div class="code-block" style="margin-bottom:0">
+            <div class="cb-bar"><span>squirrel-box.md</span><button class="copy-btn" type="button" id="entryCopy" data-copy="">Copy</button></div>
+            <pre><code id="entryText" style="font-size:.74rem"></code></pre>
+          </div>
         </div>
       </div>
 
@@ -1118,7 +1127,7 @@ unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
         <p class="tree-note">The same folder, with the system in it. Nothing phones home; there is nothing to phone.</p>
       </div>
     </div>
-    <p class="zip-lines rv"><span>license: yours — personal use, every AI you run</span><span>updates: free through season one, then optional</span><!-- LAUNCH: Taylor confirms update policy --></p>
+    <p class="zip-lines rv"><span>license: yours — personal use, every AI you run</span><span>updates: Free updates forever</span></p>
     <p class="zip-trust rv"><b>Read every line before you install.</b> It's a folder of markdown, not a black box — if a skill won't show you its files, don't run it.</p>
     <p class="works-line rv"><b>Captures land in a plain file you own — the default.</b> Already live in Notion, Airtable, Obsidian, Google Sheets, ClickUp, or Apple Notes? Point the skill there and it goes.</p>
   </div>
@@ -1160,7 +1169,7 @@ unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
         </ul>
         <ul class="defined" aria-label="What one-time means">
           <li><b>Yours forever</b> — a folder you keep, not a login we hold</li>
-          <li><b>Updates</b> — free through season one, then optional<!-- LAUNCH: Taylor confirms update policy --></li>
+          <li><b>Updates</b> — Free updates forever</li>
           <li><b>License</b> — personal use, every AI surface you run</li>
           <li><b>Free tier</b> — stays free forever; this adds the system</li>
         </ul>
@@ -1356,7 +1365,7 @@ unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
         <p class="fb-logo"><span aria-hidden="true">🐿️</span> squirrel skill</p>
         <p>by <a href="https://summitautomation.ai">SUMMIT Business Automation</a><!-- LAUNCH: confirm URL --></p>
         <p>Helena, Montana</p>
-        <p class="ver-pill">v1.1 · <a href="changelog.html" style="color:inherit">changelog</a></p>
+        <p class="ver-pill">v1.2 · <a href="changelog.html" style="color:inherit">changelog</a></p>
       </div>
       <div>
         <h4>Product</h4>
@@ -1393,15 +1402,23 @@ unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
   <a href="#" class="full-link" data-open="paid" data-evt="cta_paid_open">Full · $147</a>
 </div>
 
-<!-- FREE modal -->
+<!-- FREE modal — instant download, no gate -->
 <div class="modal" id="modal-free" hidden role="dialog" aria-modal="true" aria-labelledby="mfTitle">
   <div class="backdrop" data-close></div>
   <div class="panel">
     <button class="x" data-close aria-label="Close">✕</button>
     <p class="m-eyebrow">free — the capture half</p>
-    <h3 id="mfTitle">Where should the skill land?</h3>
-    <p>One email. The ZIP arrives with install steps — about 90 seconds from inbox to “squirrel that.”</p>
-    <!-- LAUNCH: POST to GHL form, tag squirrel-free + source -->
+    <h3 id="mfTitle">Take the ZIP. It's yours.</h3>
+    <p>No email, no account, no gate. Download it, install it, say “squirrel that.”</p>
+    <a href="squirrel-free.zip" download class="btn btn-amber" style="width:100%" data-evt="free_download">Download squirrel-free.zip</a>
+    <ol class="ins-steps" style="margin:1.2rem 0 .3rem">
+      <li><b>Claude.ai / Desktop:</b> Settings → Capabilities → Skills → upload the ZIP → toggle on</li>
+      <li><b>Claude Code:</b> <code>unzip squirrel-free.zip -d ~/.claude/skills/</code></li>
+      <li><b>Everywhere else:</b> point any skills-capable agent at the unzipped folder — or paste <code>SKILL.md</code> into any capable AI</li>
+    </ol>
+    <p class="micro">about 90 seconds, whichever door — <a href="#install" id="freeInstallLink">full install walkthrough</a></p>
+    <!-- LAUNCH(GHL): restore email-gated delivery + seed-bolt injection when the GHL
+         form/webhook + delivery email exist. Until then free = direct download. The form was:
     <form data-todo="ghl" id="freeForm">
       <input type="hidden" name="captured_idea" id="capturedIdea" value="">
       <label class="sr" for="freeEmail">Email address</label>
@@ -1414,6 +1431,10 @@ unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
       <h4>Check your inbox.</h4>
       <p id="freeSuccessP">the ZIP is on its way.</p>
     </div>
+    with headline "Where should the skill land?" + intro "One email. The ZIP arrives with
+    install steps." Also restore: the openModal free-branch that swapped freeMicro /
+    freeSuccessP copy when a demo capture existed ("your bolt rides along"), the freeForm
+    submit handler, and bottle() writing the pad text into capturedIdea. -->
   </div>
 </div>
 
@@ -1446,7 +1467,10 @@ unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
    ================================================================ */
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
-const track=e=>{(window.__evts=window.__evts||[]).push([e,Date.now()])};
+const track=e=>{(window.__evts=window.__evts||[]).push([e,Date.now()]);
+  /* mirror into GoatCounter as a custom event; no-op until count.js loads,
+     and a blocked/unreachable script simply leaves this branch false */
+  if(window.goatcounter&&goatcounter.count)goatcounter.count({path:'evt/'+e,event:true})};
 document.addEventListener('click',e=>{const el=e.target.closest('[data-evt]');if(el)track(el.dataset.evt)});
 
 /* ---- SOUND (v4 engine, tuned premium; default OFF, persisted) ---- */
@@ -1591,7 +1615,7 @@ const nextMonth=()=>{const d=new Date();d.setMonth(d.getMonth()+1,1);return d.to
 const today=()=>new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 
 const out=$('#out'),ideaIn=$('#ideaIn'),liveCount=$('#liveCount'),demoCount=$('#demoCount'),
-      bridge=$('#bridge'),receiptZone=$('#receiptZone'),receiptEl=$('#receipt');
+      bridge=$('#bridge'),firstEntry=$('#firstEntry'),receiptZone=$('#receiptZone'),receiptEl=$('#receipt');
 let bottled=0,lastCap=null;
 $$('.chip').forEach(c=>c.addEventListener('click',()=>{ideaIn.value=c.dataset.fill;
   if(!matchMedia('(pointer:coarse)').matches)ideaIn.focus()}));
@@ -1606,9 +1630,31 @@ function bottle(){
     Sound.crack();return}
   const c=classify(text),energy=text.length>70?'Hot':'Warm',
         pot=/crm|agent|automat|newsletter|platform|voice|report/i.test(text)?'🚀 High':'📈 Medium',
-        eff=text.length>90?'medium':'quick',title=titleFrom(text),nm=nextMonth();
+        eff=text.length>90?'medium':'quick',title=titleFrom(text),nm=nextMonth(),
+        nxt=NEXT[(Math.random()*NEXT.length)|0];
   lastCap={title,type:c.type,energy,pot,nm};
-  bottled++;$('#capturedIdea').value=text;
+  bottled++;
+  /* the copyable first box entry — the demo capture in the REAL squirrel-box.md
+     format (SKILL.md entry contract), so pasting it into the box is valid */
+  const d0=new Date(),
+        iso=d0.getFullYear()+'-'+String(d0.getMonth()+1).padStart(2,'0')+'-'+String(d0.getDate()).padStart(2,'0'),
+        d1=new Date(d0.getFullYear(),d0.getMonth()+1,1),
+        ym=d1.getFullYear()+'-'+String(d1.getMonth()+1).padStart(2,'0'),
+        entry='### '+title+'\n'+
+          '- Captured: '+iso+'\n'+
+          '- Type: '+c.type+'\n'+
+          '- Energy: '+energy+'\n'+
+          '- Status: Raw\n'+
+          '- Potential: '+pot+'\n'+
+          '- Effort to Validate: '+eff+'\n'+
+          '- Domain: '+c.dom+'\n'+
+          '- Context: '+text.replace(/\s+/g,' ')+' — thrown on the squirrel skill landing page\n'+
+          '- Next Action: '+nxt+'\n'+
+          '- Attached To: —\n'+
+          '- Source: landing-page demo\n'+
+          '- Chase Month: '+ym;
+  $('#entryText').innerHTML=esc(entry);
+  $('#entryCopy').dataset.copy=entry;
   const lvl=DIAL[zapLevel-1];
   /* the dial must LOOK different per level: quiet = plain text + murmured
      close; narrate = stamps; celebrate = amber chassis + honey close band */
@@ -1628,7 +1674,7 @@ function bottle(){
         (lvl==='celebrate'?'<span class="stamp s-amber thunk">★ keeper</span>':'')+'</div>')+
     capRow('effort','to validate: '+eff)+
     capRow('domain',c.dom)+
-    capRow('next',NEXT[(Math.random()*NEXT.length)|0])+
+    capRow('next',nxt)+
     capRow('chase',nm+' — first Monday')+
     '<button class="more-btn cap-line" id="moreBtn" aria-expanded="false" aria-controls="moreFields">+ 5 more fields captured</button>'+
     '<div class="more-fields" id="moreFields" hidden>'+
@@ -1645,13 +1691,11 @@ function bottle(){
   const doneAt=reduced()?50:120+lines.length*150+200;
   setTimeout(()=>{Sound.stash();
     liveCount.textContent=bottled;$('#liveS').textContent=bottled===1?'':'s';demoCount.hidden=false;
-    bridge.hidden=false;receiptZone.hidden=false;earn(3);paintOdo(bottled);track('demo_bottled');
+    bridge.hidden=false;firstEntry.hidden=false;receiptZone.hidden=false;earn(3);paintOdo(bottled);track('demo_bottled');
     if(Math.random()<1/6)mascotPop();
-    if(bottled>=3)bridge.querySelector('p').innerHTML='<em>Third bolt. You are exactly who this was built for.</em> The capture half is free — take it, and this one ships pre-loaded.';
+    if(bottled>=3)bridge.querySelector('p').innerHTML='<em>Third bolt. You are exactly who this was built for.</em> The capture half is free — take it, and move this one in first.';
     if(innerWidth<860)out.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'nearest'});
   },doneAt);
-  /* TODO(launch): pass this capture into the free download flow so the
-     delivered skill file arrives with this exact bolt already in the box. */
 }
 out.addEventListener('click',e=>{const b=e.target.closest('#moreBtn');if(!b)return;
   const mf=$('#moreFields'),open=mf.hidden;mf.hidden=!open;
@@ -1950,12 +1994,9 @@ if([...$$('.proof-slot blockquote')].some(b=>b.textContent.trim()))$('#proof').c
 let lastFocus=null;
 function openModal(name){lastFocus=document.activeElement;
   const m=$('#modal-'+name);m.hidden=false;
-  /* #capturedIdea is set by bottle() — the bottled bolt, never the raw pad */
-  if(name==='free'){
-    $('#freeMicro').textContent=lastCap?'the skill file lands in your inbox; your bolt ships inside it. no spam, no sequence.':'the skill file lands in your inbox. no spam, no sequence.';
-    $('#freeSuccessP').textContent=lastCap?'the skill file is on its way — your bolt rides along, pre-loaded in the box.':'the skill file is on its way.';
-  }
-  const f=m.querySelector('input:not([type=hidden]),button:not(.x)');(f||m.querySelector('.x')).focus()}
+  /* first focus lands on the primary action: an input if one exists, else the
+     primary .btn (the free download link / the Stripe link), else the ✕ */
+  const f=m.querySelector('input:not([type=hidden]),a.btn,button:not(.x)');(f||m.querySelector('.x')).focus()}
 function closeModal(m){m.hidden=true;if(lastFocus)lastFocus.focus()}
 document.addEventListener('click',e=>{
   const opener=e.target.closest('[data-open]');
@@ -1971,8 +2012,12 @@ document.addEventListener('keydown',e=>{
   const first=f[0],last=f[f.length-1];
   if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
   else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}});
-$('#freeForm').addEventListener('submit',e=>{e.preventDefault();track('modal_email_submit');
-  $('#freeForm').hidden=true;$('#freeSuccess').hidden=false;Sound.stash()});
+/* the free modal's "full install walkthrough" link: close the overlay and hand
+   focus to the install section itself, so return-focus never fights the anchor
+   scroll (the Esc/✕ paths still restore focus to the opener as before) */
+const fil=$('#freeInstallLink');
+if(fil)fil.addEventListener('click',()=>{$('#modal-free').hidden=true;
+  const t=$('#install');t.setAttribute('tabindex','-1');t.focus({preventScroll:true})});
 /* Crew link carries the code straight into Stripe checkout */
 if(new URLSearchParams(location.search).get('crew')==='hustle')
   $('#stripeBtn').href+='?prefilled_promo_code=HUSTLE50';
@@ -1986,5 +2031,8 @@ const zoneIO=new IntersectionObserver(es=>{es.forEach(e=>zones.set(e.target,e.is
   bottomZone=[...zones.values()].some(Boolean);paintBar()});
 zoneIO.observe($('#pricing'));zoneIO.observe($('#final'));
 </script>
+<!-- GoatCounter — cookie-less, aggregate-only analytics (site code: squirrelskill).
+     async + failure-tolerant: if the host is unreachable the page loses nothing. -->
+<script data-goatcounter="https://squirrelskill.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>

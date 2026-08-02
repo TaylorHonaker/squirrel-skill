@@ -27,9 +27,9 @@ Squirrel Skill is a folder of plain markdown (an Agent Skill), not an app and no
 ## Pricing
 
 - **Free tier:** $0 — the capture protocol, free forever, fully inspectable markdown.
-- **Full system:** $147 one-time — capture plus the Chase ritual, the Squirrel Box tournament, the ranking mechanism, and updates. Pay once. It's yours. No subscription.
+- **Full system:** $147 one-time — capture plus the Chase ritual, the Squirrel Box tournament, the ranking mechanism, and free updates forever. Pay once. It's yours. No subscription.
 - **Guarantee:** 30-day unconditional refund. If it's not for you, email within 30 days for a full refund.
-- Checkout by Stripe · delivered by email.
+- Free tier: instant direct download, no email required. Paid tier: checkout by Stripe · delivered by email.
 
 ## FAQ essentials
 
@@ -48,6 +48,6 @@ Squirrel Skill is a folder of plain markdown (an Agent Skill), not an app and no
 <!-- LAUNCH: single substitution point — must match index.html canonical/og:url + footer email exactly -->
 - Product page: https://taylorhonaker.github.io/squirrel-skill/ <!-- LAUNCH: confirm final domain -->
 - Buy ($147 one-time): https://buy.stripe.com/5kQ6oH97wcfP9S02XJds405 (promo codes supported)
-- Free download: https://taylorhonaker.github.io/squirrel-skill/#free <!-- LAUNCH: free-tier ZIP link -->
+- Free download (direct ZIP, no email): https://taylorhonaker.github.io/squirrel-skill/squirrel-free.zip
 - Contact: hello@summitautomation.ai <!-- LAUNCH: confirm support email -->
 - Maker: Taylor, SUMMIT Business Automation, Montana <!-- LAUNCH: add @handle + link -->
