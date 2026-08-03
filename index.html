@@ -54,7 +54,7 @@ if(__theme){document.documentElement.setAttribute('data-theme',__theme);window._
 "applicationCategory":"ProductivityApplication","operatingSystem":"Claude (claude.ai, Claude Desktop, Claude Code); any agent supporting the open Agent Skills standard",
 "offers":[{"@type":"Offer","price":"0","priceCurrency":"USD","name":"Free — lightning capture"},
 {"@type":"Offer","price":"147","priceCurrency":"USD","name":"Full — the Squirrel Box",
-"hasMerchantReturnPolicy":{"@type":"MerchantReturnPolicy","returnPolicyCategory":"https://schema.org/MerchantReturnFiniteReturnWindow","merchantReturnDays":30,"refundType":"https://schema.org/FullRefund","description":"30-day unconditional refund — email and it is refunded, no questions."}}],
+"hasMerchantReturnPolicy":{"@type":"MerchantReturnPolicy","returnPolicyCategory":"https://schema.org/MerchantReturnNotPermitted","description":"All sales are final. The capture half is free forever and every file is plain markdown you can read before buying; duplicate or mistaken charges are corrected by email."}}],
 "author":{"@type":"Organization","name":"SUMMIT Business Automation","legalName":"AI Company USA dba SUMMIT Business Automation","url":"https://summitbusinessautomation.xyz"}}
 </script>
 <script type="application/ld+json">
@@ -68,7 +68,7 @@ if(__theme){document.documentElement.setAttribute('data-theme',__theme);window._
 {"@type":"Question","name":"Why is bottling free but ranking paid?","acceptedAnswer":{"@type":"Answer","text":"Bottling is the straightforward half, so it should be free and it always will be. The Squirrel Box tournament took two years to get right and it is the part that turns a year of good ideas into the one you build."}},
 {"@type":"Question","name":"What happens to my ideas and data?","acceptedAnswer":{"@type":"Answer","text":"They live in a plain file on your machine — or your own Notion database, if you point the skill there. Nothing is uploaded to us, and there is no account to hold your data hostage."}},
 {"@type":"Question","name":"Does it work outside Claude?","acceptedAnswer":{"@type":"Answer","text":"Yes — with honest asterisks. Agent Skills began at Anthropic in October 2025 and became an open standard since adopted across major AI platforms. Any agent that runs skills can point at this folder, and because SKILL.md is plain markdown, you can paste it into any capable AI as instructions. Claude stays the best-paved, best-tested path — and your box is plain text either way, so it travels with you."}},
-{"@type":"Question","name":"Refunds?","acceptedAnswer":{"@type":"Answer","text":"If it's not for you, email me within 30 days and I'll refund you. Unconditionally. No form, no call, no “can I ask why.”"}}]}
+{"@type":"Question","name":"Refunds?","acceptedAnswer":{"@type":"Answer","text":"All sales are final. The capture half is free forever and the whole thing is plain markdown you can read before you buy — try that first, then buy the Box when you know you want it. If you were charged twice or by mistake, email me and I'll fix it."}}]}
 </script>
 <style>
 /* ================================================================
@@ -310,11 +310,6 @@ header{position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-fi
    header with no visible control to dismiss it (see the JS guard too) */
 .mnav{display:none;border-bottom:2px solid var(--line);background:var(--paper)}
 .mnav a{display:block;padding:.95rem var(--edge);font-family:var(--disp);font-weight:700;font-size:1rem;color:var(--ink);text-decoration:none;border-top:1px solid rgba(var(--soft-rgb),.12);min-height:44px}
-/* sound collapses into the menu panel on the narrowest phones so the
-   theme toggle always stays visible in the header */
-.mnav-sound{display:none;width:100%;align-items:center;justify-content:space-between;gap:.75rem;padding:.95rem var(--edge);font-family:var(--disp);font-weight:700;font-size:1rem;color:var(--ink);border-top:1px solid rgba(var(--soft-rgb),.12);min-height:44px;text-align:left}
-.mnav-sound .ms-state{font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);border:2px solid var(--line);border-radius:9px;padding:.2rem .5rem;background:var(--card)}
-.mnav-sound[aria-pressed="true"] .ms-state{background:var(--honey);color:var(--ink)}
 @media(max-width:920px){
   .nav-links{display:none}
   .burger{display:grid}
@@ -322,7 +317,10 @@ header{position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-fi
   .nav .btn{padding:.55rem 1rem;min-height:44px;font-size:.88rem}
 }
 @media(max-width:560px){.stash-chip{display:none}.logo .suffix{display:none}}
-@media(max-width:520px){.sound-btn{display:none}.mnav-sound{display:flex}.nav-right{gap:.5rem}}
+/* the sound button stays in the header at every width — buried in the menu
+   panel nobody found it. The header CTA is what gives way instead: under
+   520px the sticky bottom bar and the hero both already carry "Get it free". */
+@media(max-width:520px){.nav-right{gap:.4rem}.nav-right>.btn{display:none}}
 </style>
 <style>
 /* ================================================================ HERO */
@@ -841,8 +839,6 @@ footer{border-top:2px solid var(--line);background:var(--card);padding:2.6rem 0 
     <a href="#box">The Squirrel Box</a>
     <a href="#install">Install</a>
     <a href="#pricing">Pricing</a>
-    <!-- shown only under 520px, where the header sound button collapses -->
-    <button class="mnav-sound" id="soundBtnM" type="button" aria-pressed="false">Sound <span class="ms-state">off</span></button>
   </nav>
 </header>
 
@@ -860,7 +856,7 @@ footer{border-top:2px solid var(--line);background:var(--card);padding:2.6rem 0 
         <button class="btn btn-amber btn-lg" data-open="free" data-evt="cta_free_open" id="heroCta">Get it free</button>
         <a class="btn" href="#demo">Throw a bolt ↓</a>
       </div>
-      <p class="trust"><span>Free to start</span><span>Full system $147 once</span><span>30-day guarantee</span></p>
+      <p class="trust"><span>Free to start</span><span>Full system $147 once</span><span>Read every line first</span></p>
       <p class="odometer" id="odometer" aria-live="polite"><span class="odo-digits" id="odoDigits" aria-hidden="true"><span class="odo-d"><span>0</span></span><span class="odo-d"><span>0</span></span><span class="odo-d"><span>0</span></span><span class="odo-d"><span>0</span></span><span class="odo-d"><span>0</span></span></span><span class="sr" id="odoText">00000</span><span>bolts bottled on this page</span></p>
     </div>
 
@@ -1196,7 +1192,7 @@ unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
           <li><b>Free tier</b> — stays free forever; this adds the system</li>
         </ul>
         <button class="btn btn-hot btn-amber" data-open="paid" data-evt="cta_paid_open">Get the Squirrel Box tournament — $147</button>
-        <p class="guarantee" id="guarantee"><b>If it's not for you, email me within 30 days and I'll refund you. Unconditionally.</b> — Taylor</p>
+        <p class="guarantee" id="guarantee"><b>All sales are final.</b> That is why the capture half is free forever and every file is plain markdown — run it, read every line, and buy the Box only once you know you want it. Charged twice or by mistake? Email me and I'll fix it. — Taylor</p>
         <p class="pay-logistics">Checkout by Stripe · delivered by email<!-- LAUNCH: restore "instant delivery · VAT handled" only after Stripe Tax + automated fulfillment are live --></p>
       </div>
     </div>
@@ -1237,7 +1233,7 @@ unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
       <div class="q"><button aria-expanded="false" aria-controls="a6" id="qb6">Why is bottling free but ranking paid?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a6" role="region" aria-labelledby="qb6"><div><p>Bottling is the straightforward half, so it should be free and it always will be. The Squirrel Box tournament took two years to get right and it is the part that turns a year of good ideas into the one you build. Charging for the hard half felt more honest than watering down both.</p></div></div></div>
       <div class="q"><button aria-expanded="false" aria-controls="a7" id="qb7">What happens to my ideas and data?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a7" role="region" aria-labelledby="qb7"><div><p>They live in a plain file on your machine — or your own Notion database, if you point the skill there. Nothing is uploaded to us, and there is no account to hold your data hostage.</p></div></div></div>
       <div class="q"><button aria-expanded="false" aria-controls="a8" id="qb8">Does it work outside Claude?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a8" role="region" aria-labelledby="qb8"><div><p>Yes — with honest asterisks. Agent Skills began at Anthropic in October 2025 and became an open standard since adopted across major AI platforms. Any agent that runs skills can point at this folder, and because <code>SKILL.md</code> is plain markdown, you can paste it into any capable AI as instructions. Claude stays the best-paved, best-tested path — and your box is plain text either way, so it travels with you.</p></div></div></div>
-      <div class="q"><button aria-expanded="false" aria-controls="a9" id="qb9">Refunds?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a9" role="region" aria-labelledby="qb9"><div><p>If it’s not for you, email me within 30 days and I’ll refund you. Unconditionally. No form, no call, no “can I ask why.”</p></div></div></div>
+      <div class="q"><button aria-expanded="false" aria-controls="a9" id="qb9">Refunds?<span class="mark" aria-hidden="true">+</span></button><div class="a" id="a9" role="region" aria-labelledby="qb9"><div><p>All sales are final. That is the trade for how open this is: the capture half is free forever, and the whole thing is plain markdown you can read end to end before you spend anything. Run the free half first, then buy the Box when you know you want it. If you were charged twice or by mistake, email me and I’ll fix it.</p></div></div></div>
     </div>
   </div>
 </section>
@@ -1400,7 +1396,7 @@ unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
       <div>
         <h4>Trust</h4>
         <ul>
-          <li><a href="#guarantee">Refund policy</a></li>
+          <li><a href="#guarantee">Sales policy</a></li>
           <li><a href="terms.html">Terms</a><!-- LAUNCH: Taylor reviews terms.html wording --></li>
           <li><a href="privacy.html">Privacy</a><!-- LAUNCH: Taylor reviews privacy.html wording --></li>
         </ul>
@@ -1475,7 +1471,7 @@ unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
       <div class="o-row total"><span>One payment</span><span>$147</span></div>
     </div>
     <a class="btn btn-amber" style="width:100%" id="stripeBtn" href="https://buy.stripe.com/5kQ6oH97wcfP9S02XJds405" data-evt="checkout_stripe">Continue to checkout →</a>
-    <p class="micro" style="margin-top:.8rem"><b>If it's not for you, email me within 30 days and I'll refund you. Unconditionally.</b> — Taylor</p>
+    <p class="micro" style="margin-top:.8rem"><b>All sales are final</b> — the free half and the readable markdown are there so you can be sure before you buy. Charged twice or by mistake? Email me and I'll fix it. — Taylor</p>
     <p class="micro" style="margin-top:.5rem">Checkout by Stripe · delivered by email · pay once, it's yours<!-- LAUNCH: restore "instant delivery · VAT handled" only after Stripe Tax + automated fulfillment are live --></p>
   </div>
 </div>
@@ -1519,22 +1515,23 @@ const Sound=(()=>{let ctx=null,on=store.get('sq_snd')==='1';
    const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.setValueAtTime(f,s);
    g.gain.setValueAtTime(.0001,s);g.gain.linearRampToValueAtTime(.12,s+.015);
    g.gain.exponentialRampToValueAtTime(.0001,s+.5);o.connect(g).connect(c.destination);o.start(s);o.stop(s+.55)})});
- return{unlock,tick,crack,stash,fanfare,isOn:()=>on,
+ /* green light — brighter and shorter than the season fanfare, so a promotion
+    reads as its own event and never gets mistaken for the crown */
+ const green=()=>voice((c,t)=>{[783.99,1046.5,1318.5].forEach((f,i)=>{const s=t+i*.055;
+   const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.setValueAtTime(f,s);
+   g.gain.setValueAtTime(.0001,s);g.gain.linearRampToValueAtTime(.11,s+.012);
+   g.gain.exponentialRampToValueAtTime(.0001,s+.34);o.connect(g).connect(c.destination);o.start(s);o.stop(s+.36)})});
+ return{unlock,tick,crack,stash,green,fanfare,isOn:()=>on,
   toggle(){on=!on;store.set('sq_snd',on?'1':'0');if(on){unlock();stash()}return on}}})();
 ['pointerdown','keydown','touchstart'].forEach(e=>addEventListener(e,()=>Sound.unlock(),{once:true,passive:true}));
 /* two mounts for one control: the header button, and the row inside the
    mobile menu panel that takes over under 520px */
-/* both mounts carry their state on aria-pressed. The header button's face is
-   pure CSS off that attribute (speaker ⇄ mute), so there is no icon to paint
-   here; the mobile row still swaps its ON/OFF word. */
-const soundBtn=$('#soundBtn'),soundBtnM=$('#soundBtnM');
-function paintSnd(on){
-  soundBtn.setAttribute('aria-pressed',on);
-  if(soundBtnM){soundBtnM.setAttribute('aria-pressed',on);
-    soundBtnM.querySelector('.ms-state').textContent=on?'on':'off'}}
+/* one mount at every width. State rides on aria-pressed and the face is pure
+   CSS off it (speaker ⇄ mute), so there is no icon to paint here. */
+const soundBtn=$('#soundBtn');
+function paintSnd(on){soundBtn.setAttribute('aria-pressed',on)}
 paintSnd(Sound.isOn());
 soundBtn.addEventListener('click',()=>paintSnd(Sound.toggle()));
-if(soundBtnM)soundBtnM.addEventListener('click',()=>paintSnd(Sound.toggle()));
 
 /* ---- THEME: two-state toggle (light ⇄ dark) ----
    The <head> script already resolved ?theme= → stored choice → system
@@ -1807,7 +1804,10 @@ function renderBox(mark){
   boxFill.style.width=Math.min(100,(month/12)*100)+'%';
 }
 renderBox();
-function chase(silent,done){
+/* one chase sounds the same however it was started — a tick per bolt struck
+   out, a chime for any green light, the stash close. The season just runs
+   this on a timer, so it must not silence any of it. */
+function chase(done){
   /* ranked on merit alone — a nut never buys a bolt its place, so a fresh
      bolt out-shines a veteran the moment it is judged stronger */
   box.sort((a,b)=>b.m-a.m);
@@ -1825,7 +1825,7 @@ function chase(silent,done){
   renderBox();
   const rows=boxList.querySelectorAll('li'),restCount=box.length-5;
   rows.forEach((el,ix)=>{if(ix>=5){
-    setTimeout(()=>el.classList.add('cut'),(ix-5)*90);
+    setTimeout(()=>{el.classList.add('cut');Sound.tick()},(ix-5)*90);
     setTimeout(()=>el.classList.add('gone'),(ix-5)*90+(reduced()?0:480))}});
   setTimeout(()=>{
     const survivors=box.slice(0,5);survivors.forEach(s=>s.s++);
@@ -1855,7 +1855,9 @@ function chase(silent,done){
         '<b>'+box[0].n+'</b> finished tied on nuts and took the final chase outright. That is your idea of the year. Go build it.');
       chaseBtn.textContent='New season';
     }else{
-      if(!silent)Sound.stash();
+      /* a green light gets its own chime and the stash steps aside for it,
+         so a promotion never lands as two overlapping arpeggios */
+      if(greens.length){Sound.green()}else{Sound.stash()}
       const add=box.filter(i=>i.s===0).length;
       const gtxt=greens.length?'🟢 <b>'+greens.map(g=>g.n).join('</b> and <b>')+'</b> hit 6 nuts — green light, promoted. Count frozen for the crown. ':'';
       const rtxt=restCount?restCount+' rested (“'+LESSONS[(month-2)%LESSONS.length]+'”). ':'Nothing rested — a thin field, every bolt held its place. ';
@@ -1876,14 +1878,17 @@ chaseBtn.addEventListener('click',()=>{
     chaseBtn.textContent='Run the Chase';seasonBtn.disabled=false;return}
   const opener=document.activeElement;
   chaseBtn.disabled=true;seasonBtn.disabled=true;
-  chase(false,()=>{chaseBtn.disabled=false;seasonBtn.disabled=month>12;refocus(opener)});
+  chase(()=>{chaseBtn.disabled=false;seasonBtn.disabled=month>12;refocus(opener)});
 });
 seasonBtn.addEventListener('click',()=>{
   if(playing||month>12)return;
   const opener=document.activeElement;
   playing=true;chaseBtn.disabled=true;seasonBtn.disabled=true;
+  /* reduced-motion normally races through at 80ms; with sound on that would
+     stack twelve arpeggios into one blur, so give each chase room to finish */
+  const gap=()=>reduced()?(Sound.isOn()?520:80):900;
   const step=()=>{if(month>12){playing=false;chaseBtn.disabled=false;seasonBtn.disabled=true;refocus(opener);return}
-    chase(true,()=>setTimeout(step,reduced()?80:900))};
+    chase(()=>setTimeout(step,gap()))};
   step();
 });
 
