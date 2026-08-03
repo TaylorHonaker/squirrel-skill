@@ -1760,26 +1760,31 @@ function confetti(host){if(reduced())return;
 /* Every bolt carries an authored merit — it stands in for the judgment call a
    real Chase makes. It is fixed, so the same box always plays out the same way:
    nothing random decides a Chase here, and nuts never weigh on one (they are a
-   record of past survival, not a score). See references/box-tournament.md. */
-const SEED=[['CRM built only for home inspectors',8.6],['After-hours voice agent for HVAC',8.1],
- ['Weekly teardown newsletter',6.4],['Buy the laundromat on 7th',4.2],['Turn the audit into a fixed fee',8.9],
- ['Podcast with three local operators',5.1],['App that reads utility bills',6.9]];
+   record of past survival, not a score). See references/box-tournament.md.
+   The values are tuned so exactly ONE bolt ever reaches six. Six nuts promotes
+   a bolt and freezes its count, so a second green light would tie the crown at
+   six and there would be no clear idea of the year. Fresh bolts keep arriving
+   strong enough to break up the incumbents, which is what keeps that true — and
+   it is why the winner is one that arrived mid-season rather than a starter. */
+const SEED=[['CRM built only for home inspectors',6.6],['After-hours voice agent for HVAC',6.2],
+ ['Weekly teardown newsletter',6.7],['Buy the laundromat on 7th',5.9],['Turn the audit into a fixed fee',5.2],
+ ['Podcast with three local operators',5.0],['App that reads utility bills',4.8]];
 /* a 12-chase season draws exactly 28 fresh bolts — the list is that long on
    purpose, so no idea is ever handed to you twice in one season */
-const INCOMING=[['Route the intake form through Claude',7.6],['Charge for the assessment, not the build',9.2],
- ['Buy the competitor list off the state site',4.8],['Templates for the trades, $49 each',8.3],
- ['Local meetup, first Thursday',3.9],['Flip the pricing page to annual',6.1],
- ['Warm-email the 40 firms from spring',7.1],['Teach the course once, sell the replay',8.7],
- ['Partner with the equipment dealer',5.6],['Free tier for anyone under 5 people',6.6],
- ['Rewrite the onboarding as a checklist',4.5],['White-label it for the accountants',7.9],
- ['Newsletter sponsorship, one slot',3.4],['Turn last year’s support tickets into docs',5.9],
- ['Audit the top 20 accounts for churn signals',7.4],['Bundle setup and training as one price',6.8],
- ['Hire the intern who keeps emailing',5.3],['Record every install as a training clip',6.2],
- ['Drop the smallest tier entirely',7.7],['Quarterly on-site day, billed upfront',8.4],
- ['Referral fee for the supply houses',5.8],['Publish the pricing nobody publishes',8.0],
- ['Second location once the first runs itself',4.9],['Swap the contract for a one-page agreement',6.5],
- ['Answer the phone as a paid service',7.3],['Case study for every finished job',6.0],
- ['Weekend workshop for the chamber',4.1],['License the checklist to the franchise',7.0]];
+const INCOMING=[['Route the intake form through Claude',5.5],['Charge for the assessment, not the build',9.4],
+ ['Buy the competitor list off the state site',6.5],['Templates for the trades, $49 each',4.7],
+ ['Local meetup, first Thursday',6.3],['Flip the pricing page to annual',7.5],
+ ['Warm-email the 40 firms from spring',7.1],['Teach the course once, sell the replay',5.0],
+ ['Partner with the equipment dealer',6.3],['Free tier for anyone under 5 people',7.0],
+ ['Rewrite the onboarding as a checklist',7.7],['White-label it for the accountants',4.6],
+ ['Newsletter sponsorship, one slot',6.3],['Turn last year’s support tickets into docs',7.5],
+ ['Audit the top 20 accounts for churn signals',7.0],['Bundle setup and training as one price',6.8],
+ ['Hire the intern who keeps emailing',8.4],['Record every install as a training clip',8.1],
+ ['Drop the smallest tier entirely',8.5],['Quarterly on-site day, billed upfront',8.0],
+ ['Referral fee for the supply houses',7.6],['Publish the pricing nobody publishes',6.1],
+ ['Second location once the first runs itself',4.8],['Swap the contract for a one-page agreement',6.8],
+ ['Answer the phone as a paid service',8.4],['Case study for every finished job',7.3],
+ ['Weekend workshop for the chamber',5.4],['License the checklist to the franchise',7.5]];
 const LESSONS=['taught me my real market is elsewhere','strong idea, better with a partner',
  'worth building once the tooling catches up','someone does this well already — learned from them',
  'great instinct, better applied to the day job','holding this one for next season',
