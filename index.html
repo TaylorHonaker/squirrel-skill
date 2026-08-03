@@ -39,8 +39,19 @@ if(__theme){document.documentElement.setAttribute('data-theme',__theme);window._
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.squirrelskill.com/">
 <meta property="og:image" content="https://www.squirrelskill.com/og.png">
+<!-- dimensions declared so Facebook renders the big card on the FIRST scrape:
+     without them the crawler has to fetch and measure the image before it will
+     commit to a large preview, which is what makes a brand-new link post show
+     up with a small image or none at all. -->
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="Squirrel Skill — a lightning bolt sealed in a glass bottle, with a squirrel sitting on the cork.">
+<meta property="og:site_name" content="Squirrel Skill">
+<meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.squirrelskill.com/og.png">
+<meta name="twitter:image:alt" content="Squirrel Skill — a lightning bolt sealed in a glass bottle, with a squirrel sitting on the cork.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23FFB237' stroke='%232A1B10' stroke-width='5'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle'%3E🐿️%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
