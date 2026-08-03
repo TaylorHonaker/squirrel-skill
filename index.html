@@ -1795,7 +1795,11 @@ function renderBox(mark){
       '<span class="pos">'+(champ?'<span aria-hidden="true">★</span>':String(ix+1).padStart(2,'0'))+'</span>'+
       (champ?'<span class="sr">champion — </span>':'')+
       '<span class="nm">'+i.n+'</span>'+
-      (mark&&ix<5&&i.s>0?'<span class="carried">carried</span>':'')+
+      /* in-season the top five CARRY; at the close the survivors on six are
+         PROMOTED, which is a different thing — labelling those "carried" is
+         what made a six-way tie look like a glitch instead of six green lights */
+      (month>12?(i.gm?'<span class="carried">green lit · m'+i.gm+'</span>':'')
+               :(mark&&ix<5&&i.s>0?'<span class="carried">carried</span>':''))+
       '<span class="dots" aria-hidden="true"></span>'+
       (i.s>0?'<span class="nuts"><span class="nut">🌰</span> '+i.s+'</span>':'<span class="new">new</span>')+
       '<span class="strike"></span></li>'}).join('');
@@ -1837,22 +1841,37 @@ function chase(done){
       if(greens.length){box=box.filter(i=>i.s<6);greens.forEach(g=>{g.gm=month-1;retired.push(g)})}
       const add=2+((month%2)===0?1:0);
       for(let i=0;i<add;i++){const[n,m]=INCOMING[inbox%INCOMING.length];box.push({n,m,s:0});inbox++;boltsSeen++}}
+    /* the twelfth carry mints a sixth nut like any other, so anything that
+       reaches six on the final chase is green-lit too — otherwise it sits in
+       the closing table on six nuts with nothing saying why */
+    if(month>12)box.forEach(i=>{if(i.s>=6&&!i.gm)i.gm=12});
     if(month>12)box=retired.concat(box); /* finale: promoted bolts rejoin the table, frozen counts intact */
     box.sort((a,b)=>b.s-a.s||((a.gm||99)-(b.gm||99))||b.m-a.m);
     renderBox(true);earn(5);
     if(month>12){
       Sound.fanfare();earn(25);track('box_season_complete');
       $('#wcWinner').textContent='“'+box[0].n+'”';
-      $('#wcAgate').textContent=box[0].s+' nuts · '+boltsSeen+' bolts entered · 12 chases run';
+      $('#wcAgate').textContent=box[0].s+' nuts'+(box[0].gm?' · green lit month '+box[0].gm:'')+' · '+boltsSeen+' bolts entered · 12 chases run';
       $('#bsDate').textContent='HELENA, MONTANA — '+new Date().toLocaleDateString('en-US',{month:'long'}).toUpperCase();
       wrapped.hidden=false;
       confetti($('.box-band'));
       if(!reduced())wrapped.scrollIntoView({behavior:'smooth',block:'nearest'});
-      boxLog.innerHTML=box[0].gm?
-        '<b>'+box[0].n+'</b> hit six nuts in month '+box[0].gm+' — green-lit, promoted, and still holding the crown. That is your idea of the year. Go build it.':
-        (box[0].s>box[1].s?
-        '<b>'+box[0].n+'</b> held the most nuts across 12 chases. That is your idea of the year. Go build it.':
-        '<b>'+box[0].n+'</b> finished tied on nuts and took the final chase outright. That is your idea of the year. Go build it.');
+      /* Six nuts promotes a bolt and freezes its count, so the strongest all
+         top out on six — a tie at the crown is the normal shape of a good
+         season, not a fault. The skill's rule is that judgment breaks it and
+         you say why (references/box-tournament.md), so the demo has to show
+         its reason rather than crown by a silent sort. */
+      const win=box[0],tied=box.filter(i=>i.s===win.s);
+      const sameMonth=tied.filter(i=>i.gm===win.gm).length>1;
+      boxLog.innerHTML=tied.length>1?
+        '<b>'+win.n+'</b> is your idea of the year. '+tied.length+' bolts finished level on '+win.s+
+        ' nuts — six nuts promotes a bolt and freezes its count, so everything strong tops out together; a crowded top is the season working. '+
+        (sameMonth?
+          'It came down to a head-to-head between the bolts that went green in month '+win.gm+', and this one won it on the merits.':
+          'This one got there first — green-lit in month '+win.gm+', so it beat fresh competition soonest.')+
+        ' In your own Chase that last call is yours to make out loud, with reasons. Go build it.':
+        '<b>'+win.n+'</b> finished clear of the field on '+win.s+' nuts'+(win.gm?', green-lit in month '+win.gm:'')+
+        '. That is your idea of the year. Go build it.';
       chaseBtn.textContent='New season';
     }else{
       /* a green light gets its own chime and the stash steps aside for it,
