@@ -267,8 +267,13 @@ header{position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-fi
 .sound-btn:hover,.theme-btn:hover{transform:translateY(-2px);box-shadow:0 5px 0 var(--shadow-ink)}
 .sound-btn:active,.theme-btn:active{transform:translateY(3px);box-shadow:0 0 0 var(--shadow-ink)}
 .sound-btn[aria-pressed="true"]{background:var(--honey);color:var(--ink)}
-/* the face is an emoji, not the 10px mono the button was sized for */
-#sndFace{font-size:1.05rem;line-height:1;letter-spacing:0}
+/* SOUND TOGGLE — drawn speaker/mute, switched off aria-pressed (JS state),
+   not the theme cascade. Icon shows the state you are IN, not the one you get. */
+.sound-btn{color:var(--ink)}
+.sound-btn .ic{width:20px;height:20px;display:block}
+.sound-btn .ic-vol{display:none}
+.sound-btn[aria-pressed="true"] .ic-mute{display:none}
+.sound-btn[aria-pressed="true"] .ic-vol{display:block}
 /* ---- THEME TOGGLE — two-state light ⇄ dark, drawn sun/moon.
    The icon shows the theme the press will GIVE you, and it is switched
    by the same cascade the colour tokens use (system preference unless
@@ -810,10 +815,16 @@ footer{border-top:2px solid var(--line);background:var(--card);padding:2.6rem 0 
     </nav>
     <div class="nav-right">
       <span class="stash-chip" id="stashChip" role="status" aria-label="Nuts earned on this page"><span class="nut" aria-hidden="true">🌰</span> <b id="stash">0</b></span>
-      <!-- icon-only: the speaker face is decorative and state rides on
-           aria-pressed, so the accessible name is a plain speakable "Sound"
-           ("click Sound" still works for speech input) -->
-      <button class="sound-btn" id="soundBtn" type="button" aria-pressed="false"><span aria-hidden="true" id="sndFace">🔇</span><span class="sr">Sound</span></button>
+      <!-- sound toggle: drawn speaker/mute, no emoji — same construction as
+           the theme toggle below (amber body, ink outline, 24-grid). Unlike
+           that one the icon shows the CURRENT state, which is the convention
+           every audio control uses; aria-pressed carries it for assistive
+           tech, so the accessible name stays a plain speakable "Sound". -->
+      <button class="sound-btn" id="soundBtn" type="button" aria-pressed="false">
+        <svg class="ic ic-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M3.6 9.5H7.2L11.8 5.5V18.5L7.2 14.5H3.6Z" fill="var(--amber)"/><path d="M15.6 9.6 20.4 14.4M20.4 9.6 15.6 14.4"/></svg>
+        <svg class="ic ic-vol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M3.6 9.5H7.2L11.8 5.5V18.5L7.2 14.5H3.6Z" fill="var(--amber)"/><path d="M14.6 9a4.6 4.6 0 0 1 0 6"/><path d="M17.4 6.4a8.6 8.6 0 0 1 0 11.2" opacity=".55"/></svg>
+        <span class="sr">Sound</span>
+      </button>
       <!-- theme toggle: drawn sun/moon, no emoji. Icon = the theme you get. -->
       <button class="theme-btn" id="themeBtn" type="button">
         <svg class="ic ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20.2 14.6A8.6 8.6 0 0 1 9.4 3.8 8.6 8.6 0 1 0 20.2 14.6Z" fill="var(--honey)"/><path d="M12.6 7.4 13.4 9.6 15.6 10.4 13.4 11.2 12.6 13.4 11.8 11.2 9.6 10.4 11.8 9.6 Z" fill="none" stroke-width="1.4" opacity=".55"/></svg>
@@ -1513,12 +1524,12 @@ const Sound=(()=>{let ctx=null,on=store.get('sq_snd')==='1';
 ['pointerdown','keydown','touchstart'].forEach(e=>addEventListener(e,()=>Sound.unlock(),{once:true,passive:true}));
 /* two mounts for one control: the header button, and the row inside the
    mobile menu panel that takes over under 520px */
-/* both mounts take their accessible name from their own visible text (so
-   the spoken label always contains it) and their state from aria-pressed;
-   only the decorative face changes here */
-const soundBtn=$('#soundBtn'),soundBtnM=$('#soundBtnM'),sndFace=$('#sndFace');
+/* both mounts carry their state on aria-pressed. The header button's face is
+   pure CSS off that attribute (speaker ⇄ mute), so there is no icon to paint
+   here; the mobile row still swaps its ON/OFF word. */
+const soundBtn=$('#soundBtn'),soundBtnM=$('#soundBtnM');
 function paintSnd(on){
-  soundBtn.setAttribute('aria-pressed',on);if(sndFace)sndFace.textContent=on?'🔊':'🔇';
+  soundBtn.setAttribute('aria-pressed',on);
   if(soundBtnM){soundBtnM.setAttribute('aria-pressed',on);
     soundBtnM.querySelector('.ms-state').textContent=on?'on':'off'}}
 paintSnd(Sound.isOn());
