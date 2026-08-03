@@ -451,7 +451,15 @@ label.pad-label{display:block}
 .receipt-zone{display:flex;flex-direction:column;align-items:center;gap:1rem}
 /* desktop only: pin to the output column — placing this unscoped forced an
    implicit 2nd grid track on phones even with the mobile stack rule active */
-@media(min-width:861px){.receipt-zone{grid-column:2}}
+/* the aftermath stack: full content width, so the paste-me block is not stuck
+   in a half column and the left gutter cannot strand beside it */
+.demo-after{margin-top:1.6rem}
+.demo-after>*+*{margin-top:1.5rem}
+/* the visitor's own sentence rides inside this block, so its longest line has no
+   ceiling — wrap it rather than hand them a sideways scrollbar on the one thing
+   the page tells them to copy. Display-only: Copy reads dataset.copy, not the
+   rendered text. Scoped here so install commands keep their single-line form. */
+#firstEntry pre{overflow-x:hidden;white-space:pre-wrap;overflow-wrap:anywhere}
 .receipt-zone[hidden]{display:none}
 .receipt-clip{overflow:hidden;padding:0 14px 14px}
 .receipt{width:300px;background:#FFFEF9;color:var(--ink);font-family:var(--mono);font-weight:500;font-size:.74rem;line-height:1.65;padding:1.3rem 1.15rem 1.5rem;position:relative;transform:rotate(-.6deg);
@@ -628,7 +636,11 @@ label.pad-label{display:block}
 .whynot p b{color:var(--ink);font-weight:600}
 /* rules run edge-to-edge, so the text starts on --edge too — an open band,
    not an unexplained 19px indent */
-.works-line{margin-top:2.2rem;border-top:2px solid var(--line);border-bottom:2px solid var(--line);background:var(--card);padding:1rem 0;font-size:.92rem;color:var(--sub)}
+/* closed card, not an open band: this is the last element in the section, and a
+   trailing border-bottom drew a rule under everything and then opened onto the
+   80+80px section gap — which read as the page being cut off. Matches the
+   .zip-trust callout directly above it so the two notes land as a pair. */
+.works-line{margin-top:1.5rem;border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);background:var(--card);padding:1.1rem 1.4rem;font-size:.92rem;color:var(--sub);max-width:760px}
 .works-line b{font-family:var(--disp);font-weight:600;color:var(--ink)}
 
 /* ================================================================ FOUNDER NOTE */
@@ -942,19 +954,26 @@ Now — back to the GHL webhook. Where were we?</pre></div></div>
           <div>your bottled bolt will appear here<span class="caret"></span></div>
         </div>
         <p class="sim-note">simulated on this page; the real one runs in your Claude — or wherever your skills run.</p>
-        <p class="demo-count" id="demoCount" hidden>you have bottled <b id="liveCount">0</b> bolt<span id="liveS">s</span> on this page</p>
-        <div class="bridge" id="bridge" hidden>
-          <p><em>That's a real capture.</em> Get the skill free — and make this bolt your box's first resident.</p>
-          <button class="btn btn-amber" data-open="free" data-evt="cta_free_open" id="bridgeBtn">Get the skill free</button>
-        </div>
-        <!-- the honest hand-off: the demo capture, formatted as a real squirrel-box.md
-             entry the visitor can paste in after installing -->
-        <div class="first-entry" id="firstEntry" hidden style="margin:1.5rem 0 0">
-          <p class="pad-label" style="margin-bottom:.5rem">your first box entry — copy it, install the skill, paste it in.</p>
-          <div class="code-block" style="margin-bottom:0">
-            <div class="cb-bar"><span>squirrel-box.md</span><button class="copy-btn" type="button" id="entryCopy" data-copy="">Copy</button></div>
-            <pre><code id="entryText" style="font-size:.74rem"></code></pre>
-          </div>
+      </div>
+    </div>
+
+    <!-- Everything past the capture is the AFTERMATH, not half of the
+         input-vs-output pairing above. Kept out of .demo-grid so the left
+         column cannot strand a screen-tall empty gutter beside it, and so the
+         paste-me block gets the full column instead of a horizontal scrollbar. -->
+    <div class="demo-after">
+      <p class="demo-count" id="demoCount" hidden>you have bottled <b id="liveCount">0</b> bolt<span id="liveS">s</span> on this page</p>
+      <div class="bridge" id="bridge" hidden>
+        <p><em>That's a real capture.</em> Get the skill free — and make this bolt your box's first resident.</p>
+        <button class="btn btn-amber" data-open="free" data-evt="cta_free_open" id="bridgeBtn">Get the skill free</button>
+      </div>
+      <!-- the honest hand-off: the demo capture, formatted as a real squirrel-box.md
+           entry the visitor can paste in after installing -->
+      <div class="first-entry" id="firstEntry" hidden style="margin:1.5rem 0 0">
+        <p class="pad-label" style="margin-bottom:.5rem">your first box entry — copy it, install the skill, paste it in.</p>
+        <div class="code-block" style="margin-bottom:0">
+          <div class="cb-bar"><span>squirrel-box.md</span><button class="copy-btn" type="button" id="entryCopy" data-copy="">Copy</button></div>
+          <pre><code id="entryText" style="font-size:.74rem"></code></pre>
         </div>
       </div>
 
