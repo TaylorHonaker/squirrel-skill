@@ -337,7 +337,7 @@ header{position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-fi
 /* ================================================================ HERO */
 /* the hero is the one section that runs tighter than the rhythm — and it
    does it as a FRACTION of the same --sec-y scale, not a second scale */
-.hero{padding-top:calc(var(--sec-y)*.68);padding-bottom:calc(var(--sec-y)*.76)}
+.hero{padding-top:calc(var(--sec-y)*.68);padding-bottom:calc(var(--sec-y)*.46)}
 .hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(1.6rem,4vw,3.4rem);align-items:center}
 @media(max-width:960px){.hero-grid{grid-template-columns:1fr;gap:1.4rem}}
 .hero-cat{margin-bottom:1.2rem}
@@ -355,7 +355,10 @@ header{position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-fi
 .odo-d>span{display:block;line-height:1.5em;text-align:center;color:var(--ink);font-weight:500;white-space:pre;transition:transform .55s cubic-bezier(.22,.8,.3,1)}
 
 /* product at the fold: the Claude recreation lives in the hero column */
-.hero-stage{display:grid;place-items:center}
+/* start, not center: the frame grows downward as the replay runs, so it must be
+   pinned to the top of the cell. The cell's reserved height (set in build())
+   absorbs the growth, which is what keeps the page from reflowing. */
+.hero-stage{display:grid;place-items:start center;align-content:start}
 .hero-stage .claude-frame{margin:0;width:100%;max-width:560px}
 .hero-stage .cw-chat{font-size:.88rem;gap:.9rem;padding:1.05rem 1.1rem 1.2rem}
 .hero-stage .cw-capture{font-size:.7rem}
@@ -365,6 +368,9 @@ header{position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-fi
 .stage-box svg{display:block;width:100%;height:auto}
 .mascot{position:absolute;left:50%;bottom:76%;transform:translateX(-50%);font-size:clamp(2.5rem,5vw,3.3rem);line-height:1;min-width:44px;min-height:44px;display:grid;place-items:center;border-radius:14px;filter:drop-shadow(0 3px 0 rgba(42,27,16,.28));transition:transform .12s var(--spring)}
 .mascot:hover{transform:translateX(-50%) translateY(-2px)}
+/* pokeable squirrels. inline-block matters: a transform does nothing on an
+   inline box, so the wiggle would silently no-op on the two logo glyphs. */
+[data-sq]{display:inline-block;cursor:pointer}
 .js .spark{animation:twinkle 2.8s ease-in-out infinite}
 .js .spark.k2{animation-delay:.9s}
 .js .spark.k3{animation-delay:1.7s}
@@ -546,6 +552,10 @@ label.pad-label{display:block}
 .box-log b{color:var(--amber);font-weight:500}
 /* premium confetti */
 .cf{position:absolute;top:0;width:7px;height:11px;border-radius:2px;pointer-events:none;z-index:5}
+/* celebration mode: fixed to the viewport so it lands where the reader is.
+   700 sits above the grain overlay (600) so the colour stays vivid, and below
+   the cta bar (800) and modals (900). pointer-events:none is inherited. */
+.cf-fixed{position:fixed;z-index:700;will-change:transform,opacity}
 /* season card — crowned idea of the year, signed */
 .wrapped{margin-top:2rem;display:grid;place-items:center}
 .wrapped[hidden]{display:none}
@@ -596,8 +606,14 @@ label.pad-label{display:block}
 .cw-capture{font-family:var(--mono);font-weight:500;font-size:.76rem;line-height:1.75;background:var(--cw-bar);border:1px solid var(--cw-line);border-radius:10px;padding:.85rem 1rem;margin-top:.55rem;white-space:pre-wrap;word-break:break-word;overflow-x:auto}
 .js .cw-turn{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
 .js .cw-turn.on{opacity:1;transform:none}
-/* typing engine: unsent turns reserve their final space but show nothing */
-.cw-turn.cw-hide{visibility:hidden}
+/* Typing engine. Unsent turns COLLAPSE rather than reserving their final box.
+   Reserving it kept the frame from reflowing, but it also meant one visible
+   message sat at the top of ~440px of invisible ones -- a card that read as
+   mostly empty for most of the loop. Now the frame is only ever as tall as the
+   conversation so far, and grows downward: the reader starts at the top and
+   follows it down, and nothing already read is ever pushed around. The reserved
+   height moved out to .hero-stage, so the page still never reflows. */
+.cw-turn.cw-hide{display:none}
 /* caption sits on the frame's own left edge — no stray centred line */
 .cw-caption{max-width:780px;margin:.7rem 0 0;font-family:var(--mono);font-weight:500;font-size:.7rem;color:var(--sub);text-align:left}
 /* user-facing pause for the auto-playing replay (WCAG 2.2.2) — injected by
@@ -827,7 +843,7 @@ footer{border-top:2px solid var(--line);background:var(--card);padding:2.6rem 0 
 <!-- ================= 1 · HEADER ================= -->
 <header>
   <div class="wrap nav">
-    <a href="#top" class="logo"><span class="tile" aria-hidden="true">🐿️</span><span>squirrel <span class="suffix">skill</span></span></a>
+    <a href="#top" class="logo"><span class="tile" aria-hidden="true" data-sq>🐿️</span><span>squirrel <span class="suffix">skill</span></span></a>
     <nav class="nav-links" aria-label="Primary">
       <a href="#how">How it works</a>
       <a href="#box">The Squirrel Box</a>
@@ -1413,7 +1429,7 @@ unzip squirrel-free.zip -d ~/.claude/skills/</code></pre>
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <p class="fb-logo"><span aria-hidden="true">🐿️</span> squirrel skill</p>
+        <p class="fb-logo"><span aria-hidden="true" data-sq>🐿️</span> squirrel skill</p>
         <p>by <a href="https://summitbusinessautomation.xyz">SUMMIT Business Automation</a></p>
         <p>Helena, Montana</p>
         <p class="ver-pill">v1.2 · <a href="changelog.html" style="color:inherit">changelog</a></p>
@@ -1533,7 +1549,12 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-evt]');if
 
 /* ---- SOUND (v4 engine, tuned premium; default OFF, persisted) ---- */
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-const Sound=(()=>{let ctx=null,on=store.get('sq_snd')==='1';
+/* Sound defaults ON. Note the test is !== '0', not === '1': anyone who has
+   already turned it off keeps that choice, and only visitors with no stored
+   preference get the new default. Nothing plays on load regardless -- the
+   AudioContext stays suspended until the first gesture, and every voice here
+   is click-triggered, so the first sound a visitor hears is one they caused. */
+const Sound=(()=>{let ctx=null,on=store.get('sq_snd')!=='0';
  const init=()=>{if(ctx)return ctx;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;ctx=new AC();return ctx};
  const unlock=()=>{const c=init();if(c&&c.state==='suspended')c.resume()};
  const voice=f=>{if(!on)return;const c=init();if(!c)return;if(c.state==='suspended')c.resume();f(c,c.currentTime)};
@@ -1547,6 +1568,19 @@ const Sound=(()=>{let ctx=null,on=store.get('sq_snd')==='1';
    const bp=c.createBiquadFilter();bp.type='bandpass';bp.frequency.setValueAtTime(2200,t);bp.frequency.exponentialRampToValueAtTime(700,t+.07);bp.Q.value=1.5;
    const g=c.createGain();g.gain.setValueAtTime(.2,t);g.gain.exponentialRampToValueAtTime(.001,t+.08);
    s.connect(bp).connect(g).connect(c.destination);s.start(t);s.stop(t+.09)});
+ /* Squirrel chitter. A burst of short up-flicked chirps rather than one tone:
+    a single pitch reads as a UI beep, a fast irregular cluster reads as a small
+    excited animal. Count, pitch and spacing are all randomised so poking twice
+    never sounds identical -- that variance is most of the charm. */
+ const chitter=()=>voice((c,t)=>{const n=5+((Math.random()*3)|0);
+   for(let i=0;i<n;i++){const s=t+i*(.042+Math.random()*.022);
+     const o=c.createOscillator(),g=c.createGain();o.type='triangle';
+     const f=1450+Math.random()*750;
+     o.frequency.setValueAtTime(f,s);
+     o.frequency.exponentialRampToValueAtTime(f*(1.45+Math.random()*.55),s+.026);
+     g.gain.setValueAtTime(.0001,s);g.gain.linearRampToValueAtTime(.07,s+.005);
+     g.gain.exponentialRampToValueAtTime(.0001,s+.048);
+     o.connect(g).connect(c.destination);o.start(s);o.stop(s+.052)}});
  const stash=()=>voice((c,t)=>{[523.25,659.25,783.99,1046.5].forEach((f,i)=>{const s=t+i*.06;
    const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.setValueAtTime(f,s);
    g.gain.setValueAtTime(.0001,s);g.gain.linearRampToValueAtTime(.1,s+.012);
@@ -1561,7 +1595,7 @@ const Sound=(()=>{let ctx=null,on=store.get('sq_snd')==='1';
    const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.setValueAtTime(f,s);
    g.gain.setValueAtTime(.0001,s);g.gain.linearRampToValueAtTime(.11,s+.012);
    g.gain.exponentialRampToValueAtTime(.0001,s+.34);o.connect(g).connect(c.destination);o.start(s);o.stop(s+.36)})});
- return{unlock,tick,crack,stash,green,fanfare,isOn:()=>on,
+ return{unlock,tick,crack,chitter,stash,green,fanfare,isOn:()=>on,
   toggle(){on=!on;store.set('sq_snd',on?'1':'0');if(on){unlock();stash()}return on}}})();
 ['pointerdown','keydown','touchstart'].forEach(e=>addEventListener(e,()=>Sound.unlock(),{once:true,passive:true}));
 /* two mounts for one control: the header button, and the row inside the
@@ -1626,7 +1660,32 @@ function mascotPop(){if(reduced()||!mascot)return;
     {transform:'translateX(-50%) scale(1.18) rotate(-8deg)'},
     {transform:'translateX(-50%) scale(.95) rotate(4deg)'},
     {transform:'translateX(-50%) scale(1)'}],{duration:450,easing:'cubic-bezier(.34,1.56,.64,1)'})}
-if(mascot)mascot.addEventListener('click',()=>{mascotPop();Sound.tick();earn(1)});
+if(mascot)mascot.addEventListener('click',()=>{mascotPop();Sound.chitter();earn(1)});
+
+/* The glass tap belongs to the glass. Poking the animal used to ring the
+   bottle, which is the one sound it should never make -- so tick moved to the
+   SVG and the mascot got a voice. The mascot sits above the bottle as its own
+   button, so a click on it never reaches this handler. Decorative only: no
+   role or tabindex, because nothing here is lost if you cannot click it. */
+const bottleSvg=$('.final-stage .stage-box svg');
+if(bottleSvg){
+  bottleSvg.style.cursor='pointer';
+  bottleSvg.addEventListener('click',()=>{Sound.tick();
+    if(reduced())return;
+    bottleSvg.animate([{transform:'scale(1)'},{transform:'scale(1.018)'},{transform:'scale(1)'}],
+      {duration:220,easing:'cubic-bezier(.2,.7,.3,1)'})});
+}
+
+/* Every standalone squirrel on the page answers when you poke it. Scoped to
+   [data-sq] rather than "any element containing the glyph" so the ones sitting
+   inside sentences stay prose instead of becoming surprise buttons. */
+document.addEventListener('click',e=>{
+  const s=e.target.closest('[data-sq]');if(!s)return;
+  Sound.chitter();
+  if(reduced())return;
+  s.animate([{transform:'rotate(0) scale(1)'},{transform:'rotate(-9deg) scale(1.16)'},
+             {transform:'rotate(7deg) scale(1.08)'},{transform:'rotate(0) scale(1)'}],
+    {duration:430,easing:'cubic-bezier(.2,.7,.3,1)'})});
 
 /* ---- ZAP DIAL: segmented control (radiogroup) ---- */
 const DIAL=['understate','narrate','celebrate'];
@@ -1749,6 +1808,12 @@ function bottle(){
   setTimeout(()=>{Sound.stash();
     liveCount.textContent=bottled;$('#liveS').textContent=bottled===1?'':'s';demoCount.hidden=false;
     bridge.hidden=false;firstEntry.hidden=false;receiptZone.hidden=false;earn(3);paintOdo(bottled);track('demo_bottled');
+    /* Every bolt, not just the first. ELEVATION-BRIEF gated confetti to two
+       "earned" moments, but bottling IS the moment this page exists to sell --
+       withholding the reward on the second throw punishes the person who liked
+       it enough to try again. Fires in fixed mode against <body>, so it rains
+       across the viewport wherever the reader happens to be sitting. */
+    confetti(document.body,{fixed:true,n:innerWidth<720?54:96});
     if(Math.random()<1/6)mascotPop();
     if(bottled>=3)bridge.querySelector('p').innerHTML='<em>Third bolt. You are exactly who this was built for.</em> The capture half is free — take it, and move this one in first.';
     if(innerWidth<860)out.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'nearest'});
@@ -1784,17 +1849,43 @@ $('#printBtn').addEventListener('click',()=>{
   $('#receiptHint').hidden=false;Sound.tick();setTimeout(()=>Sound.tick(),180);setTimeout(()=>Sound.tick(),360);
 });
 
-/* ---- PREMIUM CONFETTI: milestone-only (season finale), capped ---- */
-function confetti(host){if(reduced())return;
-  const n=innerWidth<720?22:36,cols=['#FFB237','#FFE9B8','#FFFFFF','#FFC65C'];
-  for(let i=0;i<n;i++){const p=document.createElement('i');p.className='cf';
-    p.style.left=(6+Math.random()*88)+'%';
-    p.style.background=(i===0)?'#1FC7D4':cols[i%4]; /* one teal fleck, that's the budget */
+/* ---- PREMIUM CONFETTI: the two earned moments, first bottle and season crown ----
+   Two modes. Default is the original in-flow burst, anchored to a host element.
+   {fixed:true} is the celebration: particles are viewport-fixed, so it lands
+   wherever the reader is scrolled instead of firing off-screen at the top of a
+   tall section -- which is most of why the anchored version went unnoticed. */
+function confetti(host,opts){if(reduced())return;
+  const o=opts||{},fixed=!!o.fixed;
+  const n=o.n||(innerWidth<720?22:36),cols=['#FFB237','#FFE9B8','#FFFFFF','#FFC65C'];
+  for(let i=0;i<n;i++){const p=document.createElement('i');
+    p.className=fixed?'cf cf-fixed':'cf';
+    p.style.left=(fixed?Math.random()*100:6+Math.random()*88)+'%';
+    /* the teal accent stays rare rather than fixed at one: a single fleck in a
+       96-piece burst is invisible, and a quarter of them teal is a different
+       brand. Roughly one in thirty keeps it an accent at any size. */
+    p.style.background=(i%30===0)?'#1FC7D4':cols[i%4];
+    if(fixed){
+      /* size and shape variety. Uniform rectangles read as a texture; a mix of
+         ribbons and dots reads as a burst. */
+      const w=5+Math.random()*8;
+      p.style.width=w+'px';
+      p.style.height=(Math.random()<.3?w+'px':(9+Math.random()*10)+'px');
+      if(Math.random()<.3)p.style.borderRadius='50%';
+      p.style.top=(-10-Math.random()*70)+'px';
+    }
     host.appendChild(p);
-    const dx=(Math.random()-.5)*150,rot=(Math.random()-.5)*540,dur=900+Math.random()*700;
+    const dx=(Math.random()-.5)*(fixed?460:150);
+    const rot=(Math.random()-.5)*(fixed?1440:540);
+    const dy=fixed?innerHeight+160:180+Math.random()*180;
+    const dur=fixed?1600+Math.random()*1700:900+Math.random()*700;
     p.animate([{transform:'translate(0,-12px) rotate(0deg)',opacity:1},
-      {transform:'translate('+dx+'px,'+(180+Math.random()*180)+'px) rotate('+rot+'deg)',opacity:0}],
-      {duration:dur,easing:'cubic-bezier(.2,.6,.3,1)'}).onfinish=()=>p.remove()}}
+      {opacity:1,offset:.72},
+      {transform:'translate('+dx+'px,'+dy+'px) rotate('+rot+'deg)',opacity:0}],
+      {duration:dur,
+       /* stagger the release so it reads as a burst rather than a curtain */
+       delay:fixed?Math.random()*300:0,
+       easing:fixed?'cubic-bezier(.15,.5,.35,1)':'cubic-bezier(.2,.6,.3,1)'}
+      ).onfinish=()=>p.remove()}}
 
 /* ---- THE BOX: league table season ---- */
 /* Every bolt carries an authored merit — it stands in for the judgment call a
@@ -2007,9 +2098,22 @@ if(cwFrame){const turns=[...cwFrame.querySelectorAll('.cw-turn')];
           else toks.push(n.outerHTML)});
           data={kind:'stream',toks}}
         return{el,box,data,h:el.offsetHeight}});
+      /* Lock the card at its settled height, measured here while every turn
+         still holds its full content. The frame is then STATIONARY for the
+         whole replay: it never grows, never shrinks, and the page never
+         reflows around it.
+         This is not the original behaviour it resembles. That version gave
+         each unsent turn its final box (visibility:hidden), so a lone visible
+         message floated in the middle of invisible ones. Turns now collapse
+         (display:none), so the conversation stays contiguous, packed to the
+         TOP of the box, and fills downward as it types -- a chat window part
+         way through a conversation rather than a scattered one. */
       chat.style.minHeight=chat.offsetHeight+'px';
     }
-    const blank=()=>plan.forEach(p=>{p.el.style.minHeight=p.h+'px';p.el.classList.add('on','cw-hide');
+    /* no per-turn min-height: a collapsed turn must take no space, or the
+       card is full of invisible boxes again. chat.style.minHeight in build()
+       is what keeps the frame from reflowing. */
+    const blank=()=>plan.forEach(p=>{p.el.classList.add('on','cw-hide');
       if(p.data.kind==='type')p.box.textContent='';else p.box.innerHTML=''});
     async function typeTurn(p){ /* user turn: char-by-char, blinking caret,
       ~18–28 cps — fast human typing, clearly slower than Claude's stream */
