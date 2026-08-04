@@ -28,7 +28,7 @@ Squirrel Skill is a folder of plain markdown (an Agent Skill), not an app and no
 
 - **Free tier:** $0 — the capture protocol, free forever, fully inspectable markdown.
 - **Full system:** $147 one-time — capture plus the Chase ritual, the Squirrel Box tournament, the ranking mechanism, and free updates forever. Pay once. It's yours. No subscription.
-- **Sales policy:** All sales are final, with two absolute exceptions — non-delivery and billing errors. The paid ZIP is emailed by a person, usually the same day; if it has not arrived within one business day the buyer chooses immediate delivery or a full refund. Duplicate or incorrect charges are always corrected. Otherwise sales are final once the files are received: the capture half is free forever and every file in both tiers is plain readable markdown, so the product can be inspected in full before purchase.
+- **Sales policy:** All sales are final, with two absolute exceptions — non-delivery and billing errors. The paid ZIP is emailed automatically the moment payment clears, usually within seconds; if it has not arrived within one business day the buyer chooses immediate delivery or a full refund. Duplicate or incorrect charges are always corrected. Otherwise sales are final once the files are received: the capture half is free forever and every file in both tiers is plain readable markdown, so the product can be inspected in full before purchase.
 - Free tier: instant direct download, no email required. Paid tier: checkout by Stripe · delivered by email.
 
 ## FAQ essentials
@@ -37,7 +37,7 @@ Squirrel Skill is a folder of plain markdown (an Agent Skill), not an app and no
 - **Is it safe to install?** It's a folder of markdown. Read every line before you install.
 - **What do I need?** For the first-class path, a Claude plan that supports custom skills (claude.ai, Cowork, or Claude Code). Running it on another skills-capable platform instead? Then no Claude plan is needed — the skill is plain markdown and there is no separate app or account either way.
 - **Does it work with my task tracker?** Captures are structured records; the reference setup uses Notion (preferred — setup guide included), and the format ports to any system your AI can write to.
-- **Refunds?** All sales are final. Try the free capture half and read the markdown first; billing errors are corrected by email.
+- **Refunds?** All sales are final, with two exceptions that are always honoured: if the paid ZIP does not reach you within one business day you choose immediate delivery or a full refund, and any billing error is corrected. Try the free capture half and read the markdown first.
 
 ## Legal
 
